@@ -22,11 +22,10 @@ class Slider {
         if (this.slider) {
             let mouseout = new MouseEvent('mouseout', {bubbles: true})
             this.getEventElement(this.slider).dispatchEvent(mouseout)
-            // setTimeout(100, () => this.slider.style.zIndex = '1')
         }
         let mouseover = new MouseEvent('mouseover', {bubbles: true})
-        this.getEventElement(slider).dispatchEvent(mouseover)
-        // setTimeout(100, () => slider.style.zIndex = '4')
+        // delay before sending mouseover necessary to avoid impacting animation
+        setTimeout(() => this.getEventElement(slider).dispatchEvent(mouseover), 100)
         this.slider = slider
     }
 
