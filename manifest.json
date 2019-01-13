@@ -1,0 +1,38 @@
+{
+    "name": "Netflix Gamepad Controller Interface",
+    "version": "0.1",
+    "description": "Control Netflix in your browser with a gamepad or controller.",
+    "manifest_version": 2,
+    "permissions": [
+        "*://*.netflix.com/*",
+        "activeTab",
+        "declarativeContent"
+    ],
+    "background": {
+        "scripts": ["app/background.js"],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://*.netflix.com/*"],
+            "exclude_matches": ["*://help.netflix.com/*"],
+            "js": ["static/js/gamepads.js", "app/content.js"]
+        }
+    ],
+    "options_page": "app/settings.html",
+    "page_action": {
+        "default_popup": "app/popup.html",
+        "default_icon": {
+            "16": "static/icon16.png",
+            "32": "static/icon32.png",
+            "48": "static/icon48.png",
+            "128": "static/icon128.png"
+        }
+    },
+    "icons": {
+        "16": "static/icon16.png",
+        "32": "static/icon32.png",
+        "48": "static/icon48.png",
+        "128": "static/icon128.png"
+    }
+}
