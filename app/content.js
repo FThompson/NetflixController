@@ -14,35 +14,79 @@ class NetflixController {
 
 class Slider {
     constructor(row) {
-        let slider = document.querySelector(`#row-${row} .slider-item-0`)
-        this.selectSlider(slider)
+        this.row = document.querySelector(`#row-${row}`)
+        let sliderItem = this.getItem(0)
+        this.selectItem(sliderItem)
     }
 
-    selectSlider(slider) {
-        if (this.slider) {
+    getItem(number) {
+        return this.row.querySelector(`.slider-item-${number}`)
+    }
+
+    selectItem(sliderItem) {
+        if (this.sliderItem) {
             let mouseout = new MouseEvent('mouseout', {bubbles: true})
-            this.getEventElement(this.slider).dispatchEvent(mouseout)
+            this.dispatchEvent(this.sliderItem, mouseout)
         }
         let mouseover = new MouseEvent('mouseover', {bubbles: true})
         // delay before sending mouseover necessary to avoid impacting animation
-        setTimeout(() => this.getEventElement(slider).dispatchEvent(mouseover), 100)
-        this.slider = slider
+        setTimeout(() => this.dispatchEvent(sliderItem, mouseover), 100)
+        this.sliderItem = sliderItem
     }
 
-    getEventElement(slider) {
-        return slider.querySelector('img.boxart-image')
+    dispatchEvent(slider, event) {
+        slider.querySelector('img.boxart-image').dispatchEvent(event)
+    }
+
+    select(next) {
+        let target = next ? this.sliderItem.nextElementSibling : this.sliderItem.previousElementSibling
+        console.log(target)
+        if (target) {
+            let selected = false
+            let targetSibling = next ? target.nextElementSibling : target.previousElementSibling
+            if (targetSibling) {
+                if (targetSibling.classList.contains('slider-item-')) {
+                    this.shiftSlider(next)
+                    setTimeout(() => {
+                        this.selectItem(this.getShiftedItem(target))
+                    }, 2000)
+                    selected = true
+                }
+            }
+            if (!selected) {
+                this.selectItem(target)
+            }
+        } // else vibrate? cannot move slider
+    }
+
+    getShiftedItem(target) {
+        let newPosition;
+        let position = target.className[target.className.length - 1]
+        if (position === '0') {
+            let slider = this.row.querySelector('.sliderContent')
+            // count slider items ending in a number
+            let visibleCount = Array.from(slider.childNodes).reduce((n, node) => {
+                let lastChar = node.className[node.className.length - 1]
+                return n + (lastChar >= '0' && lastChar <= '9')
+            }, 0)
+            newPosition = visibleCount - 2
+        } else {
+            newPosition = 1
+        }
+        return this.getItem(newPosition)
     }
 
     next() {
-        if (this.slider.nextElementSibling) {
-            this.selectSlider(this.slider.nextElementSibling)
-        }
+        this.select(true)
     }
 
     previous() {
-        if (this.slider.previousElementSibling) {
-            this.selectSlider(this.slider.previousElementSibling)
-        } // else vibrate? cannot move slider
+        this.select(false)
+    }
+
+    shiftSlider(next) {
+        let handle = this.row.querySelector('span.handle' + (next ? 'Next' : 'Prev'))
+        handle.click()
     }
 }
 
