@@ -13,6 +13,9 @@ class NetflixController {
 }
 
 class Slider {
+    /**
+     * Creates the Slider at the given row and selects the first item in it.
+     */
     constructor(row) {
         this.row = document.querySelector(`#row-${row}`)
         let sliderItem = this.getItem(0)
@@ -20,10 +23,17 @@ class Slider {
         this.locked = false
     }
 
+    /**
+     * Gets the slider item with the given number.
+     */
     getItem(number) {
         return this.row.querySelector(`.slider-item-${number}`)
     }
 
+    /**
+     * Sends a mouseout event to the current item and a mouseover event to the given item.
+     * These events initiate the selection animation from one slider item to the next.
+     */
     selectItem(sliderItem) {
         this.locked = true
         if (this.sliderItem) {
@@ -39,20 +49,26 @@ class Slider {
         this.sliderItem = sliderItem
     }
 
+    /**
+     * Dispatches the given event to the given slider's image.
+     */
     dispatchEvent(slider, event) {
         slider.querySelector('img.boxart-image').dispatchEvent(event)
     }
 
+    /**
+     * Selects either the next or previous slider element, shifting the slider if necessary.
+     */
     select(next) {
         if (this.locked) {
-            return  // another interaction is in progress; do not initiate a new one
+            return false // another interaction is in progress; do not initiate a new one
         }
+        let selected = false
         let target = next ? this.sliderItem.nextElementSibling : this.sliderItem.previousElementSibling
         if (target) {
-            let selected = false
             let targetSibling = next ? target.nextElementSibling : target.previousElementSibling
             if (targetSibling) {
-                if (targetSibling.classList.contains('slider-item-')) {
+                if (targetSibling.classList.contains('slider-item-')) { // reached end of visible items
                     this.locked = true
                     this.shiftSlider(next)
                     setTimeout(() => {
@@ -64,10 +80,17 @@ class Slider {
             }
             if (!selected) {
                 this.selectItem(target)
+                selected = true
             }
-        } // else vibrate? cannot move slider
+        }
+        return selected // if false, vibrate? cannot move slider
     }
 
+    /**
+     * Gets the shifted target item.
+     * If the target is at the beginning of the visible list, then its new position will be visibleCount - 2.
+     * If the target is at the end of the visible list, then its new position will be 1.
+     */
     getShiftedItem(target) {
         let newPosition;
         let position = target.className[target.className.length - 1]
@@ -85,14 +108,23 @@ class Slider {
         return this.getItem(newPosition)
     }
 
+    /**
+     * Selects the next slider item.
+     */
     next() {
         this.select(true)
     }
 
+    /**
+     * Selects the previous slider item.
+     */
     previous() {
         this.select(false)
     }
 
+    /**
+     * Shifts the slider forwards or backwards by clicking the proper control.
+     */
     shiftSlider(next) {
         let handle = this.row.querySelector('span.handle' + (next ? 'Next' : 'Prev'))
         handle.click()
