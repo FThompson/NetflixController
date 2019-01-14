@@ -5,19 +5,13 @@ class PageHandler {
         }
     }
 
-    getPath() {
-        throw new TypeError('must define abstract method PageHandler#getPath')
-    }
-
-    onPageLoad() {
-        throw new TypeError('must define abstract method PageHandler#onPageLoad')
-    }
+    // static validatePath(path) must be implemented
 
     onSelectAction() {
-        
+        // to be optionally implemented by subclasses
     }
 
     onDirectionAction(direction) {
-        
+        // to be optionally implemented by subclasses
     }
 }

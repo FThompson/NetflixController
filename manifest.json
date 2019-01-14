@@ -6,7 +6,8 @@
     "permissions": [
         "*://*.netflix.com/*",
         "activeTab",
-        "declarativeContent"
+        "declarativeContent",
+        "tabs"
     ],
     "background": {
         "scripts": ["app/background.js"],
@@ -16,7 +17,15 @@
         {
             "matches": ["*://*.netflix.com/*"],
             "exclude_matches": ["*://help.netflix.com/*"],
-            "js": ["static/js/gamepads.js", "app/content.js"]
+            "js": [
+                "static/js/gamepads.js",
+                "app/common/direction.js",
+                "app/common/slider.js",
+                "app/handlers/page-handler.js",
+                "app/handlers/slider-page.js",
+                "app/handlers/home.js",
+                "app/content.js"
+            ]
         }
     ],
     "options_page": "app/settings.html",
