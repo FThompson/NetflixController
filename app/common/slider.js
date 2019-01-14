@@ -3,9 +3,18 @@ class Slider {
      * Creates the Slider at the given row and selects the given position in it.
      */
     constructor(row, position) {
-        this.row = document.querySelector(`#row-${row}`)
-        this.selectPosition(position)
+        this.row = row
+        if (position !== undefined) {
+            this.selectPosition(position)
+        }
         this.locked = false
+    }
+
+    /**
+     * Checks if this slider has the given position.
+     */
+    hasPosition(position) {
+        return this.row.querySelector(`.slider-item-${position}`) !== null
     }
 
     /**
@@ -14,11 +23,8 @@ class Slider {
      */
     selectPosition(position) {
         this.locked = true
+        this.unselect()
         let sliderItem = this.row.querySelector(`.slider-item-${position}`)
-        if (this.sliderItem) {
-            let mouseout = new MouseEvent('mouseout', {bubbles: true})
-            this.dispatchEvent(this.sliderItem, mouseout)
-        }
         let mouseover = new MouseEvent('mouseover', {bubbles: true})
         // delay before sending mouseover necessary to avoid impacting animation
         setTimeout(() => {
@@ -27,6 +33,16 @@ class Slider {
         }, 100)
         this.sliderItem = sliderItem
         this.position = position
+    }
+
+    /**
+     * Unselects the currently selected item.
+     */
+    unselect() {
+        if (this.sliderItem) {
+            let mouseout = new MouseEvent('mouseout', {bubbles: true})
+            this.dispatchEvent(this.sliderItem, mouseout)
+        }
     }
 
     /**
