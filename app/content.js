@@ -3,13 +3,14 @@
 
 let currentHandler = null
 const pageHandlers = [
-    HomepageHandler
+    FeaturedBrowse
 ]
 
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
     pageHandlers.forEach(handler => {
         if (handler.validatePath(request.path)) {
-            currentHandler = new handler()
+            console.log(`NETFLIX-CONTROLLER: Loading module for ${request.path}`)
+            setTimeout(() => currentHandler = new handler(), 500) // delay to allow page to finish loading
         }
     })
 })
