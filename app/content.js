@@ -1,17 +1,22 @@
 class NetflixController {
     constructor() {
-        this.slider = new Slider(1, 0)
+        this.firstRow = 1
+        this.slider = new Slider(this.firstRow, 0)
+        this.rows = {}
     }
 
     handleButtonPress(i) {
         if (i == 12) {
             // up
+            if (this.slider.row < this.firstRow) {
+                this.slider = new Slider
+            }
         } else if (i == 13) {
 
         } else if (i == 14) {
-            controller.slider.previous()
+            this.slider.previous()
         } else if (i == 15) {
-            controller.slider.next()
+            this.slider.next()
         }
     }
 }
@@ -129,10 +134,12 @@ class Slider {
     }
 }
 
+console.log('Netflix Controller loaded')
 controller = new NetflixController()
 gamepads.addEventListener('connect', (gamepad) => {
     console.log('gamepad connected')
     gamepad.addEventListener('buttonpress', controller.handleButtonPress)
 })
 gamepads.start()
+window.addEventListener('popstate', function(e){console.log('url changed')});
 
