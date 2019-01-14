@@ -17,6 +17,7 @@ class Slider {
         this.row = document.querySelector(`#row-${row}`)
         let sliderItem = this.getItem(0)
         this.selectItem(sliderItem)
+        this.locked = false
     }
 
     getItem(number) {
@@ -24,13 +25,17 @@ class Slider {
     }
 
     selectItem(sliderItem) {
+        this.locked = true
         if (this.sliderItem) {
             let mouseout = new MouseEvent('mouseout', {bubbles: true})
             this.dispatchEvent(this.sliderItem, mouseout)
         }
         let mouseover = new MouseEvent('mouseover', {bubbles: true})
         // delay before sending mouseover necessary to avoid impacting animation
-        setTimeout(() => this.dispatchEvent(sliderItem, mouseover), 100)
+        setTimeout(() => {
+            this.dispatchEvent(sliderItem, mouseover)
+            this.locked = false
+        }, 100)
         this.sliderItem = sliderItem
     }
 
@@ -39,17 +44,21 @@ class Slider {
     }
 
     select(next) {
+        if (this.locked) {
+            return  // another interaction is in progress; do not initiate a new one
+        }
         let target = next ? this.sliderItem.nextElementSibling : this.sliderItem.previousElementSibling
-        console.log(target)
         if (target) {
             let selected = false
             let targetSibling = next ? target.nextElementSibling : target.previousElementSibling
             if (targetSibling) {
                 if (targetSibling.classList.contains('slider-item-')) {
+                    this.locked = true
                     this.shiftSlider(next)
                     setTimeout(() => {
                         this.selectItem(this.getShiftedItem(target))
-                    }, 2000)
+                        this.locked = false
+                    }, 800)
                     selected = true
                 }
             }
