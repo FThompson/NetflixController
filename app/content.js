@@ -1,10 +1,14 @@
 class NetflixController {
     constructor() {
-        this.slider = new Slider(1)
+        this.slider = new Slider(1, 0)
     }
 
     handleButtonPress(i) {
-        if (i == 14) {
+        if (i == 12) {
+            // up
+        } else if (i == 13) {
+
+        } else if (i == 14) {
             controller.slider.previous()
         } else if (i == 15) {
             controller.slider.next()
@@ -14,28 +18,21 @@ class NetflixController {
 
 class Slider {
     /**
-     * Creates the Slider at the given row and selects the first item in it.
+     * Creates the Slider at the given row and selects the given position in it.
      */
-    constructor(row) {
+    constructor(row, position) {
         this.row = document.querySelector(`#row-${row}`)
-        let sliderItem = this.getItem(0)
-        this.selectItem(sliderItem)
+        this.selectPosition(position)
         this.locked = false
     }
 
     /**
-     * Gets the slider item with the given number.
-     */
-    getItem(number) {
-        return this.row.querySelector(`.slider-item-${number}`)
-    }
-
-    /**
-     * Sends a mouseout event to the current item and a mouseover event to the given item.
+     * Sends a mouseout event to the current item and a mouseover event to the item at the given position.
      * These events initiate the selection animation from one slider item to the next.
      */
-    selectItem(sliderItem) {
+    selectPosition(position) {
         this.locked = true
+        let sliderItem = this.row.querySelector(`.slider-item-${position}`)
         if (this.sliderItem) {
             let mouseout = new MouseEvent('mouseout', {bubbles: true})
             this.dispatchEvent(this.sliderItem, mouseout)
@@ -47,6 +44,7 @@ class Slider {
             this.locked = false
         }, 100)
         this.sliderItem = sliderItem
+        this.position = position
     }
 
     /**
@@ -72,14 +70,14 @@ class Slider {
                     this.locked = true
                     this.shiftSlider(next)
                     setTimeout(() => {
-                        this.selectItem(this.getShiftedItem(target))
+                        this.selectPosition(this.getShiftedPosition(target))
                         this.locked = false
                     }, 800)
                     selected = true
                 }
             }
             if (!selected) {
-                this.selectItem(target)
+                this.selectPosition(this.position + (next ? 1 : -1))
                 selected = true
             }
         }
@@ -87,11 +85,11 @@ class Slider {
     }
 
     /**
-     * Gets the shifted target item.
+     * Gets the target's shifted position.
      * If the target is at the beginning of the visible list, then its new position will be visibleCount - 2.
      * If the target is at the end of the visible list, then its new position will be 1.
      */
-    getShiftedItem(target) {
+    getShiftedPosition(target) {
         let newPosition;
         let position = target.className[target.className.length - 1]
         if (position === '0') {
@@ -105,7 +103,7 @@ class Slider {
         } else {
             newPosition = 1
         }
-        return this.getItem(newPosition)
+        return newPosition
     }
 
     /**
