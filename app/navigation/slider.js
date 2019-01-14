@@ -1,9 +1,10 @@
-class Slider {
+class Slider extends Navigatable {
     /**
      * Creates the Slider at the given row and selects the given position in it.
      */
-    constructor(row, position) {
-        this.row = row
+    constructor(rowNode, position) {
+        super()
+        this.rowNode = rowNode
         if (position !== undefined) {
             this.selectPosition(position)
         }
@@ -11,10 +12,64 @@ class Slider {
     }
 
     /**
+     * Returns the slider at the given row if it exists.
+     * Sets that slider to the given position or the right-most position if not possible.
+     */
+    static getSlider(row, position) {
+        let rowNode = document.querySelector(`#row-${row}`)
+        if (rowNode) {
+            return new Slider(rowNode, position)
+        }
+        return null
+    }
+
+    /**
+     * Selects the previous slider item.
+     */
+    left() {
+        this.select(false)
+    }
+
+    /**
+     * Selects the next slider item.
+     */
+    right() {
+        this.select(true)
+    }
+
+    /**
+     * Selects either this slider's first item or the item in the given position.
+     */
+    enter(params) {
+        if (params.position) {
+            let position = params.position
+            let found = false
+            while (!found) {
+                if (this.hasPosition(position)) {
+                    found = true
+                } else {
+                    position--
+                }
+            }
+            this.selectPosition(position)
+        } else {
+            this.selectPosition(0)
+        }
+    }
+
+    /**
+     * Unselects this slider and returns its position.
+     */
+    exit() {
+        this.unselect()
+        return {position: this.position}
+    }
+
+    /**
      * Checks if this slider has the given position.
      */
     hasPosition(position) {
-        return this.row.querySelector(`.slider-item-${position}`) !== null
+        return this.rowNode.querySelector(`.slider-item-${position}`) !== null
     }
 
     /**
@@ -24,7 +79,7 @@ class Slider {
     selectPosition(position) {
         this.locked = true
         this.unselect()
-        let sliderItem = this.row.querySelector(`.slider-item-${position}`)
+        let sliderItem = this.rowNode.querySelector(`.slider-item-${position}`)
         let mouseover = new MouseEvent('mouseover', {bubbles: true})
         // delay before sending mouseover necessary to avoid impacting animation
         setTimeout(() => {
@@ -91,7 +146,7 @@ class Slider {
         let newPosition;
         let position = target.className[target.className.length - 1]
         if (position === '0') {
-            let slider = this.row.querySelector('.sliderContent')
+            let slider = this.rowNode.querySelector('.sliderContent')
             // count slider items ending in a number
             let visibleCount = Array.from(slider.childNodes).reduce((n, node) => {
                 let lastChar = node.className[node.className.length - 1]
@@ -105,24 +160,10 @@ class Slider {
     }
 
     /**
-     * Selects the next slider item.
-     */
-    next() {
-        this.select(true)
-    }
-
-    /**
-     * Selects the previous slider item.
-     */
-    previous() {
-        this.select(false)
-    }
-
-    /**
      * Shifts the slider forwards or backwards by clicking the proper control.
      */
     shiftSlider(next) {
-        let handle = this.row.querySelector('span.handle' + (next ? 'Next' : 'Prev'))
+        let handle = this.rowNode.querySelector('span.handle' + (next ? 'Next' : 'Prev'))
         handle.click()
     }
 }

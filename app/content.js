@@ -1,6 +1,3 @@
-// TODO traverseable element superclass for slider/menus
-// TODO SliderPage class
-
 let currentHandler = null
 const pageHandlers = [
     FeaturedBrowse

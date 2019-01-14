@@ -19,11 +19,11 @@
             "exclude_matches": ["*://help.netflix.com/*"],
             "js": [
                 "static/js/gamepads.js",
-                "app/common/direction.js",
-                "app/common/slider.js",
-                "app/handlers/page-handler.js",
-                "app/handlers/slider-page.js",
-                "app/handlers/home.js",
+                "app/navigation/direction.js",
+                "app/navigation/navigatable.js",
+                "app/navigation/slider.js",
+                "app/handlers/page.js",
+                "app/handlers/featured-browse.js",
                 "app/content.js"
             ]
         }
