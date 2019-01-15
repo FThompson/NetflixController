@@ -3,6 +3,7 @@ const pageHandlers = [
     FeaturedBrowse
 ]
 
+// TODO: refresh page if ?so=su is in url? this seems to cause the page to not load
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
     pageHandlers.forEach(handler => {
         if (handler.validatePath(request.path)) {
@@ -11,6 +12,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
         }
     })
 })
+
+let cssLink = document.createElement('link')
+cssLink.href = chrome.runtime.getURL('app/content.css')
+cssLink.rel = 'stylesheet'
+cssLink.type = 'text/css'
+document.head.prepend(cssLink)
 
 console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
 gamepads.addEventListener('connect', gamepad => {

@@ -73,6 +73,10 @@ class Slider extends Navigatable {
         }
         return {position: position}
     }
+
+    click() {
+
+    }
     
     /**
      * Scrolls the viewport to be centered vertically on this slider.
@@ -100,10 +104,9 @@ class Slider extends Navigatable {
         this.locked = true
         this.unselect()
         let sliderItem = this.rowNode.querySelector(`.slider-item-${position}`)
-        let mouseover = new MouseEvent('mouseover', {bubbles: true})
         // delay before sending mouseover necessary to avoid impacting animation
         setTimeout(() => {
-            this.dispatchEvent(sliderItem, mouseover)
+            Navigatable.mouseOver(this.getEventTarget(sliderItem))
             this.locked = false
         }, 100)
         this.sliderItem = sliderItem
@@ -115,16 +118,15 @@ class Slider extends Navigatable {
      */
     unselect() {
         if (this.sliderItem) {
-            let mouseout = new MouseEvent('mouseout', {bubbles: true})
-            this.dispatchEvent(this.sliderItem, mouseout)
+            Navigatable.mouseOut(this.getEventTarget(this.sliderItem))
         }
     }
 
     /**
-     * Dispatches the given event to the given slider's image.
+     * Gets the given slider item's mouse event target.
      */
-    dispatchEvent(slider, event) {
-        slider.querySelector('img.boxart-image').dispatchEvent(event)
+    getEventTarget(sliderItem) {
+        return sliderItem.querySelector('img.boxart-image')
     }
 
     /**

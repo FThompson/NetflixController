@@ -1,6 +1,7 @@
 class FeaturedBrowse extends NavigatablePage {
     constructor() {
-        super(2, Slider.getSlider(1, 0))
+        super(1, new Billboard())
+        this.addNavigatable(2, Slider.getSlider(1))
         // add browse navigatable @0 and feature navigatable @1
     }
 

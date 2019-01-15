@@ -20,7 +20,10 @@ class NavigatablePage {
         }
         let params = {}
         if (this.navigatables[this.position]) {
-            params = this.navigatables[this.position].exit()
+            let exitParams = this.navigatables[this.position].exit()
+            if (exitParams) {
+                params = exitParams
+            }
         }
         this.navigatables[position].enter(params)
         this.position = position

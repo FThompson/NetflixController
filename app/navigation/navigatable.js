@@ -22,15 +22,23 @@ class Navigatable {
         throw new TypeError('must implement abstract Navigatable#exit')
     }
 
-    select() {
-        throw new TypeError('must implement abstract Navigatable#select')
+    click() {
+        throw new TypeError('must implement abstract Navigatable#click')
+    }
+
+    static mouseOver(element) {
+        let mouseover = new MouseEvent('mouseover', {bubbles: true})
+        element.dispatchEvent(mouseover)
+    }
+
+    static mouseOut(element) {
+        let mouseout = new MouseEvent('mouseout', {bubbles: true})
+        element.dispatchEvent(mouseout)
     }
 
     // via https://stackoverflow.com/a/49842367/1247781
     static scrollIntoView(element) {
         let bounds = element.getBoundingClientRect()
-        console.log(element)
-        console.log(bounds)
         let y = bounds.top + bounds.height / 2 + window.scrollY - window.innerHeight / 2;
         window.scroll({
             top: y,
