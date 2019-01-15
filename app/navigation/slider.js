@@ -77,16 +77,18 @@ class Slider extends Navigatable {
     click() {
 
     }
+
+    getBoxArtContainer() {
+        let boxarts = this.sliderItem.querySelectorAll('div.boxart-container')
+        // large title cards still have the small element; the last element is the large one
+        return boxarts[boxarts.length - 1]
+    }
     
     /**
      * Scrolls the viewport to be centered vertically on this slider.
      */
     scrollIntoView() {
-        let boxarts = this.sliderItem.querySelectorAll('div.boxart-container')
-        if (boxarts) {
-            // large title cards still have the small element; the last element is the large one
-            Navigatable.scrollIntoView(boxarts[boxarts.length - 1])
-        }
+        Navigatable.scrollIntoView(this.getBoxArtContainer())
     }
 
     /**
@@ -111,6 +113,11 @@ class Slider extends Navigatable {
         }, 100)
         this.sliderItem = sliderItem
         this.position = position
+        // this.sliderItem.style.border = '3px solid rgba(255, 255, 80, 0.7)'
+        // this.sliderItem.style.borderRadius = '3px'
+        let boxart = this.getBoxArtContainer()
+        boxart.style.border = '3px solid rgba(255, 255, 80, 0.7)'
+        boxart.style.borderRadius = '3px'
     }
 
     /**
@@ -119,6 +126,7 @@ class Slider extends Navigatable {
     unselect() {
         if (this.sliderItem) {
             Navigatable.mouseOut(this.getEventTarget(this.sliderItem))
+            this.getBoxArtContainer().style.border = 'none'
         }
     }
 
