@@ -31,7 +31,7 @@ gamepads.addEventListener('connect', gamepad => {
     })
     gamepad.addEventListener('joystickmove', (indices, values) => {
         checkJoystickDirection(gamepad, values[0], DIRECTION.RIGHT, DIRECTION.LEFT)
-        checkJoystickDirection(gamepad, values[1], DIRECTION.UP, DIRECTION.DOWN)
+        checkJoystickDirection(gamepad, values[1], DIRECTION.DOWN, DIRECTION.UP)
     }, StandardMapping.Axis.JOYSTICK_LEFT)
 })
 gamepads.addEventListener('disconnect', gamepad => {
