@@ -8,6 +8,7 @@ class Slider extends Navigatable {
         if (position !== undefined) {
             this.selectPosition(position)
         }
+        this.canShiftLeft = false
         this.locked = false
     }
 
@@ -41,8 +42,11 @@ class Slider extends Navigatable {
      * Selects either this slider's first item or the item in the given position.
      */
     enter(params) {
-        if (params.position) {
+        if ('position' in params) {
             let position = params.position
+            if (this.canShiftLeft) {
+                position++  // partially-visible left slider item takes up a position if present
+            }
             let found = false
             while (!found) {
                 if (this.hasPosition(position)) {
@@ -63,7 +67,11 @@ class Slider extends Navigatable {
      */
     exit() {
         this.unselect()
-        return {position: this.position}
+        let position = this.position
+        if (this.canShiftLeft) {
+            position--  // partially-visible left slider item takes up a position if present
+        }
+        return {position: position}
     }
     
     /**
@@ -177,5 +185,6 @@ class Slider extends Navigatable {
     shiftSlider(next) {
         let handle = this.rowNode.querySelector('span.handle' + (next ? 'Next' : 'Prev'))
         handle.click()
+        this.canShiftLeft = true
     }
 }
