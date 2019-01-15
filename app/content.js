@@ -1,6 +1,7 @@
 let currentHandler = null
 const pageHandlers = [
-    FeaturedBrowse
+    FeaturedBrowse,
+    SliderBrowse
 ]
 
 // TODO: refresh page if ?so=su is in url? this seems to cause the page to not load

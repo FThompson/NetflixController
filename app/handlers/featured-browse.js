@@ -1,4 +1,4 @@
-class FeaturedBrowse extends NavigatablePage {
+class FeaturedBrowse extends SliderBrowse {
     constructor() {
         super(1, new Billboard())
         this.addNavigatable(2, Slider.getSlider(1))
@@ -7,13 +7,5 @@ class FeaturedBrowse extends NavigatablePage {
 
     static validatePath(path) {
         return path === '/browse' || path.startsWith('/browse/genre')
-    }
-
-    setNavigatable(position) {
-        if (!this.isNavigatable(position)) {
-            let slider = Slider.getSlider(position - 1)
-            this.addNavigatable(position, slider)
-        }
-        super.setNavigatable(position)
     }
 }
