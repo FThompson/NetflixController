@@ -55,6 +55,7 @@ class Slider extends Navigatable {
         } else {
             this.selectPosition(0)
         }
+        this.scrollIntoView()
     }
 
     /**
@@ -63,6 +64,17 @@ class Slider extends Navigatable {
     exit() {
         this.unselect()
         return {position: this.position}
+    }
+    
+    /**
+     * Scrolls the viewport to be centered vertically on this slider.
+     */
+    scrollIntoView() {
+        let boxarts = this.sliderItem.querySelectorAll('div.boxart-container')
+        if (boxarts) {
+            // large title cards still have the small element; the last element is the large one
+            Navigatable.scrollIntoView(boxarts[boxarts.length - 1])
+        }
     }
 
     /**
