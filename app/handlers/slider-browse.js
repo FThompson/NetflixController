@@ -6,7 +6,7 @@ class SliderBrowse extends NavigatablePage {
     }
 
     static validatePath(path) {
-        return path === '/browse/new-release'
+        return path === '/browse/new-release' || path === '/browse/my-list'
     }
 
     setNavigatable(position) {
