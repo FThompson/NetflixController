@@ -1,13 +1,10 @@
 class SliderBrowse extends NavigatablePage {
-    constructor() {
+    constructor(startingRow) {
         if (new.target === SliderBrowse) {
             throw new TypeError('cannot instantiate abstract SliderPage')
         }
         super()
-    }
-
-    isPageReady() {
-        return document.querySelector('.mainView .rowContainer') !== null
+        this.startingRow = startingRow
     }
 
     setNavigatable(position) {
@@ -16,5 +13,13 @@ class SliderBrowse extends NavigatablePage {
             this.addNavigatable(position, slider)
         }
         super.setNavigatable(position)
+    }
+
+    isPageReady() {
+        let row = document.querySelector(`#row-${this.startingRow}`)
+        if (row) {
+            return row.getBoundingClientRect().width > 0
+        }
+        return false
     }
 }

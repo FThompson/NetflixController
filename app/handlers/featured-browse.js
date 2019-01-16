@@ -1,4 +1,8 @@
 class FeaturedBrowse extends SliderBrowse {
+    constructor() {
+        super(1)
+    }
+
     async load() {
         await super.load()
         this.addNavigatable(1, new Billboard())

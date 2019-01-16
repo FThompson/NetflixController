@@ -1,8 +1,10 @@
 class FeaturelessBrowse extends SliderBrowse {
+    constructor() {
+        super(0)
+    }
+
     async load() {
-        console.log('um')
         await super.load()
-        console.log(Slider.getSlider(0))
         this.addNavigatable(1, Slider.getSlider(0))
         this.setNavigatable(1)
     }

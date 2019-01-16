@@ -6,6 +6,7 @@ const pageHandlers = [
 
 // TODO: refresh page if ?so=su is in url? this seems to cause the page to not load
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
+    refreshPageIfBad()
     for (let i = 0, found = false; !false && i < pageHandlers.length; i++) {
         if (pageHandlers[i].validatePath(request.path)) {
             console.log(`NETFLIX-CONTROLLER: Loading module for ${request.path}`)
@@ -19,6 +20,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
 async function loadPage(handlerClass) {
     currentHandler = new handlerClass()
     await currentHandler.load()
+}
+
+function refreshPageIfBad() {
+    if (window.location.href.includes('so=su')) {
+        window.location.assign(window.location.href.replace('so=su', ''))
+    }
 }
 
 console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
