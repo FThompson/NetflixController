@@ -26,6 +26,7 @@
                 "app/navigation/billboard.js",
                 "app/handlers/page.js",
                 "app/handlers/slider-browse.js",
+                "app/handlers/featureless-browse.js",
                 "app/handlers/featured-browse.js",
                 "app/content.js"
             ]

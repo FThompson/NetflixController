@@ -1,10 +1,13 @@
 class SliderBrowse extends NavigatablePage {
-    isPageReady() {
-        return document.querySelector('.mainView .lolomo') !== undefined
+    constructor() {
+        if (new.target === SliderBrowse) {
+            throw new TypeError('cannot instantiate abstract SliderPage')
+        }
+        super()
     }
 
-    static validatePath(path) {
-        return path === '/browse/new-release' || path === '/browse/my-list'
+    isPageReady() {
+        return document.querySelector('.mainView .rowContainer') !== null
     }
 
     setNavigatable(position) {

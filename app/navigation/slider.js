@@ -113,11 +113,8 @@ class Slider extends Navigatable {
         }, 100)
         this.sliderItem = sliderItem
         this.position = position
-        // this.sliderItem.style.border = '3px solid rgba(255, 255, 80, 0.7)'
-        // this.sliderItem.style.borderRadius = '3px'
         let boxart = this.getBoxArtContainer()
-        boxart.style.border = '3px solid rgba(255, 255, 80, 0.7)'
-        boxart.style.borderRadius = '3px'
+        boxart.style.outline = '3px solid rgba(229, 9, 20, 0.7)'
     }
 
     /**
@@ -126,7 +123,7 @@ class Slider extends Navigatable {
     unselect() {
         if (this.sliderItem) {
             Navigatable.mouseOut(this.getEventTarget(this.sliderItem))
-            this.getBoxArtContainer().style.border = 'none'
+            this.getBoxArtContainer().style.outline = '0'
         }
     }
 

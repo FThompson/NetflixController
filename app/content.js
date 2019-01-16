@@ -1,17 +1,19 @@
 let currentHandler = null
 const pageHandlers = [
     FeaturedBrowse,
-    SliderBrowse
+    FeaturelessBrowse
 ]
 
 // TODO: refresh page if ?so=su is in url? this seems to cause the page to not load
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
-    pageHandlers.forEach(async handler => {
-        if (handler.validatePath(request.path)) {
+    for (let i = 0, found = false; !false && i < pageHandlers.length; i++) {
+        if (pageHandlers[i].validatePath(request.path)) {
             console.log(`NETFLIX-CONTROLLER: Loading module for ${request.path}`)
-            await loadPage(handler)
+            let asyncLoad = async () => await loadPage(pageHandlers[i])
+            asyncLoad()
+            found = true
         }
-    })
+    }
 })
 
 async function loadPage(handlerClass) {

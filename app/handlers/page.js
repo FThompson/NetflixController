@@ -1,7 +1,7 @@
 class NavigatablePage {
     constructor() {
         if (new.target === NavigatablePage) {
-            throw new TypeError('cannot instantiate abstract PageHandler')
+            throw new TypeError('cannot instantiate abstract NavigatablePage')
         }
         this.navigatables = {}
     }
@@ -31,10 +31,12 @@ class NavigatablePage {
         })
     }
 
+    // to be overriden by subclasses
     isPageReady() {
         return true
     }
 
+    // to be overriden by subclasses
     needsPseudoStyler() {
         return false
     }
