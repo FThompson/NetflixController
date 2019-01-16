@@ -1,9 +1,0 @@
-/* :hover rules as of 1/14/19, subject to change with Netflix changes */
-.billboardButtonHover {
-    box-shadow: 0 0.6vw 1vw -0.4vw rgba(0, 0, 0, 0.35) !important;
-    background-color: #e6e6e6 !important;
-    color: #000 !important;
-    outline: 0 !important;
-    transform: scale(1.05) !important;
-    transition: transform 350ms cubic-bezier(.86,0,.07,1),-webkit-transform 350ms cubic-bezier(.86,0,.07,1),-moz-transform 350ms cubic-bezier(.86,0,.07,1),-o-transform 350ms cubic-bezier(.86,0,.07,1) !important;
-}

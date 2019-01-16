@@ -29,14 +29,14 @@ class Billboard extends Navigatable {
 
     unselect() {
         if (this.selected) {
-            this.selected.classList.toggle('billboardButtonHover')
+            this.styler.toggleStyle(this.selected, ':hover')
         }
     }
 
     select(element) {
         if (element !== this.selected) {
             this.unselect()
-            element.classList.toggle('billboardButtonHover')
+            this.styler.toggleStyle(element, ':hover')
             this.selected = element
             Navigatable.scrollIntoView(this.selected)
         }

@@ -1,11 +1,42 @@
 class NavigatablePage {
-    constructor(startingNavPos, startingNav) {
+    constructor() {
         if (new.target === NavigatablePage) {
             throw new TypeError('cannot instantiate abstract PageHandler')
         }
         this.navigatables = {}
-        this.addNavigatable(startingNavPos, startingNav)
-        this.setNavigatable(startingNavPos)
+    }
+
+    async load() {
+        await Promise.all([this.loadPseudoStyler(), this.waitUntilReady()])
+    }
+
+    async loadPseudoStyler() {
+        if (this.needsPseudoStyler()) {
+            this.styler = new PseudoStyler()
+            return await this.styler.loadDocumentStyles()
+        }
+        return Promise.resolve()
+    }
+
+    // via https://stackoverflow.com/a/30506051/1247781
+    async waitUntilReady() {
+        let _this = this
+        return await new Promise((resolve, reject) => {
+            (function checkReadiness() {
+                if (_this.isPageReady()) {
+                    return resolve()
+                }
+                setTimeout(checkReadiness, 50)
+            })()
+        })
+    }
+
+    isPageReady() {
+        return true
+    }
+
+    needsPseudoStyler() {
+        return false
     }
 
     // static validatePath(path) must be implemented by subclasses
@@ -30,6 +61,9 @@ class NavigatablePage {
     }
 
     addNavigatable(position, navigatable) {
+        if (this.styler) {
+            navigatable.styler = this.styler
+        }
         this.navigatables[position] = navigatable
     }
 

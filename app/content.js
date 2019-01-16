@@ -6,19 +6,18 @@ const pageHandlers = [
 
 // TODO: refresh page if ?so=su is in url? this seems to cause the page to not load
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
-    pageHandlers.forEach(handler => {
+    pageHandlers.forEach(async handler => {
         if (handler.validatePath(request.path)) {
             console.log(`NETFLIX-CONTROLLER: Loading module for ${request.path}`)
-            setTimeout(() => currentHandler = new handler(), 500) // delay to allow page to finish loading
+            await loadPage(handler)
         }
     })
 })
 
-let cssLink = document.createElement('link')
-cssLink.href = chrome.runtime.getURL('app/content.css')
-cssLink.rel = 'stylesheet'
-cssLink.type = 'text/css'
-document.head.prepend(cssLink)
+async function loadPage(handlerClass) {
+    currentHandler = new handlerClass()
+    await currentHandler.load()
+}
 
 console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
 gamepads.addEventListener('connect', gamepad => {

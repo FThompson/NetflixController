@@ -18,7 +18,8 @@
             "matches": ["*://*.netflix.com/*"],
             "exclude_matches": ["*://help.netflix.com/*"],
             "js": [
-                "static/js/gamepads.js",
+                "static/js/gamepads@1.0.1.js",
+                "static/js/pseudostyler@1.0.5.js",
                 "app/navigation/direction.js",
                 "app/navigation/navigatable.js",
                 "app/navigation/slider.js",
@@ -27,14 +28,8 @@
                 "app/handlers/slider-browse.js",
                 "app/handlers/featured-browse.js",
                 "app/content.js"
-            ],
-            "css": [
-                "app/content.css"
             ]
         }
-    ],
-    "web_accessible_resources": [
-        "app/content.css"
     ],
     "options_page": "app/settings.html",
     "page_action": {

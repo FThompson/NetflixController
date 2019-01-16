@@ -5,11 +5,15 @@ class Navigatable {
         }
     }
 
+    setStyler(styler) {
+        this.styler = styler
+    }
+
     left() {
         throw new TypeError('must implement abstract Navigatable#navigate')
     }
 
-    right() {
+    right() {   
         throw new TypeError('must implement abstract Navigatable#navigate')
     }
 

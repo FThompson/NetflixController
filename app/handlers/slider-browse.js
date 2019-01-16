@@ -1,8 +1,6 @@
 class SliderBrowse extends NavigatablePage {
-    constructor(startingNavPos, startingNav) {
-        let pos = startingNavPos !== undefined ? startingNavPos : 1
-        let nav = startingNav !== undefined ? startingNav : Slider.getSlider(0, 0)
-        super(pos, nav)
+    isPageReady() {
+        return document.querySelector('.mainView .lolomo') !== undefined
     }
 
     static validatePath(path) {
