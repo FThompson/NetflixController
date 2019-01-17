@@ -22,6 +22,7 @@ async function loadPage(handlerClass) {
     await currentHandler.load()
 }
 
+// pages containing ?so=su seem to often not load; remove it and refresh
 function refreshPageIfBad() {
     if (window.location.href.includes('so=su')) {
         window.location.assign(window.location.href.replace('so=su', ''))

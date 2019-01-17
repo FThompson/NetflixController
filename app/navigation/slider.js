@@ -80,7 +80,7 @@ class Slider extends Navigatable {
 
     getBoxArtContainer() {
         let boxarts = this.sliderItem.querySelectorAll('div.boxart-container')
-        // large title cards still have the small element; the last element is the large one
+        // large title cards still have the small element; the last element is the larger one
         return boxarts[boxarts.length - 1]
     }
     
