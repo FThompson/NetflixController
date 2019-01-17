@@ -26,9 +26,11 @@ class Menu extends Navigatable {
         this.position = -1
     }
 
-    doPrimaryAction() {
-        this.options[this.position].click()
-        this.unselect()
+    doAction(index) {
+        if (index === StandardMapping.Button.BUTTON_BOTTOM) {
+            this.options[this.position].click()
+            this.unselect()
+        }
     }
 
     unselect() {

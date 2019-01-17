@@ -33,8 +33,10 @@ class Billboard extends Navigatable {
         this.selected = null
     }
 
-    doPrimaryAction() {
-        this.selected.action.click()
+    doAction(index) {
+        if (index === StandardMapping.Button.BUTTON_BOTTOM) {
+            this.selected.action.click()
+        }
     }
 
     unselect() {

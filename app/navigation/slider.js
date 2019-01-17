@@ -74,8 +74,13 @@ class Slider extends Navigatable {
         return {position: position}
     }
 
-    doPrimaryAction() {
-        document.querySelector('.bob-play-hitzone').click()
+    doAction(index) {
+        if (index === StandardMapping.Button.BUTTON_BOTTOM) {
+            let hitzone = document.querySelector('.bob-play-hitzone')
+            if (hitzone) {
+                hitzone.click()
+            }
+        }
     }
 
     getBoxArtContainer() {

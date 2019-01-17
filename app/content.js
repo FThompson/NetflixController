@@ -6,6 +6,7 @@ const pageHandlers = [
 
 // TODO: refresh page if ?so=su is in url? this seems to cause the page to not load
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
+    unload()
     refreshPageIfBad()
     for (let i = 0, found = false; !false && i < pageHandlers.length; i++) {
         if (pageHandlers[i].validatePath(request.path)) {
@@ -22,6 +23,13 @@ async function loadPage(handlerClass) {
     await currentHandler.load()
 }
 
+function unload() {
+    if (currentHandler) {
+        currentHandler.unload()
+        currentHandler = null
+    }
+}
+
 // pages containing ?so=su seem to often not load; remove it and refresh
 function refreshPageIfBad() {
     if (window.location.href.includes('so=su')) {
@@ -33,15 +41,6 @@ console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
 gamepads.addEventListener('connect', gamepad => {
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${gamepad.gamepad.id}`)
     gamepad.addEventListener('buttonpress', (index) => {
-        if (index === StandardMapping.Button.BUTTON_BOTTOM) {
-            currentHandler.onPrimaryAction()
-        } else if (index === StandardMapping.Button.BUTTON_CONTROL_LEFT) {
-            currentHandler.onSecondaryAction()
-        } else if (index === StandardMapping.Button.BUTTON_TOP) {
-            currentHandler.onTertiaryAction()
-        } else if (index === StandardMapping.Button.BUTTON_RIGHT) {
-            currentHandler.onBackAction()
-        }
         let directionMap = {
             12: DIRECTION.UP,
             13: DIRECTION.DOWN,
@@ -50,6 +49,8 @@ gamepads.addEventListener('connect', gamepad => {
         }
         if (index in directionMap) {
             currentHandler.onDirectionAction(directionMap[index])
+        } else {
+            currentHandler.onAction(index)
         }
     })
     gamepad.addEventListener('joystickmove', (indices, values) => {

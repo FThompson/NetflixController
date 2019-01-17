@@ -26,15 +26,7 @@ class Navigatable {
         throw new TypeError('must implement abstract Navigatable#exit')
     }
 
-    doPrimaryAction() {
-        throw new TypeError('must implement abstract Navigatable#doPrimaryAction')
-    }
-
-    doSecondaryAction() {
-        
-    }
-
-    doTertiaryAction() {
+    doAction(index) {
         
     }
 

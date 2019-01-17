@@ -32,6 +32,11 @@ class NavigatablePage {
     }
 
     // to be overriden by subclasses
+    unload() {
+        Object.keys(this.navigatables).forEach(key => this.navigatables[key].exit())
+    }
+
+    // to be overriden by subclasses
     isPageReady() {
         return true
     }
@@ -69,20 +74,8 @@ class NavigatablePage {
         this.navigatables[position] = navigatable
     }
 
-    onPrimaryAction() {
-        this.navigatables[this.position].doPrimaryAction()
-    }
-
-    onSecondaryAction() {
-        this.navigatables[this.position].doSecondaryAction()
-    }
-
-    onTertiaryAction() {
-        this.navigatables[this.position].doTertiaryAction()
-    }
-
-    onBackAction() {
-        
+    onAction(index) {
+        this.navigatables[this.position].doAction(index)
     }
 
     onDirectionAction(direction) {

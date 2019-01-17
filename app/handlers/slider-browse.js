@@ -9,7 +9,8 @@ class SliderBrowse extends NavigatablePage {
 
     async load() {
         await super.load()
-        this.addNavigatable(0, new Menu())
+        this.menu = new Menu()
+        this.addNavigatable(0, this.menu)
     }
 
     setNavigatable(position) {
