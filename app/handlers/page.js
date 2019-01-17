@@ -69,8 +69,20 @@ class NavigatablePage {
         this.navigatables[position] = navigatable
     }
 
-    onSelectAction() {
-        this.navigatable.select()
+    onPrimaryAction() {
+        this.navigatables[this.position].doPrimaryAction()
+    }
+
+    onSecondaryAction() {
+        this.navigatables[this.position].doSecondaryAction()
+    }
+
+    onTertiaryAction() {
+        this.navigatables[this.position].doTertiaryAction()
+    }
+
+    onBackAction() {
+        
     }
 
     onDirectionAction(direction) {

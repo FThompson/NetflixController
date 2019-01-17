@@ -16,6 +16,10 @@ class SliderBrowse extends NavigatablePage {
         if (!this.isNavigatable(position)) {
             // TODO: detect big title item
             let slider = Slider.getSlider(position - 1)
+            if (!slider) {
+                console.log('slider nonexistent; doing nothing')
+                return  // may have moved too fast; page needs to load
+            }
             this.addNavigatable(position, slider)
         }
         super.setNavigatable(position)

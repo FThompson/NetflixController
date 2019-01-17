@@ -26,8 +26,16 @@ class Navigatable {
         throw new TypeError('must implement abstract Navigatable#exit')
     }
 
-    click() {
-        throw new TypeError('must implement abstract Navigatable#click')
+    doPrimaryAction() {
+        throw new TypeError('must implement abstract Navigatable#doPrimaryAction')
+    }
+
+    doSecondaryAction() {
+        
+    }
+
+    doTertiaryAction() {
+        
     }
 
     static mouseOver(element) {

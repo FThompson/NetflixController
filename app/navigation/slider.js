@@ -74,8 +74,8 @@ class Slider extends Navigatable {
         return {position: position}
     }
 
-    click() {
-
+    doPrimaryAction() {
+        document.querySelector('.bob-play-hitzone').click()
     }
 
     getBoxArtContainer() {

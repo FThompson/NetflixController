@@ -33,8 +33,14 @@ console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
 gamepads.addEventListener('connect', gamepad => {
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${gamepad.gamepad.id}`)
     gamepad.addEventListener('buttonpress', (index) => {
-        if (index === 0) {
-            currentHandler.onSelectAction()
+        if (index === StandardMapping.Button.BUTTON_BOTTOM) {
+            currentHandler.onPrimaryAction()
+        } else if (index === StandardMapping.Button.BUTTON_CONTROL_LEFT) {
+            currentHandler.onSecondaryAction()
+        } else if (index === StandardMapping.Button.BUTTON_TOP) {
+            currentHandler.onTertiaryAction()
+        } else if (index === StandardMapping.Button.BUTTON_RIGHT) {
+            currentHandler.onBackAction()
         }
         let directionMap = {
             12: DIRECTION.UP,

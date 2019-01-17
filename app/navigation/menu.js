@@ -26,8 +26,9 @@ class Menu extends Navigatable {
         this.position = -1
     }
 
-    click() {
-
+    doPrimaryAction() {
+        this.options[this.position].click()
+        this.unselect()
     }
 
     unselect() {
