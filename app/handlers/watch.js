@@ -2,11 +2,15 @@ class WatchVideo extends NavigatablePage {
     constructor() {
         super()
         this.fullscreen = false
-        this.player = document.querySelector('.NFPlayer')
     }
 
     static validatePath(path) {
         return path.startsWith('/watch')
+    }
+
+    async load() {
+        await super.load()
+        this.player = document.querySelector('.NFPlayer')
     }
 
     isPageReady() {
@@ -53,9 +57,8 @@ class WatchVideo extends NavigatablePage {
     }
 
     dispatchKey(keyCode) {
-        let player = document.querySelector('.NFPlayer')
         let event = new KeyboardEvent('keydown', {keyCode: keyCode, bubbles: true, cancelable: true, view: window})
-        player.dispatchEvent(event)
+        this.player.dispatchEvent(event)
     }
 
     // this suffers the same untrusted event problem as the key dispatch
