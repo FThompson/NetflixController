@@ -31,6 +31,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 })
 
 // uses chrome.debugger to send trusted event, which is needed for setting fullscreen
+// via https://stackoverflow.com/a/53488689/1247781
 function setFullScreen(tabId) {
     let debuggee = {tabId: tabId}
     chrome.debugger.attach(debuggee, '1.3', () => {

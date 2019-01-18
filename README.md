@@ -1,6 +1,7 @@
 Control Netflix in your browser with a gamepad or controller using this Chrome extension.
 
 TODO
+* Fix bugs with over polling joystick movement / failing to mouseout slider items
 * Firefox/Edge support (convert manifests, fullscreen action)
 * Continue mapping navigation controls to additional page elements
 * Account login page
