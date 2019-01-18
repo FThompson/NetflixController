@@ -1,6 +1,7 @@
 Control Netflix in your browser with a gamepad or controller using this Chrome extension.
 
 TODO
+* Firefox/Edge support (convert manifests, fullscreen action)
 * Continue mapping navigation controls to additional page elements
 * Account login page
 * Decide what to do with the browser page action icon

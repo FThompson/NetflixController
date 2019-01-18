@@ -1,9 +1,4 @@
 class WatchVideo extends NavigatablePage {
-    constructor() {
-        super()
-        this.fullscreen = false
-    }
-
     static validatePath(path) {
         return path.startsWith('/watch')
     }
@@ -26,10 +21,8 @@ class WatchVideo extends NavigatablePage {
             this.dispatchKey(77)
         } else if (index === StandardMapping.Button.BUTTON_TOP) {
             // F(on)/ESC(off) = toggle fullscreen
-            // unable to set fullscreen via key due to non-trusted events
-            // TODO: communicate with background script to execute
-            this.dispatchKey(this.fullscreen ? 27 : 70)
-            this.fullscreen = !this.fullscreen
+            // unable to set fullscreen via key due to non-trusted events; use chrome.debugger
+            chrome.runtime.sendMessage({action: 'fullscreen'})
         } else if (index === StandardMapping.Button.D_PAD_LEFT) {
             // LEFT = rewind 10s
             this.dispatchKey(37)
@@ -47,23 +40,17 @@ class WatchVideo extends NavigatablePage {
         }
     }
 
+    onDirectionAction(direction) {
+        // override default direction navigation to do nothing
+    }
+
     openNextEpisode() {
         let button = document.querySelector('.button-nfplayerNextEpisode')
         button.click()
     }
 
-    onDirectionAction(direction) {
-        // override default direction navigation to do nothing
-    }
-
     dispatchKey(keyCode) {
         let event = new KeyboardEvent('keydown', {keyCode: keyCode, bubbles: true, cancelable: true, view: window})
         this.player.dispatchEvent(event)
-    }
-
-    // this suffers the same untrusted event problem as the key dispatch
-    toggleFullScreen() {
-        let button = document.querySelector('.button-nfplayerFullscreen')
-        button.click()
     }
 }

@@ -10,8 +10,8 @@ chrome.runtime.onInstalled.addListener(() => {
                 ],
                 actions: [new chrome.declarativeContent.ShowPageAction()]
             }
-        ]);
-    });
+        ])
+    })
 })
 
 // inform the content script of any changes to the netflix's url path
@@ -22,4 +22,25 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             chrome.tabs.sendMessage(tabId, {'path': url.pathname})
         }
     }
-});
+})
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'fullscreen') {
+        setFullScreen(sender.tab.id)
+    }
+})
+
+// uses chrome.debugger to send trusted event, which is needed for setting fullscreen
+function setFullScreen(tabId) {
+    let debuggee = {tabId: tabId}
+    chrome.debugger.attach(debuggee, '1.3', () => {
+        chrome.debugger.sendCommand(debuggee, 'Input.dispatchKeyEvent', {
+            type: 'rawKeyDown',
+            nativeVirtualKeyCode: 70,
+            windowsVirtualKeyCode: 70,
+        }, () => {
+            // detach immediately to avoid interrupting user experience with page-being-debugged popup
+            chrome.debugger.detach(debuggee)
+        })
+    })
+}
