@@ -80,6 +80,11 @@ class Slider extends Navigatable {
             if (hitzone) {
                 hitzone.click()
             }
+        } else if (index === StandardMapping.Button.BUTTON_LEFT) {
+            let hitzone = document.querySelector('.bob-jaw-hitzone')
+            if (hitzone) {
+                hitzone.click()
+            }
         }
     }
 

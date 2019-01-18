@@ -29,6 +29,7 @@
                 "app/handlers/slider-browse.js",
                 "app/handlers/featureless-browse.js",
                 "app/handlers/featured-browse.js",
+                "app/handlers/watch.js",
                 "app/content.js"
             ]
         }

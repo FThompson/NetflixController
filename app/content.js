@@ -1,7 +1,8 @@
 let currentHandler = null
 const pageHandlers = [
     FeaturedBrowse,
-    FeaturelessBrowse
+    FeaturelessBrowse,
+    WatchVideo
 ]
 
 // TODO: refresh page if ?so=su is in url? this seems to cause the page to not load
@@ -49,9 +50,8 @@ gamepads.addEventListener('connect', gamepad => {
         }
         if (index in directionMap) {
             currentHandler.onDirectionAction(directionMap[index])
-        } else {
-            currentHandler.onAction(index)
         }
+        currentHandler.onAction(index)
     })
     gamepad.addEventListener('joystickmove', (indices, values) => {
         checkJoystickDirection(gamepad, values[0], DIRECTION.RIGHT, DIRECTION.LEFT)
