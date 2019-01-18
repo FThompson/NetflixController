@@ -42,16 +42,21 @@ console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
 gamepads.addEventListener('connect', gamepad => {
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${gamepad.gamepad.id}`)
     gamepad.addEventListener('buttonpress', (index) => {
-        let directionMap = {
-            12: DIRECTION.UP,
-            13: DIRECTION.DOWN,
-            14: DIRECTION.LEFT,
-            15: DIRECTION.RIGHT
+        if (index === StandardMapping.Button.BUTTON_RIGHT) {
+            unload()
+            window.history.back()
+        } else {
+            let directionMap = {
+                12: DIRECTION.UP,
+                13: DIRECTION.DOWN,
+                14: DIRECTION.LEFT,
+                15: DIRECTION.RIGHT
+            }
+            if (index in directionMap) {
+                currentHandler.onDirectionAction(directionMap[index])
+            }
+            currentHandler.onAction(index)
         }
-        if (index in directionMap) {
-            currentHandler.onDirectionAction(directionMap[index])
-        }
-        currentHandler.onAction(index)
     })
     gamepad.addEventListener('joystickmove', (indices, values) => {
         checkJoystickDirection(gamepad, values[0], DIRECTION.RIGHT, DIRECTION.LEFT)

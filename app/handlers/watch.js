@@ -9,6 +9,10 @@ class WatchVideo extends NavigatablePage {
         return path.startsWith('/watch')
     }
 
+    isPageReady() {
+        return document.querySelector('.NFPlayer') !== null
+    }
+
     onAction(index) {
         if (index === StandardMapping.Button.BUTTON_BOTTOM) {
             // SPACE/ENTER = play/pause
