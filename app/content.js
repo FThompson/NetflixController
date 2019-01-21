@@ -59,8 +59,8 @@ gamepads.addEventListener('connect', gamepad => {
         }
     })
     gamepad.addEventListener('joystickmove', (indices, values) => {
-        checkJoystickDirection(gamepad, values[0], DIRECTION.RIGHT, DIRECTION.LEFT)
-        checkJoystickDirection(gamepad, values[1], DIRECTION.DOWN, DIRECTION.UP)
+        checkJoystickDirection(gamepad, indices[0], values[0], DIRECTION.RIGHT, DIRECTION.LEFT)
+        checkJoystickDirection(gamepad, indices[1], values[1], DIRECTION.DOWN, DIRECTION.UP)
     }, StandardMapping.Axis.JOYSTICK_LEFT)
 })
 gamepads.addEventListener('disconnect', gamepad => {
@@ -68,8 +68,29 @@ gamepads.addEventListener('disconnect', gamepad => {
 })
 gamepads.start()
 
-function checkJoystickDirection(gamepad, value, pos, neg) {
+// TODO: rethink this messy code; integrate rate limited polling into gamepads.js?
+let timeouts = {}
+let directions = {}
+
+function checkJoystickDirection(gamepad, axis, value, pos, neg) {
     if (Math.abs(value) >= 1 - gamepad.joystickDeadzone) {
-        currentHandler.onDirectionAction(value > 0 ? pos : neg)
+        let direction = value > 0 ? pos : neg
+        if (!(axis in directions) || directions[axis] !== direction) {
+            directions[axis] = direction
+            rateLimitJoystickDirection(axis, 500)
+        }
+    } else {
+        directions[axis] = -1
+        if (axis in timeouts) {
+            clearTimeout(timeouts[axis])
+            delete timeouts[axis]
+        }
+    }
+}
+
+function rateLimitJoystickDirection(axis, rateMillis) {
+    if (directions[axis] !== -1) {
+        currentHandler.onDirectionAction(directions[axis])
+        timeouts[axis] = setTimeout(() => rateLimitJoystickDirection(axis, rateMillis), rateMillis)
     }
 }
