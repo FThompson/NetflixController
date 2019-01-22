@@ -11,57 +11,83 @@ class VirtualKeyboard {
         this.input = input
         this.parent = parent
         this.keyboard = keyboard
+        this.closed = false
     }
 
     static create(input, parent) {
         // non-class styling to avoid risking class conflict with page
         let keyboard = document.createElement('div')
         keyboard.style.position = 'absolute'
-        keyboard.style.height = '10em'
         keyboard.style.zIndex = '10000'
         keyboard.style.display = 'flex'
-        keyboard.style.flexDirection = 'column'
-        keyboard.style.justifyContent = 'space-between'
+        keyboard.style.flexFlow = 'row wrap'
+        keyboard.style.alignItems = 'stretch'
         keyboard.style.textAlign = 'center'
-        keyboard.style.paddingTop = '8px'
-        keyboard.style.paddingBottom = '8px'
+        keyboard.style.paddingTop = '4px'
+        keyboard.style.paddingBottom = '4px'
         keyboard.style.backgroundColor = 'rgba(30, 30, 30, 0.8)'
         keyboard.style.border = '1px solid white'
         keyboard.style.borderTop = 'none'
 
-        for (let x = 0; x < LAYOUT.length; x++) {
-            let row = document.createElement('div')
-            row.style.display = 'flex'
-            row.style.justifyContent = 'space-between'
-            for (let y = 0; y < LAYOUT[x].length; y++) {
-                let key = document.createElement('span')
-                key.style.flexBasis = '10%'
-                key.innerHTML = LAYOUT[x][y]
-                row.append(key)
-            }
-            keyboard.append(row)
+        let appendKey = (text, widthPercent) => {
+            let key = document.createElement('span')
+            key.style.flexBasis = widthPercent + '%'
+            key.style.display = 'flex'
+            key.style.justifyContent = 'center'
+            key.style.alignItems = 'center'
+            key.innerHTML = text
+            keyboard.append(key)
         }
 
-        let bottomRow = document.createElement('div')
-        bottomRow.style.display = 'flex'
-        bottomRow.style.justifyContent = 'space-between'
-        for (let label in LAYOUT_BOTTOM) {
-            let key = document.createElement('span')
-            key.style.flexBasis = (LAYOUT_BOTTOM[label] * 10) + '%'
-            key.innerHTML = label
-            bottomRow.append(key)
+        for (let x = 0; x < LAYOUT.length; x++) {
+            for (let y = 0; y < LAYOUT[x].length; y++) {
+                appendKey(LAYOUT[x][y], 10)
+            }
         }
-        keyboard.append(bottomRow)
+
+        for (let label in LAYOUT_BOTTOM) {
+            appendKey(label, LAYOUT_BOTTOM[label] * 10)
+        }
 
         let targetBounds = parent.getBoundingClientRect()
         keyboard.style.top = (targetBounds.top + targetBounds.height) + 'px'
         keyboard.style.width = (targetBounds.width - 2) + 'px'
+        keyboard.style.height = (targetBounds.height * 4) + 'px'
         parent.append(keyboard)
 
         return new VirtualKeyboard(input, parent, keyboard)
     }
 
+    insert() {
+        
+    }
+
+    backspace() {
+
+    }
+
+    submit() {
+
+    }
+
     close() {
         this.parent.removeChild(this.keyboard)
+        this.closed = true
+    }
+
+    onAction(index) {
+        if (index === StandardMapping.Button.BUTTON_TOP) {
+            this.close()
+        } else if (index === StandardMapping.Button.BUTTON_BOTTOM) {
+            this.insert()
+        } else if (index === StandardMapping.Button.BUTTON_RIGHT) {
+            this.backspace()
+        } else if (index === StandardMapping.Button.BUTTON_LEFT) {
+            this.submit()
+        }
+    }
+
+    onDirectionAction(direction) {
+
     }
 }
