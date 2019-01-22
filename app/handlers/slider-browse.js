@@ -28,13 +28,32 @@ class SliderBrowse extends NavigatablePage {
 
     isPageReady() {
         let row = document.querySelector(`#row-${this.loadingRow}`)
-        if (row) {
-            return row.getBoundingClientRect().width > 0
-        }
-        return false
+        return row ? row.getBoundingClientRect().width > 0 : false
     }
 
     needsPseudoStyler() {
         return true
+    }
+
+    onAction(index) {
+        if (index === StandardMapping.Button.BUTTON_TOP) {
+            if (this.keyboard) {
+                this.keyboard.close()
+                this.keyboard = null
+            } else {
+                this.openSearch()
+            }
+        }
+        super.onAction(index)
+    }
+
+    openSearch() {
+        let searchButton = document.querySelector('.searchTab')
+        if (searchButton) {
+            searchButton.click()
+            Navigatable.scrollIntoView(searchButton)
+            let searchInput = document.querySelector('.searchInput > input[type=text]')
+            this.keyboard = VirtualKeyboard.create(searchInput, searchInput.parentElement.parentElement)
+        }
     }
 }
