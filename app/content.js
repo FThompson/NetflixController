@@ -7,6 +7,10 @@ const pageHandlers = [
 
 // TODO: refresh page if ?so=su is in url? this seems to cause the page to not load
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
+    // TODO temp fix; need to properly handle virtual keyboard
+    // maybe add Page#supportsKeyboard and maintain instance in content.js
+    // and upon loading a module that doesnt support it (i.e. Watch), close it
+    if (request.path.startsWith('/search')) return
     unload()
     refreshPageIfBad()
     for (let i = 0, found = false; !false && i < pageHandlers.length; i++) {
@@ -42,7 +46,7 @@ console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
 gamepads.addEventListener('connect', gamepad => {
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${gamepad.gamepad.id}`)
     gamepad.addEventListener('buttonpress', (index) => {
-        if (index === StandardMapping.Button.BUTTON_RIGHT) {
+        if (index === StandardMapping.Button.BUTTON_CONTROL_LEFT) {
             unload()
             window.history.back()
         } else {
