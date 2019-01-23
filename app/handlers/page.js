@@ -46,6 +46,11 @@ class NavigatablePage {
         return false
     }
 
+    // to be overriden by subclasses
+    hasSearchBar() {
+        return false
+    }
+
     // static validatePath(path) must be implemented by subclasses
 
     isNavigatable(position) {

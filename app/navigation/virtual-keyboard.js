@@ -69,7 +69,7 @@ class VirtualKeyboard {
         if (this.selected) {
             this.keys[this.selected].style.backgroundColor = ''
         }
-        this.keys[key].style.backgroundColor = 'red'
+        this.keys[key].style.backgroundColor = 'rgba(229, 9, 20)'
         this.selected = key
     }
 
@@ -82,8 +82,7 @@ class VirtualKeyboard {
             this.close()
         } else {
             if (this.selected === 'space') {
-                this.input.value += ' '
-                this.toggleShift(true)
+                this.insertSpace()
             } else {
                 let insertion = this.selected.toLowerCase()
                 if (this.shift) {
@@ -94,6 +93,11 @@ class VirtualKeyboard {
             }
             this.dispatchInputChangeEvent()
         }
+    }
+
+    insertSpace() {
+        this.input.value += ' '
+        this.toggleShift(true)
     }
 
     backspace() {
@@ -118,20 +122,23 @@ class VirtualKeyboard {
     }
 
     close() {
-        // TODO: find a way to collapse the search bar
+        // TODO find a way to close the search bar if empty
+        // clear(): this.parent.querySelector('.icon-close').click()
         this.parent.removeChild(this.keyboard)
         this.closed = true
     }
 
     onAction(index) {
         if (index === StandardMapping.Button.BUTTON_TOP) {
-            this.close()
+            this.insertSpace()
         } else if (index === StandardMapping.Button.BUTTON_BOTTOM) {
             this.insert()
         } else if (index === StandardMapping.Button.BUTTON_RIGHT) {
             this.backspace()
         } else if (index === StandardMapping.Button.BUTTON_LEFT) {
             this.toggleShift()
+        } else if (index === StandardMapping.Button.BUTTON_CONTROL_RIGHT) {
+            this.close()
         }
     }
 

@@ -35,36 +35,7 @@ class SliderBrowse extends NavigatablePage {
         return true
     }
 
-    onAction(index) {
-        if (this.keyboard) {
-            this.keyboard.onAction(index)
-            if (this.keyboard.closed) {
-                this.keyboard = null
-            }
-        } else {
-            if (index === StandardMapping.Button.BUTTON_TOP) {
-                this.openSearch()
-            } else {
-                // TODO: better to rewrite gamepads.js to have consumable GamepadEvents
-                super.onAction(index)
-            }
-        }
-    }
-
-    onDirectionAction(direction) {
-        if (this.keyboard) {
-            this.keyboard.onDirectionAction(direction)
-        } else {
-            super.onDirectionAction(direction)
-        }
-    }
-
-    openSearch() {
-        let searchButton = document.querySelector('.searchTab')
-        if (searchButton) {
-            searchButton.click()
-            let searchInput = document.querySelector('.searchInput > input[type=text]')
-            this.keyboard = VirtualKeyboard.create(searchInput, searchInput.parentElement.parentElement)
-        }
+    hasSearchBar() {
+        return true
     }
 }

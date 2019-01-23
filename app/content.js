@@ -1,3 +1,4 @@
+let keyboard = null
 let currentHandler = null
 const pageHandlers = [
     FeaturedBrowse,
@@ -10,7 +11,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
     // TODO temp fix; need to properly handle virtual keyboard
     // maybe add Page#supportsKeyboard and maintain instance in content.js
     // and upon loading a module that doesnt support it (i.e. Watch), close it
-    if (request.path.startsWith('/search')) return
     unload()
     refreshPageIfBad()
     for (let i = 0, found = false; !false && i < pageHandlers.length; i++) {
@@ -25,6 +25,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
 
 async function loadPage(handlerClass) {
     currentHandler = new handlerClass()
+    if (!currentHandler.hasSearchBar()) {
+        keyboard = null
+    }
     await currentHandler.load()
 }
 
@@ -46,20 +49,20 @@ console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
 gamepads.addEventListener('connect', gamepad => {
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${gamepad.gamepad.id}`)
     gamepad.addEventListener('buttonpress', (index) => {
-        if (index === StandardMapping.Button.BUTTON_CONTROL_LEFT) {
-            unload()
-            window.history.back()
+        if (keyboard) {
+            sendButtonPress(index, keyboard)
+            if (keyboard.closed) {
+                keyboard = null
+            }
         } else {
-            let directionMap = {
-                12: DIRECTION.UP,
-                13: DIRECTION.DOWN,
-                14: DIRECTION.LEFT,
-                15: DIRECTION.RIGHT
+            if (index === StandardMapping.Button.BUTTON_RIGHT) {
+                unload()
+                window.history.back()
+            } else if (index === StandardMapping.Button.BUTTON_TOP) {
+                openSearch()
+            } else {
+                sendButtonPress(index, currentHandler)
             }
-            if (index in directionMap) {
-                currentHandler.onDirectionAction(directionMap[index])
-            }
-            currentHandler.onAction(index)
         }
     })
     gamepad.addEventListener('joystickmove', (indices, values) => {
@@ -71,6 +74,19 @@ gamepads.addEventListener('disconnect', gamepad => {
     console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${gamepad.gamepad.id}`)
 })
 gamepads.start()
+
+function sendButtonPress(index, handler) {
+    let directionMap = {
+        12: DIRECTION.UP,
+        13: DIRECTION.DOWN,
+        14: DIRECTION.LEFT,
+        15: DIRECTION.RIGHT
+    }
+    if (index in directionMap) {
+        handler.onDirectionAction(directionMap[index])
+    }
+    handler.onAction(index)
+}
 
 // TODO: rethink this messy code; integrate rate limited polling into gamepads.js?
 let timeouts = {}
@@ -94,7 +110,20 @@ function checkJoystickDirection(gamepad, axis, value, pos, neg) {
 
 function rateLimitJoystickDirection(axis, rateMillis) {
     if (directions[axis] !== -1) {
-        currentHandler.onDirectionAction(directions[axis])
+        if (keyboard) {
+            keyboard.onDirectionAction(directions[axis])
+        } else {
+            currentHandler.onDirectionAction(directions[axis])
+        }
         timeouts[axis] = setTimeout(() => rateLimitJoystickDirection(axis, rateMillis), rateMillis)
+    }
+}
+
+function openSearch() {
+    let searchButton = document.querySelector('.searchTab')
+    if (searchButton) {
+        searchButton.click()
+        let searchInput = document.querySelector('.searchInput > input[type=text]')
+        keyboard = VirtualKeyboard.create(searchInput, searchInput.parentElement.parentElement)
     }
 }
