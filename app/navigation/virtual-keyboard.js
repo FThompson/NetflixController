@@ -97,6 +97,7 @@ class VirtualKeyboard {
 
     insertSpace() {
         this.input.value += ' '
+        this.dispatchInputChangeEvent()
         this.toggleShift(true)
     }
 

@@ -6,11 +6,7 @@ const pageHandlers = [
     WatchVideo
 ]
 
-// TODO: refresh page if ?so=su is in url? this seems to cause the page to not load
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
-    // TODO temp fix; need to properly handle virtual keyboard
-    // maybe add Page#supportsKeyboard and maintain instance in content.js
-    // and upon loading a module that doesnt support it (i.e. Watch), close it
     unload()
     refreshPageIfBad()
     for (let i = 0, found = false; !false && i < pageHandlers.length; i++) {
@@ -123,7 +119,7 @@ function openSearch() {
     let searchButton = document.querySelector('.searchTab')
     if (searchButton) {
         searchButton.click()
-        let searchInput = document.querySelector('.searchInput > input[type=text]')
-        keyboard = VirtualKeyboard.create(searchInput, searchInput.parentElement.parentElement)
     }
+    let searchInput = document.querySelector('.searchInput > input[type=text]')
+    keyboard = VirtualKeyboard.create(searchInput, searchInput.parentElement.parentElement)
 }
