@@ -1,7 +1,6 @@
 Control Netflix in your browser with a gamepad or controller using this Chrome extension.
 
 ## TODO
-* Virtual keyboard for search (activate with Y)
 * Dynamically determine whether a page has a billboard or not
 * Firefox/Edge support (convert manifests, fullscreen action)
 * Continue mapping navigation controls to additional page elements

@@ -17,7 +17,6 @@ class VirtualKeyboard {
         this.select('A')
     }
 
-    // TODO: properly handle already-existing search box
     static create(input, parent) {
         // non-class styling to avoid risking class conflict with page
         let keyboard = document.createElement('div')
