@@ -122,9 +122,12 @@ class VirtualKeyboard {
         this.input.dispatchEvent(new Event('change', { 'bubbles': true }))
     }
 
+    clear() {
+        this.parent.querySelector('.icon-close').click()
+    }
+
     close() {
-        // TODO find a way to close the search bar if empty
-        // clear(): this.parent.querySelector('.icon-close').click()
+        this.input.blur()
         this.parent.removeChild(this.keyboard)
         this.closed = true
     }
@@ -140,6 +143,8 @@ class VirtualKeyboard {
             this.toggleShift()
         } else if (index === StandardMapping.Button.BUTTON_CONTROL_RIGHT) {
             this.close()
+        } else if (index === StandardMapping.Button.BUTTON_CONTROL_LEFT) {
+            this.clear()
         }
     }
 
