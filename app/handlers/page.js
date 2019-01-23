@@ -61,13 +61,7 @@ class NavigatablePage {
         if (!this.isNavigatable(position)) {
             throw new Error('no navigatable at position ' + position)
         }
-        let params = {}
-        if (this.navigatables[this.position]) {
-            let exitParams = this.navigatables[this.position].exit()
-            if (exitParams) {
-                params = exitParams
-            }
-        }
+        let params = this.exit()
         this.navigatables[position].enter(params)
         this.position = position
     }
@@ -80,11 +74,20 @@ class NavigatablePage {
     }
 
     exit() {
-        return this.navigatables[this.position].exit() || {}
+        let params = {}
+        if (this.navigatables[this.position]) {
+            let exitParams = this.navigatables[this.position].exit()
+            if (exitParams) {
+                params = exitParams
+            }
+        }
+        return params
     }
 
     enter(params) {
-        this.navigatables[this.position].enter(params)
+        if (this.navigatables[this.position]) {
+            this.navigatables[this.position].enter(params)
+        }
     }
 
     onAction(index) {

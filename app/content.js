@@ -3,6 +3,7 @@ let currentHandler = null
 const pageHandlers = [
     FeaturedBrowse,
     FeaturelessBrowse,
+    SearchBrowse,
     WatchVideo
 ]
 

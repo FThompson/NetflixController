@@ -32,6 +32,7 @@
                 "app/handlers/featureless-browse.js",
                 "app/handlers/featured-browse.js",
                 "app/handlers/watch.js",
+                "app/handlers/search.js",
                 "app/content.js"
             ]
         }
