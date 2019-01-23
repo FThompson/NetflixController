@@ -121,5 +121,12 @@ function openSearch() {
         searchButton.click()
     }
     let searchInput = document.querySelector('.searchInput > input[type=text]')
-    keyboard = VirtualKeyboard.create(searchInput, searchInput.parentElement.parentElement)
+    let searchParent = searchInput.parentElement.parentElement
+    let startingLocation = window.location.href
+    let handlerState = currentHandler.exit()
+    keyboard = VirtualKeyboard.create(searchInput, searchParent, () => {
+        if (window.location.href === startingLocation) {
+            currentHandler.enter(handlerState)
+        }
+    })
 }

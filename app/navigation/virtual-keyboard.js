@@ -7,17 +7,18 @@ const LAYOUT = [
 const LAYOUT_BOTTOM = { 'space': 6, '\u232b': 2, 'close': 2 }
 
 class VirtualKeyboard {
-    constructor(input, parent, keyboard, keys) {
+    constructor(input, parent, keyboard, keys, closeCallback) {
         this.input = input
         this.parent = parent
         this.keyboard = keyboard
         this.keys = keys
+        this.closeCallback = closeCallback
         this.closed = false
         this.toggleShift(true) // first letter upper case
         this.select('A')
     }
 
-    static create(input, parent) {
+    static create(input, parent, closeCallback) {
         // non-class styling to avoid risking class conflict with page
         let keyboard = document.createElement('div')
         keyboard.style.position = 'absolute'
@@ -61,7 +62,7 @@ class VirtualKeyboard {
         keyboard.style.height = (targetBounds.height * 4) + 'px'
         parent.append(keyboard)
 
-        return new VirtualKeyboard(input, parent, keyboard, keys)
+        return new VirtualKeyboard(input, parent, keyboard, keys, closeCallback)
     }
 
     select(key) {
@@ -128,6 +129,9 @@ class VirtualKeyboard {
     close() {
         this.input.blur()
         this.parent.removeChild(this.keyboard)
+        if (this.closeCallback) {
+            this.closeCallback()
+        }
         this.closed = true
     }
 

@@ -79,6 +79,14 @@ class NavigatablePage {
         this.navigatables[position] = navigatable
     }
 
+    exit() {
+        return this.navigatables[this.position].exit() || {}
+    }
+
+    enter(params) {
+        this.navigatables[this.position].enter(params)
+    }
+
     onAction(index) {
         this.navigatables[this.position].doAction(index)
     }
