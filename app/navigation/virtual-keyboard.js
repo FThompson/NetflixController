@@ -105,6 +105,9 @@ class VirtualKeyboard {
         if (this.input.value.length > 0) {
             this.input.value = this.input.value.substring(0, this.input.value.length - 1)
             this.dispatchInputChangeEvent()
+            if (this.input.value.endsWith(' ')) {
+                this.toggleShift(true)
+            }
         }
     }
 
@@ -124,6 +127,7 @@ class VirtualKeyboard {
 
     clear() {
         this.parent.querySelector('.icon-close').click()
+        this.toggleShift(true)
     }
 
     close() {
