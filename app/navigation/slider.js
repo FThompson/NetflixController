@@ -124,7 +124,7 @@ class Slider extends Navigatable {
         this.sliderItem = sliderItem
         this.position = position
         let boxart = this.getBoxArtContainer()
-        boxart.style.outline = '3px solid rgba(229, 9, 20, 0.7)'
+        boxart.style.outline = '3px solid ' + getTransparentNetflixRed(0.7)
     }
 
     /**

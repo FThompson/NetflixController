@@ -44,7 +44,7 @@ class Menu extends Navigatable {
         this.unselect()
         this.position = position
         this.styler.toggleStyle(this.options[this.position], ':hover')
-        this.options[this.position].style.cssText = 'outline: 3px solid rgba(229, 9, 20, 0.7) !important'
+        this.options[this.position].style.cssText = 'outline: 3px solid ' + getTransparentNetflixRed(0.7) + ' !important'
         Navigatable.scrollIntoView(this.options[this.position])
     }
 }

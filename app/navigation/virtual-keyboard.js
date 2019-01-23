@@ -1,10 +1,12 @@
+const SHIFT = '\u21e7'
+const BACKSPACE = '\u232b'
 const LAYOUT = [
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', "'"],
-    ['\u21e7', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.']
+    [SHIFT, 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.']
 ]
-const LAYOUT_BOTTOM = { 'space': 6, '\u232b': 2, 'close': 2 }
+const LAYOUT_BOTTOM = { 'space': 6, [BACKSPACE]: 2, 'close': 2 }
 
 class VirtualKeyboard {
     constructor(input, parent, keyboard, keys, closeCallback) {
@@ -36,6 +38,7 @@ class VirtualKeyboard {
         let keys = {}
         let appendKey = (text, widthPercent) => {
             let key = document.createElement('span')
+            key.style.outlineOffset = '-1px'
             key.style.flexBasis = widthPercent + '%'
             // flex container properties to vertically center text
             key.style.display = 'flex'
@@ -69,14 +72,14 @@ class VirtualKeyboard {
         if (this.selected) {
             this.keys[this.selected].style.backgroundColor = ''
         }
-        this.keys[key].style.backgroundColor = 'rgba(229, 9, 20)'
+        this.keys[key].style.backgroundColor = NETFLIX_RED
         this.selected = key
     }
 
     insert() {
-        if (this.selected === '\u21e7') {
+        if (this.selected === SHIFT) {
             this.toggleShift()
-        } else if (this.selected === '\u232b') {
+        } else if (this.selected === BACKSPACE) {
             this.backspace()
         } else if (this.selected === 'close') {
             this.close()
@@ -142,17 +145,44 @@ class VirtualKeyboard {
     onAction(index) {
         if (index === StandardMapping.Button.BUTTON_TOP) {
             this.insertSpace()
+            this.pressKey('space')
         } else if (index === StandardMapping.Button.BUTTON_BOTTOM) {
             this.insert()
+            this.pressKey(this.selected)
         } else if (index === StandardMapping.Button.BUTTON_RIGHT) {
             this.backspace()
+            this.pressKey(BACKSPACE)
         } else if (index === StandardMapping.Button.BUTTON_LEFT) {
             this.toggleShift()
+            this.pressKey(SHIFT)
         } else if (index === StandardMapping.Button.BUTTON_CONTROL_RIGHT) {
             this.close()
+            this.pressKey('close')
         } else if (index === StandardMapping.Button.BUTTON_CONTROL_LEFT) {
             this.clear()
         }
+    }
+
+    onButtonRelease(index) {
+        if (index === StandardMapping.Button.BUTTON_TOP) {
+            this.releaseKey('space')
+        } else if (index === StandardMapping.Button.BUTTON_BOTTOM) {
+            this.releaseKey(this.selected)
+        } else if (index === StandardMapping.Button.BUTTON_RIGHT) {
+            this.releaseKey(BACKSPACE)
+        } else if (index === StandardMapping.Button.BUTTON_LEFT) {
+            this.releaseKey(SHIFT)
+        } else if (index === StandardMapping.Button.BUTTON_CONTROL_RIGHT) {
+            this.releaseKey('close')
+        }
+    }
+
+    pressKey(key) {
+        this.keys[key].style.outline = '1px solid ' + (key === this.selected ? 'rgb(30, 30, 30)' : NETFLIX_RED)
+    }
+
+    releaseKey(key) {
+        this.keys[key].style.outline = 'none'
     }
 
     onDirectionAction(direction) {

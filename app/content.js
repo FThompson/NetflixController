@@ -1,3 +1,9 @@
+const NETFLIX_RED = 'rgba(229, 9, 20)'
+
+function getTransparentNetflixRed(opacity) {
+    return NETFLIX_RED.replace(')', ', ' + opacity + ')')
+}
+
 let keyboard = null
 let currentHandler = null
 const pageHandlers = [
@@ -44,7 +50,7 @@ function refreshPageIfBad() {
 console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
 gamepads.addEventListener('connect', gamepad => {
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${gamepad.gamepad.id}`)
-    gamepad.addEventListener('buttonpress', (index) => {
+    gamepad.addEventListener('buttonpress', index => {
         if (keyboard) {
             sendButtonPress(index, keyboard)
             if (keyboard.closed) {
@@ -59,6 +65,11 @@ gamepads.addEventListener('connect', gamepad => {
             } else {
                 sendButtonPress(index, currentHandler)
             }
+        }
+    })
+    gamepad.addEventListener('buttonrelease', index => {
+        if (keyboard) {
+            keyboard.onButtonRelease(index)
         }
     })
     gamepad.addEventListener('joystickmove', (indices, values) => {
