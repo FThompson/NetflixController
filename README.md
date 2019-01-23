@@ -16,3 +16,4 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.
 * [Gamepads.js](https://github.com/FThompson/Gamepads.js) - A simple JavaScript module for tracking Gamepads and events pertaining to their usage.
 * Project icons courtesy of https://material.io/icons/ and https://iconfu.com.
+* Many thanks to [Tyler Sedlar](https://github.com/TSedlar) for creating pseudo:styler and for letting me send him ideas/questions throughout development of this project.

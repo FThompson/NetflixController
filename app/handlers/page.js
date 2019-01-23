@@ -4,26 +4,35 @@ class NavigatablePage {
             throw new TypeError('cannot instantiate abstract NavigatablePage')
         }
         this.navigatables = {}
+        this.unloaded = false
     }
 
     async load() {
         await Promise.all([this.loadPseudoStyler(), this.waitUntilReady()])
+        if (!this.unloaded) {
+            this.onLoad()
+        }
+    }
+
+    // to be implemented by subclass
+    onLoad() {
+
     }
 
     async loadPseudoStyler() {
         if (this.needsPseudoStyler()) {
             this.styler = new PseudoStyler()
-            return await this.styler.loadDocumentStyles()
+            return this.styler.loadDocumentStyles()
         }
         return Promise.resolve()
     }
 
     // via https://stackoverflow.com/a/30506051/1247781
-    async waitUntilReady() {
+    waitUntilReady() {
         let _this = this
-        return await new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             (function checkReadiness() {
-                if (_this.isPageReady()) {
+                if (_this.unloaded || _this.isPageReady()) {
                     return resolve()
                 }
                 setTimeout(checkReadiness, 50)
@@ -34,6 +43,7 @@ class NavigatablePage {
     // to be overriden by subclasses
     unload() {
         Object.keys(this.navigatables).forEach(key => this.navigatables[key].exit())
+        this.unloaded = true
     }
 
     // to be overriden by subclasses

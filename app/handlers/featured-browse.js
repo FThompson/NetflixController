@@ -3,8 +3,8 @@ class FeaturedBrowse extends SliderBrowse {
         super(1)
     }
 
-    async load() {
-        await super.load()
+    onLoad() {
+        super.onLoad()
         this.addNavigatable(1, new Billboard())
         this.addNavigatable(2, Slider.getSlider(1))
         this.setNavigatable(1)

@@ -10,11 +10,10 @@ const pageHandlers = [
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
     unload()
     refreshPageIfBad()
-    for (let i = 0, found = false; !false && i < pageHandlers.length; i++) {
+    for (let i = 0, found = false; !found && i < pageHandlers.length; i++) {
         if (pageHandlers[i].validatePath(request.path)) {
             console.log(`NETFLIX-CONTROLLER: Loading module for ${request.path}`)
-            let asyncLoad = async () => await loadPage(pageHandlers[i])
-            asyncLoad()
+            loadPage(pageHandlers[i])
             found = true
         }
     }
@@ -23,7 +22,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
 async function loadPage(handlerClass) {
     currentHandler = new handlerClass()
     if (!currentHandler.hasSearchBar()) {
-        keyboard = null
+        keyboard = null // does not call keyboard close callbacks but that is okay
     }
     await currentHandler.load()
 }

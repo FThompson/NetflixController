@@ -9,8 +9,8 @@ class SearchBrowse extends FeaturelessBrowse {
         return path.startsWith('/search')
     }
 
-    async load() {
-        await super.load()
+    onLoad() {
+        super.onLoad()
         this.observer.disconnect()
     }
 

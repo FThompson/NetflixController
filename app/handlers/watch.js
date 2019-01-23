@@ -3,8 +3,8 @@ class WatchVideo extends NavigatablePage {
         return path.startsWith('/watch')
     }
 
-    async load() {
-        await super.load()
+    onLoad() {
+        super.onLoad()
         this.player = document.querySelector('.NFPlayer')
     }
 

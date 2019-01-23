@@ -3,8 +3,8 @@ class FeaturelessBrowse extends SliderBrowse {
         super(0)
     }
 
-    async load() {
-        await super.load()
+    onLoad() {
+        super.onLoad()
         let focus = () => {
             this.addNavigatable(1, Slider.getSlider(0))
             this.setNavigatable(1)

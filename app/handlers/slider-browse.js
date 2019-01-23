@@ -7,8 +7,7 @@ class SliderBrowse extends NavigatablePage {
         this.loadingRow = loadingRow
     }
 
-    async load() {
-        await super.load()
+    onLoad() {
         this.menu = new Menu()
         this.addNavigatable(0, this.menu)
     }
