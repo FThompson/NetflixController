@@ -186,60 +186,60 @@ class VirtualKeyboard {
     }
 
     onDirectionAction(direction) {
-        let options = this.getAdjacentKeys()
-        if (direction in options) {
-            this.select(options[direction])
+        let key = this.getAdjacentKey(direction)
+        if (key) {
+            this.select(key)
         }
     }
 
-    // TODO: rewrite to only retrieve the requested direction
-    getAdjacentKeys() {
+    getAdjacentKey(direction) {
+        // standard keys
         for (let y = 0; y < LAYOUT.length; y++) {
             for (let x = 0; x < LAYOUT[y].length; x++) {
                 if (LAYOUT[y][x] === this.selected) {
-                    let options = {}
-                    if (y > 0) {
-                        options[DIRECTION.UP] = LAYOUT[y - 1][x]
-                    }
-                    if (y < LAYOUT.length - 1) {
-                        options[DIRECTION.DOWN] = LAYOUT[y + 1][x]
-                    } else if (y === LAYOUT.length - 1) {
-                        let cumulativeX = 0
-                        for (let key in LAYOUT_BOTTOM) {
-                            cumulativeX += LAYOUT_BOTTOM[key]
-                            if (x < cumulativeX) {
-                                options[DIRECTION.DOWN] = key
-                                break
+                    switch (direction) {
+                        case DIRECTION.UP:
+                            return y > 0 ? LAYOUT[y - 1][x] : null
+                        case DIRECTION.DOWN:
+                            if (y < LAYOUT.length - 1) {
+                                return LAYOUT[y + 1][x]
+                            } else if (y === LAYOUT.length - 1) {
+                                let cumulativeX = 0
+                                for (let key in LAYOUT_BOTTOM) {
+                                    cumulativeX += LAYOUT_BOTTOM[key]
+                                    if (x < cumulativeX) {
+                                        return key
+                                    }
+                                }
                             }
-                        }
+                            return null
+                        case DIRECTION.LEFT:
+                            return x > 0 ? LAYOUT[y][x - 1] : null
+                        case DIRECTION.RIGHT:
+                            return x < LAYOUT[y].length - 1 ? LAYOUT[y][x + 1] : null
                     }
-                    if (x > 0) {
-                        options[DIRECTION.LEFT] = LAYOUT[y][x - 1]
-                    }
-                    if (x < LAYOUT[y].length - 1) {
-                        options[DIRECTION.RIGHT] = LAYOUT[y][x + 1]
-                    }
-                    return options
                 }
             }
         }
+        // bottom row keys
         let cumulativeX = 0
         let bottomKeys = Object.keys(LAYOUT_BOTTOM)
         for (let x = 0; x < bottomKeys.length; x++) {
             if (bottomKeys[x] === this.selected) {
-                let options = {}
-                if (x > 0) {
-                    options[DIRECTION.LEFT] = bottomKeys[x - 1]
+                switch (direction) {
+                    case DIRECTION.UP:
+                        let upX = cumulativeX + Math.floor(LAYOUT_BOTTOM[bottomKeys[x]] / 2) - 1
+                        return LAYOUT[LAYOUT.length - 1][upX]
+                    case DIRECTION.DOWN:
+                        return null
+                    case DIRECTION.LEFT:
+                        return x > 0 ? bottomKeys[x - 1] : null
+                    case DIRECTION.RIGHT:
+                        return x < bottomKeys.length - 1 ? bottomKeys[x + 1] : null
                 }
-                if (x < bottomKeys.length - 1) {
-                    options[DIRECTION.RIGHT] = bottomKeys[x + 1]
-                }
-                let upX = cumulativeX + Math.floor(LAYOUT_BOTTOM[bottomKeys[x]] / 2) - 1
-                options[DIRECTION.UP] = LAYOUT[LAYOUT.length - 1][upX]
-                return options
             }
             cumulativeX += LAYOUT_BOTTOM[bottomKeys[x]]
         }
-        return null // should never reach this line
+        return null
     }
 }
