@@ -37,6 +37,8 @@ class WatchVideo extends NavigatablePage {
             this.dispatchKey(40)
         } else if (index === StandardMapping.Button.BUMPER_RIGHT) {
             this.openNextEpisode()
+        } else if (index === StandardMapping.Button.BUTTON_CONTROL_RIGHT) {
+            this.skipIntro()
         }
     }
 
@@ -45,8 +47,15 @@ class WatchVideo extends NavigatablePage {
     }
 
     openNextEpisode() {
-        let button = document.querySelector('.button-nfplayerNextEpisode')
+        let button = this.player.querySelector('.button-nfplayerNextEpisode')
         button.click()
+    }
+
+    skipIntro() {
+        let button = this.player.querySelector('.skip-credits > a')
+        if (button) {
+            button.click()
+        }
     }
 
     dispatchKey(keyCode) {
