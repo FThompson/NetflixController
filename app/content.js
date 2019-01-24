@@ -7,6 +7,7 @@ function getTransparentNetflixRed(opacity) {
 let keyboard = null
 let currentHandler = null
 const pageHandlers = [
+    ChooseProfile,
     FeaturedBrowse,
     FeaturelessBrowse,
     SearchBrowse,
@@ -18,7 +19,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
     refreshPageIfBad()
     for (let i = 0, found = false; !found && i < pageHandlers.length; i++) {
         if (pageHandlers[i].validatePath(request.path)) {
-            console.log(`NETFLIX-CONTROLLER: Loading module for ${request.path}`)
+            console.log(`NETFLIX-CONTROLLER: Loading ${pageHandlers[i].name} module for ${request.path}`)
             loadPage(pageHandlers[i])
             found = true
         }
