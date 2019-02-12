@@ -1,6 +1,6 @@
 class ChooseProfile extends NavigatablePage {
     static validatePath(path) {
-        // can occur at any path
+        // can occur at any path; check for element
         return document.querySelector('.list-profiles') !== null
     }
 
