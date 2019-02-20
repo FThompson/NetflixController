@@ -47,11 +47,11 @@ function refreshPageIfBad() {
 }
 
 console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
-gamepads.addEventListener('connect', gamepad => {
-    console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${gamepad.gamepad.id}`)
-    gamepad.addEventListener('buttonpress', index => {
+gamepads.addEventListener('connect', e => {
+    console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${e.gamepad.gamepad.id}`)
+    e.gamepad.addEventListener('buttonpress', e => {
         if (keyboard) {
-            sendButtonPress(index, keyboard)
+            sendButtonPress(e.index, keyboard)
             if (keyboard.closed) {
                 keyboard = null
             }
@@ -59,25 +59,25 @@ gamepads.addEventListener('connect', gamepad => {
             if (index === StandardMapping.Button.BUTTON_RIGHT) {
                 unload()
                 window.history.back()
-            } else if (index === StandardMapping.Button.BUTTON_TOP) {
+            } else if (e.index === StandardMapping.Button.BUTTON_TOP) {
                 openSearch()
             } else {
                 sendButtonPress(index, currentHandler)
             }
         }
     })
-    gamepad.addEventListener('buttonrelease', index => {
+    e.gamepad.addEventListener('buttonrelease', e => {
         if (keyboard) {
-            keyboard.onButtonRelease(index)
+            keyboard.onButtonRelease(e.index)
         }
     })
-    gamepad.addEventListener('joystickmove', (indices, values) => {
-        checkJoystickDirection(gamepad, indices[0], values[0], DIRECTION.RIGHT, DIRECTION.LEFT)
-        checkJoystickDirection(gamepad, indices[1], values[1], DIRECTION.DOWN, DIRECTION.UP)
+    e.gamepad.addEventListener('joystickmove', e => {
+        checkJoystickDirection(gamepad, e.horizontalIndex, e.horizontalValue, DIRECTION.RIGHT, DIRECTION.LEFT)
+        checkJoystickDirection(gamepad, e.verticalIndex, e.verticalValue, DIRECTION.DOWN, DIRECTION.UP)
     }, StandardMapping.Axis.JOYSTICK_LEFT)
 })
-gamepads.addEventListener('disconnect', gamepad => {
-    console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${gamepad.gamepad.id}`)
+gamepads.addEventListener('disconnect', e => {
+    console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${e.gamepad.gamepad.id}`)
 })
 gamepads.start()
 
