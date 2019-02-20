@@ -1,7 +1,8 @@
 class Billboard extends Navigatable {
-    constructor() {
+    constructor(inlineRow=-1) {
         super()
-        let linksDiv = document.querySelector('.billboard-links')
+        let billboardParent = document.querySelector(inlineRow != -1 ? `#row-${inlineRow}` : '.billboard-row')
+        let linksDiv = billboardParent.querySelector('.billboard-links')
         let playLink = linksDiv.querySelector('a.playLink')
         let myList = linksDiv.querySelector('a.mylist-button')
         this.buttons = {

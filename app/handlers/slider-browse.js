@@ -14,15 +14,27 @@ class SliderBrowse extends NavigatablePage {
 
     setNavigatable(position) {
         if (!this.isNavigatable(position)) {
-            // TODO: detect big title item
-            let slider = Slider.getSlider(position - 1)
-            if (!slider) {
-                console.log('slider nonexistent; doing nothing')
-                return  // may have moved too fast; page needs to load
+            let nextRow = this.getNextNavigatable(position)
+            if (nextRow) {
+                this.addNavigatable(position, nextRow)
             }
-            this.addNavigatable(position, slider)
         }
         super.setNavigatable(position)
+    }
+
+    getNextNavigatable(position) {
+        let nextPosition = position - 1
+        let rowNode = document.querySelector(`#row-${nextPosition}`)
+        if (rowNode) {
+            if (rowNode.querySelector('.slider')) {
+                return new Slider(rowNode)
+            } else if (rowNode.querySelector('.billboard-title')) {
+                return new Billboard(nextPosition)
+            } else {
+                console.log('unknown contents in row ' + nextPosition)
+            }
+        }
+        return null
     }
 
     isPageReady() {
