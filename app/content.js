@@ -14,17 +14,22 @@ const pageHandlers = [
     WatchVideo
 ]
 
-chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
-    unload()
+chrome.runtime.onMessage.addListener((request, sender, sendMessage) => runHandler(request.path))
+
+function runHandler(path) {
+    if (currentHandler) {
+        currentHandler.unload()
+        currentHandler = null
+    }
     refreshPageIfBad()
     for (let i = 0, found = false; !found && i < pageHandlers.length; i++) {
-        if (pageHandlers[i].validatePath(request.path)) {
-            console.log(`NETFLIX-CONTROLLER: Loading ${pageHandlers[i].name} module for ${request.path}`)
+        if (pageHandlers[i].validatePath(path)) {
+            console.log(`NETFLIX-CONTROLLER: Loading ${pageHandlers[i].name} module for ${path}`)
             loadPage(pageHandlers[i])
             found = true
         }
     }
-})
+}
 
 async function loadPage(handlerClass) {
     currentHandler = new handlerClass()
@@ -32,13 +37,6 @@ async function loadPage(handlerClass) {
         keyboard = null // does not call keyboard close callbacks but that is okay
     }
     await currentHandler.load()
-}
-
-function unload() {
-    if (currentHandler) {
-        currentHandler.unload()
-        currentHandler = null
-    }
 }
 
 // pages containing ?so=su seem to often not load; remove it and refresh
