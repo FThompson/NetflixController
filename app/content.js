@@ -59,7 +59,7 @@ gamepads.addEventListener('connect', e => {
             if (e.index === StandardMapping.Button.BUTTON_RIGHT) {
                 unload()
                 window.history.back()
-            } else if (e.index === StandardMapping.Button.BUTTON_TOP) {
+            } else if (e.index === StandardMapping.Button.BUTTON_TOP && currentHandler.hasSearchBar()) {
                 openSearch()
             } else {
                 sendButtonPress(e.index, currentHandler)
