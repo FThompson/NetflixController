@@ -56,13 +56,13 @@ gamepads.addEventListener('connect', e => {
                 keyboard = null
             }
         } else {
-            if (index === StandardMapping.Button.BUTTON_RIGHT) {
+            if (e.index === StandardMapping.Button.BUTTON_RIGHT) {
                 unload()
                 window.history.back()
             } else if (e.index === StandardMapping.Button.BUTTON_TOP) {
                 openSearch()
             } else {
-                sendButtonPress(index, currentHandler)
+                sendButtonPress(e.index, currentHandler)
             }
         }
     })
