@@ -26,6 +26,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'fullscreen') {
+        // possible alternate approach I discovered after writing the debugger approach:
+        // chrome.windows.getCurrent(window => chrome.windows.update(window.id, {state: 'fullscreen'}))
+        // the above seems to crash netflix upon trying to exit fullscreen mode
         setFullScreen(sender.tab.id)
     }
 })
