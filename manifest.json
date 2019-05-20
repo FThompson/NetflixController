@@ -19,8 +19,8 @@
             "matches": ["*://*.netflix.com/*"],
             "exclude_matches": ["*://help.netflix.com/*"],
             "js": [
-                "static/js/gamepads@1.1.0.js",
-                "static/js/gamepad-mappings@1.1.0.js",
+                "static/js/gamepads@1.1.2.js",
+                "static/js/gamepad-mappings@1.1.2.js",
                 "static/js/pseudostyler@1.0.7.js",
                 "app/navigation/direction.js",
                 "app/navigation/navigatable.js",

@@ -17,10 +17,7 @@ const pageHandlers = [
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => runHandler(request.path))
 
 function runHandler(path) {
-    if (currentHandler) {
-        currentHandler.unload()
-        currentHandler = null
-    }
+    unload()
     refreshPageIfBad()
     for (let i = 0, found = false; !found && i < pageHandlers.length; i++) {
         if (pageHandlers[i].validatePath(path)) {
@@ -37,6 +34,13 @@ async function loadPage(handlerClass) {
         keyboard = null // does not call keyboard close callbacks but that is okay
     }
     await currentHandler.load()
+}
+
+function unload() {
+    if (currentHandler) {
+        currentHandler.unload()
+        currentHandler = null
+    }
 }
 
 // pages containing ?so=su seem to often not load; remove it and refresh
@@ -72,8 +76,8 @@ gamepads.addEventListener('connect', e => {
         }
     })
     e.gamepad.addEventListener('joystickmove', e => {
-        checkJoystickDirection(gamepad, e.horizontalIndex, e.horizontalValue, DIRECTION.RIGHT, DIRECTION.LEFT)
-        checkJoystickDirection(gamepad, e.verticalIndex, e.verticalValue, DIRECTION.DOWN, DIRECTION.UP)
+        checkJoystickDirection(e.gamepad, e.horizontalIndex, e.horizontalValue, DIRECTION.RIGHT, DIRECTION.LEFT)
+        checkJoystickDirection(e.gamepad, e.verticalIndex, e.verticalValue, DIRECTION.DOWN, DIRECTION.UP)
     }, StandardMapping.Axis.JOYSTICK_LEFT)
 })
 gamepads.addEventListener('disconnect', e => {
