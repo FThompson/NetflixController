@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <style link='style.css' type='text/css' rel='stylesheet'></style>
+        <link href='style.css' type='text/css' rel='stylesheet'>
+        <script src='../static/js/gamepads@1.1.2.js'></script>
+        <script src='../static/js/gamepad-mappings@1.1.2.js'></script>
         <script src='popup.js' defer></script>
     </head>
     <body>
-        <button id='enable'>Enable Gamepad</button>
+        <label for='gamepad-mapping'>Gamepad button images: </label>
+        <select id='gamepad-mapping'>
+            <option value='Xbox 360' selected>Xbox 360</option>
+            <option value='Xbox One'>Xbox One</option>
+            <option value='PS3'>PS3</option>
+            <option value='PS4'>PS4</option>
+        </select>
+        <div id='gamepad-test'>
+            <p>Gamepads connected: <span id='count'>0</span></p>
+            <div class='joystick'>
+                <div id='left-joystick' class='joystick-dot'></div>
+                <div class='crosshair'>
+                    <div class='horizontal'></div>
+                    <div class='vertical'></div>
+                </div>
+            </div>
+            <div class='joystick'>
+                <div id='right-joystick' class='joystick-dot'></div>
+                <div class='crosshair'>
+                    <div class='horizontal'></div>
+                    <div class='vertical'></div>
+                </div>
+            </div>
+            <div id='pressed-buttons'></div>
+        </div>
     </body>
 </html>

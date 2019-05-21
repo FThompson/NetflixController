@@ -22,7 +22,7 @@ class WatchVideo extends NavigatablePage {
         } else if (index === StandardMapping.Button.BUTTON_TOP) {
             // F(on)/ESC(off) = toggle fullscreen
             // unable to set fullscreen via key due to non-trusted events; use chrome.debugger
-            chrome.runtime.sendMessage({action: 'fullscreen'})
+            chrome.runtime.sendMessage({ message: 'requestFullscreen' })
         } else if (index === StandardMapping.Button.D_PAD_LEFT) {
             // LEFT = rewind 10s
             this.dispatchKey(37)

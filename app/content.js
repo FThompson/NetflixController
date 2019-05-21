@@ -14,7 +14,15 @@ const pageHandlers = [
     WatchVideo
 ]
 
-chrome.runtime.onMessage.addListener((request, sender, sendMessage) => runHandler(request.path))
+chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
+    if (request.message === 'locationChanged') {
+        runHandler(request.path);
+    } else if (request.message === 'disableGamepadInput') {
+        gamepads.stop();
+    } else if (request.message === 'enableGamepadInput') {
+        gamepads.start();
+    }
+})
 
 function runHandler(path) {
     unload()

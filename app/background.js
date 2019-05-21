@@ -19,13 +19,13 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (tab.active && tab.status === 'complete' && changeInfo.status && changeInfo.status === 'complete') {
         let url = new URL(tab.url)
         if (url.hostname.endsWith('.netflix.com') && !url.hostname.startsWith('help.')) {
-            chrome.tabs.sendMessage(tabId, {'path': url.pathname})
+            chrome.tabs.sendMessage(tabId, { message: 'locationChanged', path: url.pathname})
         }
     }
 })
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'fullscreen') {
+    if (request.message === 'requestFullscreen') {
         // possible alternate approach I discovered after writing the debugger approach:
         // chrome.windows.getCurrent(window => chrome.windows.update(window.id, {state: 'fullscreen'}))
         // the above seems to crash netflix upon trying to exit fullscreen mode
