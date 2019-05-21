@@ -4,12 +4,12 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Loading WatchVideo module after going to next video
 * Dynamically determine whether a page has a billboard or not
 * Firefox/Edge support (convert manifests, fullscreen action)
+* Add semicolons throughout code
 * Continue mapping navigation controls to additional page elements
 * Detect account login page after idle period
-* Decide what to do with the browser page action icon
 * Button action hints
 * Support interactive media (e.g. the new Black Mirror movie)
-* Support non-standard gamepad mappings
+* Support non-standard gamepad mappings / offer way to configure mappings
 * Configure right joystick to control a virtual mouse
 * Timeout page readiness checks (useful in case of no internet connection)
 * Improve plugin design to be extendable for other websites

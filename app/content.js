@@ -4,8 +4,26 @@ function getTransparentNetflixRed(opacity) {
     return NETFLIX_RED.replace(')', ', ' + opacity + ')')
 }
 
-let keyboard = null
-let currentHandler = null
+let buttonImageMapping = 'Xbox One';
+gamepadMappings.buttonsPath = 'static/buttons';
+
+// load image mapping from synced storage
+chrome.storage.sync.get('buttonImageMapping', result => {
+    buttonImageMapping = result.buttonImageMapping;
+});
+
+// track changes made to image mapping preferences and update accordingly
+chrome.storage.onChanged.addListener((changes, namespace) => {
+    for (let key in changes) {
+        if (key === 'buttonImageMapping') {
+            buttonImageMapping = changes[key].newValue;
+        }
+    }
+});
+
+let keyboard = null;
+let currentHandler = null;
+let actionHandler = new ActionHandler();
 const pageHandlers = [
     ChooseProfile,
     FeaturedBrowse,
@@ -22,7 +40,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
     } else if (request.message === 'enableGamepadInput') {
         gamepads.start();
     }
-})
+});
 
 function runHandler(path) {
     unload()

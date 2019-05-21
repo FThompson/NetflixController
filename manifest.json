@@ -23,6 +23,7 @@
                 "static/js/gamepads@1.1.2.js",
                 "static/js/gamepad-mappings@1.1.2.js",
                 "static/js/pseudostyler@1.0.7.js",
+                "app/navigation/action-hints.js",
                 "app/navigation/direction.js",
                 "app/navigation/navigatable.js",
                 "app/navigation/slider.js",
