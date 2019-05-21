@@ -1,3 +1,12 @@
+let style = window.getComputedStyle(document.body);
+const CONTAINER_SIZE = parseFloat(style.getPropertyValue('--joystick-container-size'));
+const DOT_SIZE = parseFloat(style.getPropertyValue('--joystick-size'));
+const DOT_POSITION = (CONTAINER_SIZE - DOT_SIZE) / 2;
+
+let count = 0;
+let mapping = 'Xbox One';
+let pressedButtons = {};
+
 // disable gamepad input on page while popup is open
 chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
     let tabId = tabs[0].id;
@@ -7,14 +16,11 @@ chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
     });
 });
 
-let style = window.getComputedStyle(document.body);
-const CONTAINER_SIZE = parseFloat(style.getPropertyValue('--joystick-container-size'));
-const DOT_SIZE = parseFloat(style.getPropertyValue('--joystick-size'));
-const DOT_POSITION = (CONTAINER_SIZE - DOT_SIZE) / 2;
-
-let count = 0;
-let mapping = 'Xbox One';
-let pressedButtons = {};
+// load image mapping from synced storage
+chrome.storage.sync.get('buttonImageMapping', result => {
+    mapping = result.buttonImageMapping;
+    document.getElementById('gamepad-mapping').value = result.buttonImageMapping;
+});
 
 gamepads.addEventListener('connect', e => {
     console.log('Gamepad connected:');
@@ -37,7 +43,10 @@ gamepads.addEventListener('disconnect', e => {
 });
 
 let mappingDropdown = document.getElementById('gamepad-mapping');
-mappingDropdown.addEventListener('change', () => mapping = mappingDropdown.value);
+mappingDropdown.addEventListener('change', () => {
+    mapping = mappingDropdown.value;
+    chrome.storage.sync.set({ buttonImageMapping: mapping });
+});
 
 moveJoystick([0, 0], true);
 moveJoystick([0, 0], false);

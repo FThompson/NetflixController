@@ -8,7 +8,8 @@
         "activeTab",
         "declarativeContent",
         "tabs",
-        "debugger"
+        "debugger",
+        "storage"
     ],
     "background": {
         "scripts": ["app/background.js"],
