@@ -4,7 +4,7 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Loading WatchVideo module after going to next video
 * Dynamically determine whether a page has a billboard or not
 * Firefox/Edge support (convert manifests, fullscreen action)
-* Add semicolons throughout code
+* Add semicolons throughout code (decided to start using them after main codebase built)
 * Fix closing search without any search results
 * Continue mapping navigation controls to additional page elements
 * Detect account login page after idle period

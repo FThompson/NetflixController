@@ -23,6 +23,8 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     }
 });
 
+let numGamepads = 0;
+let hasConnectedGamepad = false;
 let keyboard = null;
 let currentHandler = null;
 let actionHandler = new ActionHandler();
@@ -36,7 +38,10 @@ const pageHandlers = [
 
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
     if (request.message === 'locationChanged') {
-        runHandler(request.path);
+        if (hasConnectedGamepad) {
+            // load plugin core only if user is using gamepad in this session
+            runHandler(request.path);
+        }
     } else if (request.message === 'disableGamepadInput') {
         gamepads.stop();
     } else if (request.message === 'enableGamepadInput') {
@@ -80,6 +85,15 @@ function refreshPageIfBad() {
 
 console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
 gamepads.addEventListener('connect', e => {
+    if (!hasConnectedGamepad) {
+        // first connection, run current page handler manually
+        runHandler(window.location.pathname);
+        hasConnectedGamepad = true;
+    }
+    numGamepads++;
+    if (numGamepads > 0) {
+        actionHandler.showHints();
+    } 
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${e.gamepad.gamepad.id}`)
     e.gamepad.addEventListener('buttonpress', e => {
         if (keyboard) {
@@ -109,6 +123,10 @@ gamepads.addEventListener('connect', e => {
     }, StandardMapping.Axis.JOYSTICK_LEFT)
 })
 gamepads.addEventListener('disconnect', e => {
+    numGamepads--;
+    if (numGamepads === 0) {
+        actionHandler.hideHints();
+    }
     console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${e.gamepad.gamepad.id}`)
 })
 gamepads.start()

@@ -31,6 +31,14 @@ class ActionHandler {
         this.hintsBar.update(this.actions);
     }
 
+    showHints() {
+        this.hintsBar.show();
+    }
+
+    hideHints() {
+        this.hintsBar.hide();
+    }
+
     onButtonPress(index) {
         if (index in this.actions && this.actions[index].onPress) {
             this.actions[index].onPress()
@@ -53,6 +61,7 @@ class ActionHintsBar {
     createBar() {
         let hintsBar = document.createElement('div');
         hintsBar.id = 'gamepad-interface-hints-bar';
+        hintsBar.classList.add('gamepad-interface-hidden');
         return hintsBar;
     }
 
