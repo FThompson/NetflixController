@@ -61,10 +61,10 @@ class ActionHintsBar {
         if (button) {
             let imageSrc = chrome.runtime.getURL(button.buttonImageSrc);
             return (
-                `<span class='gamepad-interface-hint'>
+                `<div class='gamepad-interface-hint'>
                     <img src='${imageSrc}' alt='${button.buttonName}'>
                     ${action.label}
-                </span>`   
+                </div>`   
             );
         }
         return null;
