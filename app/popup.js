@@ -25,8 +25,8 @@ chrome.storage.sync.get('buttonImageMapping', result => {
 gamepads.addEventListener('connect', e => {
     console.log('Gamepad connected:');
     console.log(e.gamepad);
-    count++;
-    document.getElementById('count').textContent = count;
+    document.getElementById('count').textContent = ++count;
+    checkCompatibility();
     e.gamepad.addEventListener('buttonpress', e => showPressedButton(e.index));
     e.gamepad.addEventListener('buttonrelease', e => removePressedButton(e.index));
     e.gamepad.addEventListener('joystickmove', e => moveJoystick(e.values, true),
@@ -38,8 +38,8 @@ gamepads.addEventListener('connect', e => {
 gamepads.addEventListener('disconnect', e => {
     console.log('Gamepad disconnected:');
     console.log(e.gamepad);
-    count--;
-    document.getElementById('count').textContent = count;
+    document.getElementById('count').textContent = --count;
+    checkCompatibility();
 });
 
 let mappingDropdown = document.getElementById('gamepad-mapping');
@@ -55,7 +55,6 @@ gamepads.start();
 
 function showPressedButton(index) {
     if (!pressedButtons[index]) {
-        console.log(mapping);
         let button = gamepadMappings.getButton(mapping, index);
         if (button) {
             let img = document.createElement('img');
@@ -82,4 +81,13 @@ function moveJoystick(values, isLeft) {
     let y = DOT_POSITION + CONTAINER_SIZE / 2 * values[1];
     joystick.style.top = y + 'px';
     joystick.style.left = x + 'px';
+}
+
+function checkCompatibility() {
+    let warning = document.getElementById('no-standard-gamepad');
+    if (!Object.values(gamepads.gamepads).some(g => g.gamepad.mapping === 'standard')) {
+        warning.style.display = 'default';
+    } else {
+        warning.style.display = 'none';
+    }
 }

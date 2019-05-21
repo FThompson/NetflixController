@@ -12,6 +12,8 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Support non-standard gamepad mappings
 * Configure right joystick to control a virtual mouse
 * Timeout page readiness checks (useful in case of no internet connection)
+* Improve plugin design to be extendable for other websites
+* Come up with a better plugin name, maybe considering future extendability (Flixability, Joyflix, Netstix)
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.
