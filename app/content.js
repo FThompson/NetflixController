@@ -10,6 +10,7 @@ gamepadMappings.buttonsPath = 'static/buttons';
 // load image mapping from synced storage
 chrome.storage.sync.get('buttonImageMapping', result => {
     buttonImageMapping = result.buttonImageMapping;
+    actionHandler.updateHints();
 });
 
 // track changes made to image mapping preferences and update accordingly
@@ -17,6 +18,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     for (let key in changes) {
         if (key === 'buttonImageMapping') {
             buttonImageMapping = changes[key].newValue;
+            actionHandler.updateHints();
         }
     }
 });

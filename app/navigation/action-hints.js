@@ -1,21 +1,3 @@
-class ActionHint {
-    constructor(label, buttonImageSrc) {
-        this.label = label
-        this.buttonImageSrc = buttonImageSrc
-    }
-
-    createElement() {
-        let span = document.createElement('span')
-        let img = document.createElement('img')
-        img.src = this.buttonImageSrc
-        img.title = this.label
-        span.append(img)
-        let label = document.createTextNode(this.label)
-        span.append(label)
-        return span
-    }
-}
-
 class Action {
     constructor(label, index, onPress, onRelease) {
         this.label = label
@@ -27,17 +9,25 @@ class Action {
 
 class ActionHandler {
     constructor() {
-        this.actions = {};
+        this.actions = {
+            3: {label: 'Test hint', index: 3},
+            11: {label: 'Test hint', index: 11}
+        };
         this.hintsBar = new ActionHintsBar();
+        this.updateHints();
     }
 
     addAction(action) {
         this.actions[action.index] = action;
-        this.hintsBar.update(this.actions);
+        this.updateHints();
     }
 
     removeAction(action) {
         delete this.actions[action.index];
+        this.updateHints();
+    }
+
+    updateHints() {
         this.hintsBar.update(this.actions);
     }
 
@@ -57,41 +47,25 @@ class ActionHandler {
 class ActionHintsBar {
     constructor() {
         this.element = this.createBar();
-        this.update([
-            {label: 'Test hint', index: 3},
-            {label: 'Test hint', index: 11}
-        ]);
+        document.body.append(this.element);
     }
 
     createBar() {
         let hintsBar = document.createElement('div');
-        hintsBar.style.position = 'fixed';
-        hintsBar.style.bottom = '0';
-        hintsBar.style.width = '100%';
-        hintsBar.style.height = '40px';
-        hintsBar.style.backgroundColor = '#141414';
-        hintsBar.style.zIndex = '10000';
-        document.body.append(hintsBar);
-        console.log(hintsBar);
+        hintsBar.id = 'gamepad-interface-hints-bar';
         return hintsBar;
     }
 
     createHint(action) {
         let button = gamepadMappings.getButton(buttonImageMapping, action.index);
         if (button) {
-            let span = document.createElement('span');
-            span.style.display = 'inline-block';
-            span.style.height = '40px';
-            span.style.fontSize = '24px';
-            let img = document.createElement('img');
-            img.src = chrome.extension.getURL(button.buttonImageSrc);
-            img.alt = button.buttonName;
-            img.style.height = '40px';
-            img.style.width = '40px';
-            span.append(img);
-            let label = document.createTextNode(action.label);
-            span.append(label);
-            return span;
+            let imageSrc = chrome.runtime.getURL(button.buttonImageSrc);
+            return (
+                `<span class='gamepad-interface-hint'>
+                    <img src='${imageSrc}' alt='${button.buttonName}'>
+                    ${action.label}
+                </span>`   
+            );
         }
         return null;
     }
@@ -101,16 +75,16 @@ class ActionHintsBar {
         for (let action of Object.values(actions)) {
             let hint = this.createHint(action);
             if (hint) {
-                this.element.append(hint);
+                this.element.insertAdjacentHTML('beforeend', hint);
             }
         }
     }
 
     show() {
-        this.element.style.display = 'default';
+        this.element.classList.remove('gamepad-interface-hidden');
     }
 
     hide() {
-        this.element.style.display = 'none';
+        this.element.classList.add('gamepad-interface-hidden');
     }
 }

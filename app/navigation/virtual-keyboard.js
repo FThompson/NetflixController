@@ -21,33 +21,18 @@ class VirtualKeyboard {
     }
 
     static create(input, parent, closeCallback) {
-        // non-class styling to avoid risking class conflict with page
-        let keyboard = document.createElement('div')
-        keyboard.style.position = 'absolute'
-        keyboard.style.zIndex = '10000'
-        keyboard.style.display = 'flex'
-        keyboard.style.flexFlow = 'row wrap'
-        keyboard.style.alignItems = 'stretch'
-        keyboard.style.textAlign = 'center'
-        keyboard.style.paddingTop = '4px'
-        keyboard.style.paddingBottom = '4px'
-        keyboard.style.backgroundColor = 'rgba(30, 30, 30, 0.8)'
-        keyboard.style.border = '1px solid white'
-        keyboard.style.borderTop = 'none'
+        let keyboard = document.createElement('div');
+        keyboard.id = 'gamepad-interface-keyboard';
 
         let keys = {}
         let appendKey = (text, widthPercent) => {
-            let key = document.createElement('span')
-            key.style.outlineOffset = '-1px'
-            key.style.flexBasis = widthPercent + '%'
-            // flex container properties to vertically center text
-            key.style.display = 'flex'
-            key.style.justifyContent = 'center'
-            key.style.alignItems = 'center'
-            key.innerHTML = text
-            keyboard.append(key)
-            keys[text] = key
-        }
+            let key = document.createElement('span');
+            key.classList.add('gamepad-interface-keyboard-key');
+            key.style.flexBasis = widthPercent + '%';
+            key.textContent = text;
+            keyboard.append(key);
+            keys[text] = key;
+        };
 
         for (let x = 0; x < LAYOUT.length; x++) {
             for (let y = 0; y < LAYOUT[x].length; y++) {
@@ -70,9 +55,9 @@ class VirtualKeyboard {
 
     select(key) {
         if (this.selected) {
-            this.keys[this.selected].style.backgroundColor = ''
+            this.keys[this.selected].classList.remove('gamepad-interface-selected-key');
         }
-        this.keys[key].style.backgroundColor = NETFLIX_RED
+        this.keys[key].classList.add('gamepad-interface-selected-key');
         this.selected = key
     }
 
@@ -167,7 +152,7 @@ class VirtualKeyboard {
         if (index === StandardMapping.Button.BUTTON_TOP) {
             this.releaseKey('space')
         } else if (index === StandardMapping.Button.BUTTON_BOTTOM) {
-            this.releaseKey(this.selected)
+            this.releaseKey(this.pressed)
         } else if (index === StandardMapping.Button.BUTTON_RIGHT) {
             this.releaseKey(BACKSPACE)
         } else if (index === StandardMapping.Button.BUTTON_LEFT) {
@@ -178,11 +163,12 @@ class VirtualKeyboard {
     }
 
     pressKey(key) {
-        this.keys[key].style.outline = '1px solid ' + (key === this.selected ? 'rgb(30, 30, 30)' : NETFLIX_RED)
+        this.pressed = key;
+        this.keys[key].classList.add('gamepad-interface-pressed-key');
     }
 
     releaseKey(key) {
-        this.keys[key].style.outline = 'none'
+        this.keys[key].classList.remove('gamepad-interface-pressed-key');
     }
 
     onDirectionAction(direction) {

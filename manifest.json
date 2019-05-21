@@ -39,7 +39,8 @@
                 "app/handlers/watch.js",
                 "app/handlers/search.js",
                 "app/content.js"
-            ]
+            ],
+            "css": ["static/styles/content.css"]
         }
     ],
     "options_page": "app/settings.html",
@@ -59,6 +60,7 @@
         "128": "static/icon128.png"
     },
     "web_accessible_resources": [
-        "static/buttons/*/*.png"
+        "static/buttons/*/*.png",
+        "static/styles/content.css"
     ]
 }

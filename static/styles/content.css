@@ -1,0 +1,60 @@
+:root {
+    --netflix-red: rgb(229, 9, 20);
+}
+
+#gamepad-interface-keyboard {
+    position: absolute;
+    z-index: 10000;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: stretch;
+    text-align: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    background-color: rgba(30, 30, 30, 0.8);
+    border: 1px solid white;
+    border-top: none;
+}
+
+.gamepad-interface-keyboard-key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline-offset: -1px;
+}
+
+.gamepad-interface-selected-key {
+    background-color: var(--netflix-red);
+}
+
+.gamepad-interface-pressed-key {
+    outline: 1px solid;
+    outline-color: var(--netflix-red);
+}
+
+.gamepad-interface-pressed-key.gamepad-interface-selected-key {
+    outline-color: rgb(30, 30, 30);
+}
+
+#gamepad-interface-hints-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background-color: #141414;
+    z-index: 10000;
+}
+
+.gamepad-interface-hint {
+    display: inline-block;
+    height: 40px;
+    font-size: 24px;
+}
+
+.gamepad-interface-hint img {
+    height: inherit;
+}
+
+.gamepad-interface-hidden {
+    display: none;
+}

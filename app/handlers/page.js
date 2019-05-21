@@ -77,7 +77,7 @@ class NavigatablePage {
     }
 
     addNavigatable(position, navigatable) {
-        if (this.styler) {
+        if (this.styler && navigatable !== null) {
             navigatable.styler = this.styler
         }
         this.navigatables[position] = navigatable

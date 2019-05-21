@@ -5,6 +5,7 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Dynamically determine whether a page has a billboard or not
 * Firefox/Edge support (convert manifests, fullscreen action)
 * Add semicolons throughout code
+* Fix closing search without any search results
 * Continue mapping navigation controls to additional page elements
 * Detect account login page after idle period
 * Button action hints
