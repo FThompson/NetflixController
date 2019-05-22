@@ -9,8 +9,10 @@ gamepadMappings.buttonsPath = 'static/buttons';
 
 // load image mapping from synced storage
 chrome.storage.sync.get('buttonImageMapping', result => {
-    buttonImageMapping = result.buttonImageMapping;
-    actionHandler.updateHints();
+    if (result.buttonImageMapping) {
+        buttonImageMapping = result.buttonImageMapping;
+        actionHandler.updateHints();
+    }
 });
 
 // track changes made to image mapping preferences and update accordingly
@@ -28,6 +30,7 @@ let hasConnectedGamepad = false;
 let keyboard = null;
 let currentHandler = null;
 let actionHandler = new ActionHandler();
+let connectionHintBar = null;
 const pageHandlers = [
     ChooseProfile,
     FeaturedBrowse,
@@ -35,6 +38,12 @@ const pageHandlers = [
     SearchBrowse,
     WatchVideo
 ]
+
+chrome.storage.local.get('hideConnectionHint', result => {
+    if (!result.hideConnectionHint) {
+        connectionHintBar = new ConnectionHintBar();
+    }
+});
 
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
     if (request.message === 'locationChanged') {
@@ -88,12 +97,16 @@ gamepads.addEventListener('connect', e => {
     if (!hasConnectedGamepad) {
         // first connection, run current page handler manually
         runHandler(window.location.pathname);
+        if (connectionHintBar) {
+            connectionHintBar.remove();
+            connectionHintBar = null;
+        }
         hasConnectedGamepad = true;
     }
     numGamepads++;
     if (numGamepads > 0) {
         actionHandler.showHints();
-    } 
+    }
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${e.gamepad.gamepad.id}`)
     e.gamepad.addEventListener('buttonpress', e => {
         if (keyboard) {

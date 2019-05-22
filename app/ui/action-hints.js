@@ -61,6 +61,7 @@ class ActionHintsBar {
     createBar() {
         let hintsBar = document.createElement('div');
         hintsBar.id = 'gamepad-interface-hints-bar';
+        hintsBar.classList.add('gamepad-interface-bar');
         hintsBar.classList.add('gamepad-interface-hidden');
         return hintsBar;
     }

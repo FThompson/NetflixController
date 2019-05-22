@@ -31,6 +31,7 @@
                 "app/navigation/profiles.js",
                 "app/ui/action-hints.js",
                 "app/ui/virtual-keyboard.js",
+                "app/ui/connection-hint.js",
                 "app/handlers/page.js",
                 "app/handlers/choose-profile.js",
                 "app/handlers/slider-browse.js",

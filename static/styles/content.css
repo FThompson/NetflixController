@@ -36,13 +36,16 @@
     outline-color: rgb(30, 30, 30);
 }
 
-#gamepad-interface-hints-bar {
+.gamepad-interface-bar {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 46px;
     background-color: rgba(60, 60, 60, 0.9);
     z-index: 10000;
+}
+
+#gamepad-interface-hints-bar {
+    height: 46px;
 }
 
 .gamepad-interface-hint {
@@ -56,6 +59,27 @@
 .gamepad-interface-hint img {
     height: 36px;
     margin: 0 8px;
+}
+
+#gamepad-interface-connection-bar {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+#gamepad-interface-connection-bar span {
+    margin-left: 8px;
+}
+
+#gamepad-interface-connection-bar-links {
+    margin-left: auto;
+    order: 2;
+}
+
+.gamepad-interface-connection-bar-link {
+    margin: 0 8px;
+    text-decoration: underline;
 }
 
 .gamepad-interface-hidden {

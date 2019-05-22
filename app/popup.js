@@ -18,8 +18,11 @@ chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
 
 // load image mapping from synced storage
 chrome.storage.sync.get('buttonImageMapping', result => {
-    mapping = result.buttonImageMapping;
-    document.getElementById('gamepad-mapping').value = result.buttonImageMapping;
+    // TODO link this to controller id
+    if (result.buttonImageMapping) {
+        mapping = result.buttonImageMapping;
+        document.getElementById('gamepad-mapping').value = result.buttonImageMapping;
+    }
 });
 
 gamepads.addEventListener('connect', e => {
