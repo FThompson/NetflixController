@@ -49,13 +49,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
     }
 });
 
-function runHandler(path) {
+async function runHandler(path) {
     unload()
     refreshPageIfBad()
     for (let i = 0, found = false; !found && i < pageHandlers.length; i++) {
         if (pageHandlers[i].validatePath(path)) {
             console.log(`NETFLIX-CONTROLLER: Loading ${pageHandlers[i].name} module for ${path}`)
-            loadPage(pageHandlers[i])
+            await loadPage(pageHandlers[i])
             found = true
         }
     }
