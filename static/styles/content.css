@@ -66,10 +66,11 @@
     display: flex;
     align-items: center;
     font-size: 16px;
+    white-space: nowrap;
 }
 
 #gamepad-interface-connection-bar span {
-    margin-left: 8px;
+    margin: 0 8px;
 }
 
 #gamepad-interface-connection-bar-links {
@@ -80,6 +81,7 @@
 .gamepad-interface-connection-bar-link {
     margin: 0 8px;
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .gamepad-interface-hidden {
