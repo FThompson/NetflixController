@@ -53,7 +53,7 @@ mappingDropdown.addEventListener('change', () => {
 
 moveJoystick([0, 0], true);
 moveJoystick([0, 0], false);
-gamepadMappings.buttonsPath = '../static/buttons';
+gamepadMappings.buttonsPath = '/static/buttons';
 gamepads.start();
 
 function showPressedButton(index) {
