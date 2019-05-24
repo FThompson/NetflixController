@@ -1,8 +1,4 @@
 class ConnectionHintBar {
-    constructor() {
-        this.add();
-    }
-
     createBar() {
         let bar = document.createElement('div');
         bar.id = 'gamepad-interface-connection-bar';
