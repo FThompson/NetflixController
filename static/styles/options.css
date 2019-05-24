@@ -7,3 +7,33 @@ header {
     margin-left: 8px;
     font-size: 2em;
 }
+
+#settings {
+    display: grid;
+    grid-template-columns: [labels] max-content [controls] max-content;
+    margin: 8px;
+    font-size: 1rem;
+}
+
+.label {
+    grid-column: labels;
+    padding: 4px 24px 4px 4px;
+}
+
+.control {
+    grid-column: controls;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding-right: 4px;
+}
+
+.control > select {
+    font-size: 1rem;
+}
+
+.label:nth-of-type(even), .control:nth-of-type(even) {
+    background-color: #efefef;
+}
