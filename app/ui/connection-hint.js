@@ -30,8 +30,10 @@ class ConnectionHintBar {
     }
 
     add() {
-        this.element = this.createBar();
-        document.body.append(this.element);
+        if (!this.element) {
+            this.element = this.createBar();
+            document.body.append(this.element);
+        }
     }
 
     remove() {

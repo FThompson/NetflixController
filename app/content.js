@@ -12,7 +12,7 @@ let hasConnectedGamepad = false;
 let keyboard = null;
 let currentHandler = null;
 let actionHandler = new ActionHandler();
-let connectionHintBar = null;
+let connectionHintBar = new ConnectionHintBar();
 const pageHandlers = [
     ChooseProfile,
     FeaturedBrowse,
@@ -41,7 +41,7 @@ chrome.storage.sync.get('buttonImageMapping', result => {
 
 chrome.storage.local.get('showConnectionHint', result => {
     if (result.showConnectionHint) {
-        connectionHintBar = new ConnectionHintBar();
+        connectionHintBar.add();
     }
 });
 
@@ -53,7 +53,7 @@ chrome.storage.onChanged.addListener((changes, storageArea) => {
             actionHandler.updateHints();
         } else if (key === 'showConnectionHint') {
             if (changes[key].newValue) {
-                connectionHintBar = new ConnectionHintBar();
+                connectionHintBar.add();
             } else {
                 connectionHintBar.remove();
             }
@@ -121,9 +121,7 @@ gamepads.addEventListener('connect', e => {
         runHandler(window.location.pathname);
         hasConnectedGamepad = true;
     }
-    if (connectionHintBar) {
-        connectionHintBar.remove();
-    }
+    connectionHintBar.remove();
     numGamepads++;
     if (numGamepads > 0) {
         actionHandler.showHints();
@@ -161,9 +159,7 @@ gamepads.addEventListener('disconnect', e => {
     if (numGamepads === 0) {
         actionHandler.hideHints();
     }
-    if (connectionHintBar) {
-        connectionHintBar.add();
-    }
+    connectionHintBar.add();
     console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${e.gamepad.gamepad.id}`)
 })
 gamepads.start()
