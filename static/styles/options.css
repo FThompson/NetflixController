@@ -1,3 +1,12 @@
+#root {
+    text-align: center;
+}
+
+main {
+    display: inline-block;
+    text-align: left;
+}
+
 header {
     display: flex;
     align-items: center;
