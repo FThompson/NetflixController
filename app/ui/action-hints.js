@@ -13,8 +13,6 @@ class ActionHandler {
             3: {label: 'Test hint', index: 3},
             11: {label: 'Test hint', index: 11}
         };
-        this.hintsBar = new ActionHintsBar();
-        this.updateHints();
     }
 
     addAction(action) {
@@ -28,15 +26,23 @@ class ActionHandler {
     }
 
     updateHints() {
-        this.hintsBar.update(this.actions);
+        if (this.hintsBar) {
+            this.hintsBar.update(this.actions);
+        }
     }
 
     showHints() {
-        this.hintsBar.show();
+        if (!this.hintsBar) {
+            this.hintsBar = new ActionHintsBar();
+            this.updateHints();
+        }
     }
 
     hideHints() {
-        this.hintsBar.hide();
+        if (this.hintsBar) {
+            this.hintsBar.remove();
+            this.hintsBar = null;
+        }
     }
 
     onButtonPress(index) {
@@ -62,7 +68,6 @@ class ActionHintsBar {
         let hintsBar = document.createElement('div');
         hintsBar.id = 'gamepad-interface-hints-bar';
         hintsBar.classList.add('gamepad-interface-bar');
-        hintsBar.classList.add('gamepad-interface-hidden');
         return hintsBar;
     }
 
@@ -90,11 +95,7 @@ class ActionHintsBar {
         }
     }
 
-    show() {
-        this.element.classList.remove('gamepad-interface-hidden');
-    }
-
-    hide() {
-        this.element.classList.add('gamepad-interface-hidden');
+    remove() {
+        this.element.remove();
     }
 }

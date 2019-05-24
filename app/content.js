@@ -7,24 +7,6 @@ function getTransparentNetflixRed(opacity) {
 let buttonImageMapping = 'Xbox One';
 gamepadMappings.buttonsPath = 'static/buttons';
 
-// load image mapping from synced storage
-chrome.storage.sync.get('buttonImageMapping', result => {
-    if (result.buttonImageMapping) {
-        buttonImageMapping = result.buttonImageMapping;
-        actionHandler.updateHints();
-    }
-});
-
-// track changes made to image mapping preferences and update accordingly
-chrome.storage.onChanged.addListener((changes, namespace) => {
-    for (let key in changes) {
-        if (key === 'buttonImageMapping') {
-            buttonImageMapping = changes[key].newValue;
-            actionHandler.updateHints();
-        }
-    }
-});
-
 let numGamepads = 0;
 let hasConnectedGamepad = false;
 let keyboard = null;
@@ -37,11 +19,45 @@ const pageHandlers = [
     FeaturelessBrowse,
     SearchBrowse,
     WatchVideo
-]
+];
+
+chrome.storage.sync.get('showActionHints', result => {
+    if (result.showActionHints) {
+        if (numGamepads > 0) {
+            actionHandler.showHints();
+        }
+    } else {
+        actionHandler.hideHints();
+    }
+});
+
+// load image mapping from synced storage
+chrome.storage.sync.get('buttonImageMapping', result => {
+    if (result.buttonImageMapping) {
+        buttonImageMapping = result.buttonImageMapping;
+        actionHandler.updateHints();
+    }
+});
 
 chrome.storage.local.get('showConnectionHint', result => {
     if (result.showConnectionHint) {
         connectionHintBar = new ConnectionHintBar();
+    }
+});
+
+// track changes made to image mapping preferences and update accordingly
+chrome.storage.onChanged.addListener((changes, namespace) => {
+    for (let key in changes) {
+        if (key === 'buttonImageMapping') {
+            buttonImageMapping = changes[key].newValue;
+            actionHandler.updateHints();
+        } else if (key === 'showConnectionHint') {
+            if (changes[key].newValue) {
+                connectionHintBar = new ConnectionHintBar();
+            }
+        } else if (key === 'showActionHints') {
+
+        }
     }
 });
 
@@ -97,11 +113,10 @@ gamepads.addEventListener('connect', e => {
     if (!hasConnectedGamepad) {
         // first connection, run current page handler manually
         runHandler(window.location.pathname);
-        if (connectionHintBar) {
-            connectionHintBar.remove();
-            connectionHintBar = null;
-        }
         hasConnectedGamepad = true;
+    }
+    if (connectionHintBar) {
+        connectionHintBar.remove();
     }
     numGamepads++;
     if (numGamepads > 0) {
@@ -139,6 +154,9 @@ gamepads.addEventListener('disconnect', e => {
     numGamepads--;
     if (numGamepads === 0) {
         actionHandler.hideHints();
+    }
+    if (connectionHintBar) {
+        connectionHintBar.add();
     }
     console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${e.gamepad.gamepad.id}`)
 })

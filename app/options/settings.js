@@ -24,7 +24,7 @@ const SETTINGS = [
                 default: 'Xbox One'
             },
             {
-                label: 'Show gamepad connection hint until a gamepad is connected',
+                label: 'Show gamepad connection hint when no gamepad is connected',
                 name: 'showConnectionHint',
                 storageArea: 'local',
                 type: 'checkbox',

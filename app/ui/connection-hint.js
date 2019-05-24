@@ -1,7 +1,6 @@
 class ConnectionHintBar {
     constructor() {
-        this.element = this.createBar();
-        document.body.append(this.element);
+        this.add();
     }
 
     createBar() {
@@ -30,9 +29,16 @@ class ConnectionHintBar {
         return bar;
     }
 
+    add() {
+        this.element = this.createBar();
+        document.body.append(this.element);
+    }
+
     remove() {
-        this.element.remove();
-        this.element = null;
+        if (this.element) {
+            this.element.remove();
+            this.element = null;
+        }
     }
 
     removeForever() {
