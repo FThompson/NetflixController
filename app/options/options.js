@@ -32,31 +32,13 @@ function updateDisplayedSettings(items) {
     }
 }
 
-// function insertOptionControl(option) {
-//     let container = document.getElementById('settings');
-//     let label = document.createElement('label');
-//     label.classList.add('label');
-//     label.textContent = option.label;
-//     label.for = option.name;
-//     container.append(label);
-//     let control = null;
-//     if (option.type === 'checkbox') {
-//         control = createCheckbox(option);
-//     } else if (option.type === 'combobox') {
-//         control = createCombobox(option);
-//     }
-//     control.classList.add('control');
-//     container.append(control);
-// }
-
 function insertOptionControl(option) {
-    // let row = document.createElement('div');
-    // row.classList.add('grid-row');
+    let container = document.getElementById('settings');
     let label = document.createElement('label');
     label.classList.add('label');
     label.textContent = option.label;
     label.for = option.name;
-    document.getElementById('settings').append(label);
+    container.append(label);
     let controlDiv = document.createElement('div');
     controlDiv.classList.add('control');
     if (option.type === 'checkbox') {
@@ -64,38 +46,8 @@ function insertOptionControl(option) {
     } else if (option.type === 'combobox') {
         controlDiv.append(createCombobox(option));
     }
-    document.getElementById('settings').append(controlDiv);
-    // document.getElementById('settings').append(row);
+    container.append(controlDiv);
 }
-
-// function insertOptionControl(option) {
-//     let label = document.createElement('label');
-//     label.textContent = option.label;
-//     label.for = option.name;
-//     document.getElementById('labels').append(label);
-//     let controls = document.getElementById('controls');
-//     if (option.type === 'checkbox') {
-//         controls.append(createCheckbox(option));
-//     } else if (option.type === 'combobox') {
-//         controls.append(createCombobox(option));
-//     }
-// }
-
-// function insertOptionControl(option) {
-//     let optionDiv = document.createElement('div');
-//     optionDiv.classList.add('option');
-//     let label = document.createElement('label');
-//     label.textContent = option.label;
-//     label.for = option.name;
-//     if (option.type === 'checkbox') {
-//         optionDiv.append(label);
-//         optionDiv.append(createCheckbox(option));
-//     } else if (option.type === 'combobox') {
-//         optionDiv.append(label);
-//         optionDiv.append(createCombobox(option));
-//     }
-//     document.getElementById('settings').append(optionDiv);
-// }
 
 function createCheckbox(option) {
     let checkbox = document.createElement('input');
