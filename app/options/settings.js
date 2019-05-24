@@ -32,4 +32,19 @@ const SETTINGS = [
             }
         ]
     }
-]
+];
+
+const ALL_SETTING_KEYS = getAllKeys();
+
+function getAllKeys() {
+    let keys = {
+        'local': [],
+        'sync': []
+    };
+    for (let section of SETTINGS) {
+        for (let option of section.options) {
+            keys[option.storageArea].push(option.name);
+        }
+    }
+    return keys;
+}
