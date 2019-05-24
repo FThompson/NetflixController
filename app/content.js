@@ -46,7 +46,7 @@ chrome.storage.local.get('showConnectionHint', result => {
 });
 
 // track changes made to image mapping preferences and update accordingly
-chrome.storage.onChanged.addListener((changes, namespace) => {
+chrome.storage.onChanged.addListener((changes, storageArea) => {
     for (let key in changes) {
         if (key === 'buttonImageMapping') {
             buttonImageMapping = changes[key].newValue;
@@ -54,9 +54,15 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
         } else if (key === 'showConnectionHint') {
             if (changes[key].newValue) {
                 connectionHintBar = new ConnectionHintBar();
+            } else {
+                connectionHintBar.remove();
             }
         } else if (key === 'showActionHints') {
-
+            if (changes[key].newValue) {
+                actionHandler.showHints();
+            } else {
+                actionHandler.hideHints();
+            }
         }
     }
 });

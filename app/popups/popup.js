@@ -21,7 +21,16 @@ chrome.storage.sync.get('buttonImageMapping', result => {
     // TODO link this to controller id maybe?
     if (result.buttonImageMapping) {
         mapping = result.buttonImageMapping;
-        document.getElementById('gamepad-mapping').value = result.buttonImageMapping;
+        document.getElementById('gamepad-mapping').value = mapping;
+    }
+});
+
+chrome.storage.onChanged.addListener((changes, storageArea) => {
+    for (let key in changes) {
+        if (key === 'buttonImageMapping') {
+            mapping = changes[key].newValue;
+            document.getElementById('gamepad-mapping').value = mapping;
+        }
     }
 });
 
