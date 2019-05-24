@@ -37,6 +37,6 @@ class ConnectionHintBar {
 
     removeForever() {
         this.remove();
-        chrome.storage.local.set({ hideConnectionHint: true });
+        chrome.storage.local.set({ showConnectionHint: false });
     }
 }

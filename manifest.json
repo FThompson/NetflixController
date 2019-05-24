@@ -12,7 +12,10 @@
         "storage"
     ],
     "background": {
-        "scripts": ["app/background.js"],
+        "scripts": [
+            "app/options/settings.js",
+            "app/background.js"
+        ],
         "persistent": false
     },
     "content_scripts": [

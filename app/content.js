@@ -39,8 +39,8 @@ const pageHandlers = [
     WatchVideo
 ]
 
-chrome.storage.local.get('hideConnectionHint', result => {
-    if (!result.hideConnectionHint) {
+chrome.storage.local.get('showConnectionHint', result => {
+    if (result.showConnectionHint) {
         connectionHintBar = new ConnectionHintBar();
     }
 });

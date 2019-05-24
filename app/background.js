@@ -1,5 +1,27 @@
+chrome.runtime.onInstalled.addListener(details => {
+    if (details.reason === 'install') {
+        setDefaultSettings();
+    }
+    setDeclarativeContent();
+});
+
+function setDefaultSettings() {
+    let items = {};
+    for (let section of SETTINGS) {
+        for (let option of section.options) {
+            if (!items[option.storageArea]) {
+                items[option.storageArea] = {};
+            }
+            items[option.storageArea][option.name] = option.default;
+        }
+    }
+    for (let storageArea in items) {
+        chrome.storage[storageArea].set(items[storageArea]);
+    }
+}
+
 // enable toolbar icon only on *.netflix.com
-chrome.runtime.onInstalled.addListener(() => {
+function setDeclarativeContent() {
     chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
         chrome.declarativeContent.onPageChanged.addRules([
             {
@@ -10,9 +32,9 @@ chrome.runtime.onInstalled.addListener(() => {
                 ],
                 actions: [new chrome.declarativeContent.ShowPageAction()]
             }
-        ])
-    })
-})
+        ]);
+    });
+}
 
 // inform the content script of any changes to the netflix's url path
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
