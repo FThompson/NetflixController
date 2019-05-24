@@ -43,6 +43,10 @@ header {
     font-size: 1rem;
 }
 
+.control > input[type='checkbox'] {
+    transform: scale(1.25);
+}
+
 .label:nth-of-type(even), .control:nth-of-type(even) {
     background-color: #efefef;
 }
