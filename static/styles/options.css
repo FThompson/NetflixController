@@ -39,11 +39,15 @@ header {
     padding-right: 4px;
 }
 
+.disabled {
+    color: #808080;
+}
+
 .control > select {
     font-size: 1rem;
 }
 
-.control > input[type='checkbox'] {
+.control > input[type=checkbox] {
     transform: scale(1.25);
 }
 

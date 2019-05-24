@@ -21,7 +21,10 @@ const SETTINGS = [
                     'PS3',
                     'PS4'
                 ],
-                default: 'Xbox One'
+                default: 'Xbox One',
+                condition: {
+                    showActionHints: true
+                }
             },
             {
                 label: 'Show gamepad connection hint when no gamepad is connected',
