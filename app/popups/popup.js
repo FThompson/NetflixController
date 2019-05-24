@@ -18,7 +18,7 @@ chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
 
 // load image mapping from synced storage
 chrome.storage.sync.get('buttonImageMapping', result => {
-    // TODO link this to controller id
+    // TODO link this to controller id maybe?
     if (result.buttonImageMapping) {
         mapping = result.buttonImageMapping;
         document.getElementById('gamepad-mapping').value = result.buttonImageMapping;
