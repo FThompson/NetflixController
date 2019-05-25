@@ -85,4 +85,8 @@ class ActionHintsBar extends BottomBar {
             }
         }
     }
+
+    getPriority() {
+        return 5;
+    }
 }

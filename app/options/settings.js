@@ -32,6 +32,13 @@ const SETTINGS = [
                 storageArea: 'local',
                 type: 'checkbox',
                 default: true
+            },
+            {
+                label: 'Show non-standard gamepad compatibility warning',
+                name: 'showCompatibilityWarning',
+                storageArea: 'local',
+                type: 'checkbox',
+                default: true
             }
         ]
     }

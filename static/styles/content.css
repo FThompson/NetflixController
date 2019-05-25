@@ -36,7 +36,7 @@
     outline-color: rgb(30, 30, 30);
 }
 
-.gamepad-interface-bar {
+#gamepad-interface-bottom-bar-container {
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -61,7 +61,7 @@
     margin: 0 8px;
 }
 
-#gamepad-interface-connection-bar {
+.gamepad-interface-notice-bar {
     height: 36px;
     display: flex;
     align-items: center;
@@ -69,19 +69,28 @@
     white-space: nowrap;
 }
 
-#gamepad-interface-connection-bar span {
+.gamepad-interface-notice-bar span {
     margin: 0 8px;
 }
 
-#gamepad-interface-connection-bar-links {
+.gamepad-interface-notice-bar-links {
     margin-left: auto;
     order: 2;
 }
 
-.gamepad-interface-connection-bar-link {
+.gamepad-interface-notice-bar-link {
     margin: 0 8px;
     text-decoration: underline;
     cursor: pointer;
+}
+
+#gamepad-interface-connection-bar {
+    color: white;
+}
+
+#gamepad-interface-compatibility-bar > span {
+    color: red;
+    font-weight: bold;
 }
 
 .gamepad-interface-hidden {

@@ -1,4 +1,5 @@
-const NETFLIX_RED = 'rgba(229, 9, 20)'
+const manifest = chrome.runtime.getManifest();
+const NETFLIX_RED = 'rgba(229, 9, 20)';
 
 function getTransparentNetflixRed(opacity) {
     return NETFLIX_RED.replace(')', ', ' + opacity + ')')
@@ -10,10 +11,12 @@ gamepadMappings.buttonsPath = 'static/buttons';
 let numGamepads = 0;
 let hasConnectedGamepad = false;
 let showActionHints = true;
+let showCompatibilityWarning = true;
 let keyboard = null;
 let currentHandler = null;
 let actionHandler = new ActionHandler();
 let connectionHintBar = new ConnectionHintBar();
+let compatibilityWarning = new CompatibilityWarningBar();
 const pageHandlers = [
     ChooseProfile,
     FeaturedBrowse,
@@ -64,6 +67,9 @@ chrome.storage.onChanged.addListener((changes, storageArea) => {
             } else {
                 actionHandler.hideHints();
             }
+        } else if (key === 'showCompatibilityWarning') {
+            showCompatibilityWarning = changes[key].newValue;
+            updateCompatibility();
         }
     }
 });
@@ -127,6 +133,15 @@ function showConnectionHint() {
     }
 }
 
+function updateCompatibility() {
+    if (showCompatibilityWarning &&
+            !Object.values(gamepads.gamepads).some(g => g.gamepad.mapping === 'standard')) {
+        compatibilityWarning.add();
+    } else {
+        compatibilityWarning.remove();
+    }
+}
+
 console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
 gamepads.addEventListener('connect', e => {
     if (!hasConnectedGamepad) {
@@ -137,6 +152,7 @@ gamepads.addEventListener('connect', e => {
     connectionHintBar.remove();
     numGamepads++;
     displayActionHints();
+    updateCompatibility();
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${e.gamepad.gamepad.id}`)
     e.gamepad.addEventListener('buttonpress', e => {
         if (keyboard) {
@@ -171,6 +187,7 @@ gamepads.addEventListener('disconnect', e => {
         actionHandler.hideHints();
     }
     showConnectionHint();
+    updateCompatibility();
     console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${e.gamepad.gamepad.id}`)
 })
 gamepads.start()

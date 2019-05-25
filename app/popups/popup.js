@@ -38,7 +38,7 @@ gamepads.addEventListener('connect', e => {
     console.log('Gamepad connected:');
     console.log(e.gamepad);
     document.getElementById('count').textContent = ++count;
-    checkCompatibility();
+    updateCompatibility();
     e.gamepad.addEventListener('buttonpress', e => showPressedButton(e.index));
     e.gamepad.addEventListener('buttonrelease', e => removePressedButton(e.index));
     e.gamepad.addEventListener('joystickmove', e => moveJoystick(e.values, true),
@@ -51,7 +51,7 @@ gamepads.addEventListener('disconnect', e => {
     console.log('Gamepad disconnected:');
     console.log(e.gamepad);
     document.getElementById('count').textContent = --count;
-    checkCompatibility();
+    updateCompatibility();
 });
 
 let mappingDropdown = document.getElementById('gamepad-mapping');
@@ -95,7 +95,7 @@ function moveJoystick(values, isLeft) {
     joystick.style.left = x + 'px';
 }
 
-function checkCompatibility() {
+function updateCompatibility() {
     let warning = document.getElementById('no-standard-gamepad');
     if (!Object.values(gamepads.gamepads).some(g => g.gamepad.mapping === 'standard')) {
         warning.style.display = 'default';
