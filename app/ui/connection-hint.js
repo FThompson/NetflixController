@@ -1,4 +1,4 @@
-class ConnectionHintBar {
+class ConnectionHintBar extends BottomBar {
     createBar() {
         let bar = document.createElement('div');
         bar.id = 'gamepad-interface-connection-bar';
@@ -23,20 +23,6 @@ class ConnectionHintBar {
         dismissForeverLink.addEventListener('click', () => this.removeForever());
         dismissLinks.append(dismissForeverLink);
         return bar;
-    }
-
-    add() {
-        if (!this.element) {
-            this.element = this.createBar();
-            document.body.append(this.element);
-        }
-    }
-
-    remove() {
-        if (this.element) {
-            this.element.remove();
-            this.element = null;
-        }
     }
 
     removeForever() {

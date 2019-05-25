@@ -9,6 +9,7 @@ class Action {
 
 class ActionHandler {
     constructor() {
+        this.hintsBar = new ActionHintsBar();
         this.actions = {
             3: {label: 'Test hint', index: 3},
             11: {label: 'Test hint', index: 11}
@@ -26,23 +27,16 @@ class ActionHandler {
     }
 
     updateHints() {
-        if (this.hintsBar) {
-            this.hintsBar.update(this.actions);
-        }
+        this.hintsBar.update(this.actions);
     }
 
     showHints() {
-        if (!this.hintsBar) {
-            this.hintsBar = new ActionHintsBar();
-            this.updateHints();
-        }
+        this.hintsBar.add();
+        this.updateHints();
     }
 
     hideHints() {
-        if (this.hintsBar) {
-            this.hintsBar.remove();
-            this.hintsBar = null;
-        }
+        this.hintsBar.remove();
     }
 
     onButtonPress(index) {
@@ -58,12 +52,7 @@ class ActionHandler {
     }
 }
 
-class ActionHintsBar {
-    constructor() {
-        this.element = this.createBar();
-        document.body.append(this.element);
-    }
-
+class ActionHintsBar extends BottomBar {
     createBar() {
         let hintsBar = document.createElement('div');
         hintsBar.id = 'gamepad-interface-hints-bar';
@@ -86,16 +75,14 @@ class ActionHintsBar {
     }
 
     update(actions) {
-        this.element.innerHTML = '';
-        for (let action of Object.values(actions)) {
-            let hint = this.createHint(action);
-            if (hint) {
-                this.element.insertAdjacentHTML('beforeend', hint);
+        if (this.element) {
+            this.element.innerHTML = '';
+            for (let action of Object.values(actions)) {
+                let hint = this.createHint(action);
+                if (hint) {
+                    this.element.insertAdjacentHTML('beforeend', hint);
+                }
             }
         }
-    }
-
-    remove() {
-        this.element.remove();
     }
 }
