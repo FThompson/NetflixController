@@ -18,6 +18,7 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Batch chrome.storage get calls where possible
 * Add warning bar for non-standard gamepad in content script
 * Separate live setting logic into external library
+* Replace pseudo:styler with calls to chrome.debugger to spawn trusted mouse events
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.
