@@ -89,8 +89,13 @@
 }
 
 #gamepad-interface-compatibility-bar > span {
-    color: red;
-    font-weight: bold;
+    color: var(--netflix-red);
+    font-weight: 600;
+}
+
+#gamepad-interface-compatibility-bar > span > a {
+    color: inherit;
+    text-decoration: underline;
 }
 
 .gamepad-interface-hidden {

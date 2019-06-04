@@ -27,7 +27,9 @@ class ActionHandler {
     }
 
     updateHints() {
-        this.hintsBar.update(this.actions);
+        if (this.hintsBar) {
+            this.hintsBar.update(this.actions);
+        }
     }
 
     showHints() {
