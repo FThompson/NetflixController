@@ -2,7 +2,7 @@ class CompatibilityWarningBar extends NoticeBar {
     constructor() {
         let notice = (`
             <span>
-                No gamepad with a <a href='https://www.w3.org/TR/gamepad/#remapping' alt='Standard mapping'>
+                No gamepad with a <a href='https://www.w3.org/TR/gamepad/#remapping' alt='Standard mapping' target='_blank'>
                 standard mapping</a> found. Gamepad interface may not work as expected.
             </span>
         `);
