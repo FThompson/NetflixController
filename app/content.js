@@ -6,7 +6,6 @@ function getTransparentNetflixRed(opacity) {
     return NETFLIX_RED.replace(')', ', ' + opacity + ')')
 }
 
-let buttonImageMapping = 'Xbox One';
 gamepadMappings.buttonsPath = 'static/buttons';
 
 let numGamepads = 0;
@@ -25,7 +24,7 @@ const pageHandlers = [
 ];
 
 storage.addListener('showActionHints', showActionHints);
-storage.addListener('buttonImageMapping', actionHandler.updateHints);
+storage.addListener('buttonImageMapping', () => actionHandler.updateHints());
 storage.addListener('showConnectionHint', showConnectionHint);
 storage.addListener('showCompatibilityWarning', updateCompatibility);
 storage.load();

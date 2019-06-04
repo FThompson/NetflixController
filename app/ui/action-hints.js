@@ -63,7 +63,7 @@ class ActionHintsBar extends BottomBar {
     }
 
     createHint(action) {
-        let button = gamepadMappings.getButton(buttonImageMapping, action.index);
+        let button = gamepadMappings.getButton(storage.sync.buttonImageMapping, action.index);
         if (button) {
             let imageSrc = chrome.runtime.getURL(button.buttonImageSrc);
             return (
