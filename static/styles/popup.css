@@ -1,11 +1,12 @@
 :root {
     --joystick-size: 6px;
     --joystick-container-size: 100px;
+    --options-button-height: 1.5rem;
 }
 
 body {
     width: 300px;
-    height: 260px;
+    height: 290px;
     font-family: 'Helvetica Neue', Helvetica, Arial, Helvetica, sans-serif;
 }
 
@@ -49,4 +50,20 @@ body {
 #no-standard-gamepad {
     color: red;
     display: none;
+}
+
+#gamepad-test {
+    margin-bottom: var(--options-button-height);
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    height: var(--options-button-height);
+    width: 100%;
+    margin: 8px 0;
+}
+
+#options {
+    height: var(--options-button-height);
 }

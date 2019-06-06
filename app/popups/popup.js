@@ -47,6 +47,10 @@ mappingDropdown.addEventListener('change', () => {
     storage.sync.buttonImageMapping = mappingDropdown.value;
 });
 
+document.getElementById('options').addEventListener('click', () => {
+    chrome.runtime.openOptionsPage();
+});
+
 moveJoystick([0, 0], true);
 moveJoystick([0, 0], false);
 gamepadMappings.buttonsPath = '/static/buttons';
