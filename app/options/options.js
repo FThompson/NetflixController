@@ -1,31 +1,23 @@
+const storage = LiveStorage;
 const manifest = chrome.runtime.getManifest();
 document.getElementById('extension-name').textContent = manifest.name;
 
 let dependencies = {};
-let liveSettings = {
-    'sync': {},
-    'local': {}
-};
 
 for (let setting of SETTINGS) {
     for (let option of setting.options) {
         insertOptionControl(option);
+        storage.addListener(option.name, change => {
+            updateDisplayedSetting(option.name, change.value);
+        });
     }
 }
+storage.load();
 
-Object.keys(ALL_SETTING_KEYS).forEach(storageArea => {
-    chrome.storage[storageArea].get(ALL_SETTING_KEYS[storageArea], items => {
-        Object.assign(liveSettings[storageArea], items);
-        updateDisplayedSettings(items);
-    });
-});
-
-chrome.storage.onChanged.addListener((changes, storageArea) => {
-    let items = {};
-    Object.keys(changes).forEach(key => items[key] = changes[key].newValue);
-    Object.assign(liveSettings[storageArea], items);
-    updateDisplayedSettings(items);
-});
+function updateDisplayedSetting(key, value) {
+    document.getElementById(key).setValue(value);
+    checkDependencies(key);
+}
 
 function updateDisplayedSettings(items) {
     for (let key in items) {
@@ -83,7 +75,6 @@ function insertOptionControl(option) {
         for (let key in option.condition) {
             dependencies[option.name][key] = option.condition[key];
             document.getElementById(key).addEventListener('change', () => {
-                // let shouldEnable = option.condition[key] === this.getValue();
                 checkDependencies(option.name);
             });
         }
@@ -96,7 +87,8 @@ function createCheckbox(option) {
     checkbox.id = option.name;
     checkbox.checked = option.default;
     checkbox.addEventListener('change', () => {
-        chrome.storage[option.storageArea].set({ [option.name]: checkbox.checked });
+        storage[option.storageArea][option.name] = checkbox.checked;
+        // chrome.storage[option.storageArea].set({ [option.name]: checkbox.checked });
     })
     checkbox.getValue = () => checkbox.checked;
     checkbox.setValue = value => checkbox.checked = value;
@@ -116,7 +108,8 @@ function createCombobox(option) {
         combobox.append(boxOption);
     }
     combobox.addEventListener('change', () => {
-        chrome.storage[option.storageArea].set({ [option.name]: combobox.value });
+        storage[option.storageArea][option.name] = combobox.value;
+        // chrome.storage[option.storageArea].set({ [option.name]: combobox.value });
     });
     combobox.getValue = () => combobox.value;
     combobox.setValue = value => combobox.value = value;
