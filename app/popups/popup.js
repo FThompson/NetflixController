@@ -1,10 +1,10 @@
+const storage = LiveStorage;
 let style = window.getComputedStyle(document.body);
 const CONTAINER_SIZE = parseFloat(style.getPropertyValue('--joystick-container-size'));
 const DOT_SIZE = parseFloat(style.getPropertyValue('--joystick-size'));
 const DOT_POSITION = (CONTAINER_SIZE - DOT_SIZE) / 2;
 
 let count = 0;
-let mapping = 'Xbox One';
 let pressedButtons = {};
 
 // disable gamepad input on page while popup is open
@@ -16,23 +16,11 @@ chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
     });
 });
 
-// load image mapping from synced storage
-chrome.storage.sync.get('buttonImageMapping', result => {
-    // TODO link this to controller id maybe?
-    if (result.buttonImageMapping) {
-        mapping = result.buttonImageMapping;
-        document.getElementById('gamepad-mapping').value = mapping;
-    }
+storage.addListener('buttonImageMapping', () => {
+    // TODO link mapping to controller id maybe?
+    document.getElementById('gamepad-mapping').value = storage.sync.buttonImageMapping;
 });
-
-chrome.storage.onChanged.addListener((changes, storageArea) => {
-    for (let key in changes) {
-        if (key === 'buttonImageMapping') {
-            mapping = changes[key].newValue;
-            document.getElementById('gamepad-mapping').value = mapping;
-        }
-    }
-});
+storage.load();
 
 gamepads.addEventListener('connect', e => {
     console.log('Gamepad connected:');
@@ -56,8 +44,7 @@ gamepads.addEventListener('disconnect', e => {
 
 let mappingDropdown = document.getElementById('gamepad-mapping');
 mappingDropdown.addEventListener('change', () => {
-    mapping = mappingDropdown.value;
-    chrome.storage.sync.set({ buttonImageMapping: mapping });
+    storage.sync.buttonImageMapping = mappingDropdown.value;
 });
 
 moveJoystick([0, 0], true);
@@ -67,7 +54,7 @@ gamepads.start();
 
 function showPressedButton(index) {
     if (!pressedButtons[index]) {
-        let button = gamepadMappings.getButton(mapping, index);
+        let button = gamepadMappings.getButton(storage.sync.buttonImageMapping, index);
         if (button) {
             let img = document.createElement('img');
             img.src = button.buttonImageSrc;
