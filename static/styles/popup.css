@@ -5,8 +5,8 @@
 }
 
 body {
-    width: 300px;
-    height: 290px;
+    width: 250px;
+    height: 275px;
     font-family: 'Helvetica Neue', Helvetica, Arial, Helvetica, sans-serif;
 }
 
@@ -47,13 +47,18 @@ body {
     margin-top: calc((var(--joystick-container-size) + 2px) / -2);
 }
 
+.gamepad-button {
+    width: 40px;
+    height: 40px;
+}
+
 #no-standard-gamepad {
     color: red;
     display: none;
 }
 
 #gamepad-test {
-    margin-bottom: var(--options-button-height);
+    margin-bottom: calc(1rem + var(--options-button-height));
 }
 
 footer {
@@ -61,7 +66,7 @@ footer {
     bottom: 0;
     height: var(--options-button-height);
     width: 100%;
-    margin: 8px 0;
+    margin: 0.5rem 0;
 }
 
 #options {

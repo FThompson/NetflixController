@@ -61,6 +61,7 @@ function showPressedButton(index) {
         let button = gamepadMappings.getButton(storage.sync.buttonImageMapping, index);
         if (button) {
             let img = document.createElement('img');
+            img.classList.add('gamepad-button');
             img.src = button.buttonImageSrc;
             img.alt = button.buttonName;
             document.getElementById('pressed-buttons').append(img);
