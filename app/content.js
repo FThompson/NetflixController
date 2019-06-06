@@ -1,3 +1,4 @@
+const storage = LiveStorage;
 const manifest = chrome.runtime.getManifest();
 const NETFLIX_RED = 'rgba(229, 9, 20)';
 
@@ -5,13 +6,10 @@ function getTransparentNetflixRed(opacity) {
     return NETFLIX_RED.replace(')', ', ' + opacity + ')')
 }
 
-let buttonImageMapping = 'Xbox One';
 gamepadMappings.buttonsPath = 'static/buttons';
 
 let numGamepads = 0;
 let hasConnectedGamepad = false;
-let showActionHints = true;
-let showCompatibilityWarning = true;
 let keyboard = null;
 let currentHandler = null;
 let actionHandler = new ActionHandler();
@@ -25,54 +23,11 @@ const pageHandlers = [
     WatchVideo
 ];
 
-chrome.storage.sync.get('showActionHints', result => {
-    showActionHints = result.showActionHints;
-    if (result.showActionHints) {
-        displayActionHints();
-    } else {
-        actionHandler.hideHints();
-    }
-});
-
-// load image mapping from synced storage
-chrome.storage.sync.get('buttonImageMapping', result => {
-    if (result.buttonImageMapping) {
-        buttonImageMapping = result.buttonImageMapping;
-        actionHandler.updateHints();
-    }
-});
-
-chrome.storage.local.get('showConnectionHint', result => {
-    if (result.showConnectionHint) {
-        showConnectionHint();
-    }
-});
-
-// track changes made to image mapping preferences and update accordingly
-chrome.storage.onChanged.addListener((changes, storageArea) => {
-    for (let key in changes) {
-        if (key === 'buttonImageMapping') {
-            buttonImageMapping = changes[key].newValue;
-            actionHandler.updateHints();
-        } else if (key === 'showConnectionHint') {
-            if (changes[key].newValue) {
-                showConnectionHint();
-            } else {
-                connectionHintBar.remove();
-            }
-        } else if (key === 'showActionHints') {
-            showActionHints = changes[key].newValue;
-            if (showActionHints) {
-                displayActionHints();
-            } else {
-                actionHandler.hideHints();
-            }
-        } else if (key === 'showCompatibilityWarning') {
-            showCompatibilityWarning = changes[key].newValue;
-            updateCompatibility();
-        }
-    }
-});
+storage.addListener('showActionHints', showActionHints);
+storage.addListener('buttonImageMapping', () => actionHandler.updateHints());
+storage.addListener('showConnectionHint', showConnectionHint);
+storage.addListener('showCompatibilityWarning', updateCompatibility);
+storage.load();
 
 chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
     if (request.message === 'locationChanged') {
@@ -121,25 +76,32 @@ function refreshPageIfBad() {
     }
 }
 
-function displayActionHints() {
-    if (numGamepads > 0 && showActionHints) {
+function showActionHints() {
+    if (numGamepads > 0 && storage.sync.showActionHints) {
         actionHandler.showHints();
+    } else {
+        actionHandler.hideHints();
     }
 }
 
 function showConnectionHint() {
-    if (numGamepads === 0) {
+    if (numGamepads === 0 && storage.local.showConnectionHint) {
         connectionHintBar.add();
+    } else {
+        connectionHintBar.remove();
     }
 }
 
 function updateCompatibility() {
-    if (showCompatibilityWarning &&
-            !Object.values(gamepads.gamepads).some(g => g.gamepad.mapping === 'standard')) {
+    if (storage.local.showCompatibilityWarning && !isStandardGamepadConnected()) {
         compatibilityWarning.add();
     } else {
         compatibilityWarning.remove();
     }
+}
+
+function isStandardGamepadConnected() {
+    return Object.values(gamepads.gamepads).some(g => g.gamepad.mapping === 'standard');
 }
 
 console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
@@ -151,7 +113,7 @@ gamepads.addEventListener('connect', e => {
     }
     connectionHintBar.remove();
     numGamepads++;
-    displayActionHints();
+    showActionHints();
     updateCompatibility();
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${e.gamepad.gamepad.id}`)
     e.gamepad.addEventListener('buttonpress', e => {
