@@ -1,6 +1,9 @@
 const storage = LiveStorage;
 const manifest = chrome.runtime.getManifest();
-document.getElementById('extension-name').textContent = manifest.name;
+document.querySelectorAll('.extension-name').forEach(elem => {
+    elem.textContent = manifest.name;
+});
+document.getElementById('extension-version').textContent = manifest.version;
 
 let dependencies = {};
 

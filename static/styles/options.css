@@ -12,7 +12,7 @@ header {
     align-items: center;
 }
 
-#extension-name {
+header .extension-name {
     margin-left: 8px;
     font-size: 2em;
 }
@@ -53,4 +53,23 @@ header {
 
 .label:nth-of-type(even), .control:nth-of-type(even) {
     background-color: #efefef;
+}
+
+section {
+    font-size: 1rem;
+}
+
+section > h2 {
+    font-weight: normal;
+    font-size: 1.3em;
+    margin: 0;
+}
+
+section > p {
+    margin: 8px;
+    margin-left: 8px;
+}
+
+.version {
+    color: #888;
 }
