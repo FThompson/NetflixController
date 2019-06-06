@@ -61,13 +61,16 @@ section {
 
 section > h2 {
     font-weight: normal;
-    font-size: 1.3em;
-    margin: 0;
+    font-size: 1.25em;
+    margin: 8px 0;
+}
+
+.table-header {
+    margin-bottom: -4px;
 }
 
 section > p {
     margin: 8px;
-    margin-left: 8px;
 }
 
 .version {
