@@ -93,7 +93,8 @@ function showConnectionHint() {
 }
 
 function updateCompatibility() {
-    if (storage.local.showCompatibilityWarning && !isStandardGamepadConnected()) {
+    if (storage.local.showCompatibilityWarning && numGamepads > 0 &&
+            !isStandardGamepadConnected()) {
         compatibilityWarning.add();
     } else {
         compatibilityWarning.remove();
