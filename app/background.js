@@ -1,22 +1,16 @@
+const storage = LiveStorage;
+
 chrome.runtime.onInstalled.addListener(details => {
     if (details.reason === 'install') {
+        storage.load().then(() => setDefaultSettings());
         setDefaultSettings();
     }
     setDeclarativeContent();
 });
 
 function setDefaultSettings() {
-    let items = {};
-    for (let section of SETTINGS) {
-        for (let option of section.options) {
-            if (!items[option.storageArea]) {
-                items[option.storageArea] = {};
-            }
-            items[option.storageArea][option.name] = option.default;
-        }
-    }
-    for (let storageArea in items) {
-        chrome.storage[storageArea].set(items[storageArea]);
+    for (let option of OPTIONS) {
+        storage[option.storageArea][option.name] = option.default;
     }
 }
 

@@ -4,13 +4,11 @@ document.getElementById('extension-name').textContent = manifest.name;
 
 let dependencies = {};
 
-for (let setting of SETTINGS) {
-    for (let option of setting.options) {
-        insertOptionControl(option);
-        storage.addListener(option.name, change => {
-            updateDisplayedSetting(option.name, change.value);
-        });
-    }
+for (let option of OPTIONS) {
+    insertOptionControl(option);
+    storage.addListener(option.name, change => {
+        updateDisplayedSetting(option.name, change.value);
+    });
 }
 storage.load();
 
