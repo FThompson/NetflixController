@@ -15,9 +15,6 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Timeout page readiness checks (useful in case of no internet connection)
 * Improve plugin design to be extendable for other websites
 * Come up with a better plugin name, maybe considering future extendability (Flixability, Joyflix, Netstix)
-* Batch chrome.storage get calls where possible
-* Add warning bar for non-standard gamepad in content script
-* Separate live setting logic into external library
 * Replace pseudo:styler with calls to chrome.debugger to spawn trusted mouse events
 
 ## Libraries and Materials Used
