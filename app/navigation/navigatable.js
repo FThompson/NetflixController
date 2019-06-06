@@ -40,23 +40,6 @@ class Navigatable {
         element.dispatchEvent(mouseout)
     }
 
-    static hover(element) {
-        let center = Navigatable.getCenter(element);
-        chrome.runtime.sendMessage({ message: 'mouseOver', x: center.x, y: center.y });
-    }
-
-    static unhover() {
-        chrome.runtime.sendMessage({ message: 'mouseOut' });
-    }
-
-    static getCenter(element) {
-        let rect = element.getBoundingClientRect();
-        return {
-            x: rect.left + window.scrollX + rect.width / 2,
-            y: rect.top + window.scrollY + rect.height / 2
-        };
-    }
-
     // via https://stackoverflow.com/a/49842367/1247781
     static scrollIntoView(element) {
         let bounds = element.getBoundingClientRect()

@@ -46,10 +46,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         // chrome.windows.getCurrent(window => chrome.windows.update(window.id, {state: 'fullscreen'}))
         // the above seems to crash netflix upon trying to exit fullscreen mode
         setFullScreen(sender.tab.id)
-    } else if (request.message === 'mouseOver') {
-        mouseOver(sender.tab.id, request.x, request.y);
-    } else if (request.message === 'mouseOut') {
-        mouseOut(sender.tab.id);
     }
 })
 
@@ -67,18 +63,4 @@ function setFullScreen(tabId) {
             chrome.debugger.detach(debuggee)
         })
     })
-}
-
-function mouseOver(tabId, x, y) {
-    let debuggee = { tabId };
-    chrome.debugger.attach(debuggee, '1.3', () => {
-        let params = { type: 'mouseMoved', x, y };
-        chrome.debugger.sendCommand(debuggee, 'Input.dispatchMouseEvent', params, () => {
-            chrome.debugger.detach(debuggee);
-        });
-    });
-}
-
-function mouseOut(tabId) {
-    mouseOver(tabId, 0, 0);
 }

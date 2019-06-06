@@ -42,16 +42,14 @@ class Billboard extends Navigatable {
 
     unselect() {
         if (this.selected) {
-            Navigatable.unhover();
-            // this.styler.toggleStyle(this.selected.style, ':hover')
+            this.styler.toggleStyle(this.selected.style, ':hover')
         }
     }
 
     select(button) {
         if (button !== this.selected) {
             this.unselect()
-            // this.styler.toggleStyle(button.style, ':hover')
-            Navigatable.hover(button.action);
+            this.styler.toggleStyle(button.style, ':hover')
             this.selected = button
             Navigatable.scrollIntoView(this.selected.style)
         }
