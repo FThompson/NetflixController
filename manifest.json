@@ -37,7 +37,7 @@
                 "app/ui/virtual-keyboard.js",
                 "app/ui/bottom-bar.js",
                 "app/ui/notice-bar.js",
-                "app/ui/action-hints.js",
+                "app/ui/actions.js",
                 "app/ui/connection-hint.js",
                 "app/ui/compatibility-warning.js",
                 "app/handlers/page.js",
