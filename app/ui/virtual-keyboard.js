@@ -90,11 +90,11 @@ class VirtualKeyboard {
 
     backspace() {
         if (this.input.value.length > 0) {
-            this.input.value = this.input.value.substring(0, this.input.value.length - 1)
-            this.dispatchInputChangeEvent()
-            if (this.input.value.endsWith(' ')) {
-                this.toggleShift(true)
-            }
+            let c = this.input.value[this.input.value.length - 1];
+            this.input.value = this.input.value.substring(0, this.input.value.length - 1);
+            this.dispatchInputChangeEvent();
+            let isRemovedUpper = (c === c.toUpperCase()) && (c !== c.toLowerCase());
+            this.toggleShift(isRemovedUpper);
         }
     }
 
