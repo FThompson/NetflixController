@@ -205,9 +205,7 @@ function openSearch() {
     let handlerState = currentHandler.exit()
 
     keyboard = VirtualKeyboard.create(searchInput, searchParent, () => {
-        for (let action of keyboard.getActions()) {
-            actionHandler.removeAction(action);
-        }
+        actionHandler.removeAll(keyboard.getActions());
         if (window.location.href === startingLocation) {
             currentHandler.enter(handlerState)
         }
@@ -228,9 +226,7 @@ function openSearch() {
     closeObserver.observe(searchContainer, { attributes: true, attributeFilter: [ 'class' ] });
 
     actionHandler.removeAction(searchAction);
-    for (let action of keyboard.getActions()) {
-        actionHandler.addAction(action);
-    }
+    actionHandler.addAll(keyboard.getActions());
     actionHandler.onDirection = keyboard.onDirectionAction.bind(keyboard);
 }
 

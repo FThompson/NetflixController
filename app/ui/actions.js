@@ -26,6 +26,20 @@ class ActionHandler {
         this.updateHints();
     }
 
+    addAll(actions) {
+        for (let action of actions) {
+            this.actions[action.index] = action;
+        }
+        this.updateHints();
+    }
+
+    removeAll(actions) {
+        for (let action of actions) {
+            delete this.actions[action.index];
+        }
+        this.updateHints();
+    }
+
     updateHints() {
         if (this.hintsBar) {
             this.hintsBar.update(this.actions);

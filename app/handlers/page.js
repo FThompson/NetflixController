@@ -11,9 +11,7 @@ class NavigatablePage {
         await Promise.all([this.loadPseudoStyler(), this.waitUntilReady()])
         if (!this.unloaded) {
             this.onLoad();
-            for (let action of this.getActions()) {
-                actionHandler.addAction(action);
-            }
+            actionHandler.addAll(this.getActions());
         }
     }
 
@@ -47,9 +45,7 @@ class NavigatablePage {
     unload() {
         Object.keys(this.navigatables).forEach(key => this.navigatables[key].exit())
         this.unloaded = true
-        for (let action of this.getActions()) {
-            actionHandler.removeAction(action);
-        }
+        actionHandler.removeAll(this.getActions());
     }
 
     // to be overriden by subclasses
@@ -94,25 +90,20 @@ class NavigatablePage {
     }
 
     exit() {
-        let params = {}
         if (this.navigatables[this.position]) {
             let exitParams = this.navigatables[this.position].exit();
-            for (let action of this.navigatables[this.position].getActions()) {
-                actionHandler.removeAction(action);
-            }
+            actionHandler.removeAll(this.navigatables[this.position].getActions());
             if (exitParams) {
-                params = exitParams
+                return exitParams;
             }
         }
-        return params
+        return {};
     }
 
     enter(params) {
         if (this.navigatables[this.position]) {
             this.navigatables[this.position].enter(params);
-            for (let action of this.navigatables[this.position].getActions()) {
-                actionHandler.addAction(action);
-            }
+            actionHandler.addAll(this.navigatables[this.position].getActions());
         }
     }
 
