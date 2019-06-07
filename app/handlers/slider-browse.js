@@ -38,6 +38,9 @@ class SliderBrowse extends NavigatablePage {
     }
 
     isPageReady() {
+        if (keyboard) {
+            return false;
+        }
         let row = document.querySelector(`#row-${this.loadingRow}`)
         return row ? row.getBoundingClientRect().width > 0 : false
     }

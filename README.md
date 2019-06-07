@@ -14,8 +14,6 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Timeout page readiness checks (useful in case of no internet connection)
 * Improve plugin design to be extendable for other websites
 * Come up with a better plugin name, maybe considering future extendability (Flixability, Joyflix, Netstix)
-* Replace pseudo:styler with calls to chrome.debugger to spawn trusted mouse events
-* Stop back button navigation if previous page is not Netflix
 * Dual action hints for action pairs like volume up/down
 * Fix bug where billboard sometimes grabs the current page instead of waiting for the new page's billboard to load in
 * Hide action hints on Watch module when idle
