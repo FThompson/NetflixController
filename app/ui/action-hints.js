@@ -1,19 +1,19 @@
-class Action {
-    constructor(label, index, onPress, onRelease) {
-        this.label = label
-        this.index = index
-        this.onPress = onPress
-        this.onRelease = onRelease
-    }
-}
+const DIRECTION_MAP = {
+    [StandardMapping.Button.D_PAD_UP]: DIRECTION.UP,
+    [StandardMapping.Button.D_PAD_BOTTOM]: DIRECTION.DOWN,
+    [StandardMapping.Button.D_PAD_LEFT]: DIRECTION.LEFT,
+    [StandardMapping.Button.D_PAD_RIGHT]: DIRECTION.RIGHT
+};
+
+/**
+ * Action { label, index, onPress, onRelease, hideHint }
+ */
 
 class ActionHandler {
     constructor() {
         this.hintsBar = new ActionHintsBar();
-        this.actions = {
-            3: {label: 'Test hint', index: 3},
-            11: {label: 'Test hint', index: 11}
-        };
+        this.actions = {};
+        this.onDirection = null;
     }
 
     addAction(action) {
@@ -42,14 +42,17 @@ class ActionHandler {
     }
 
     onButtonPress(index) {
+        if (index in DIRECTION_MAP && this.onDirection) {
+            this.onDirection(DIRECTION_MAP[index]);
+        }
         if (index in this.actions && this.actions[index].onPress) {
-            this.actions[index].onPress()
+            this.actions[index].onPress();
         }
     }
 
     onButtonRelease(index) {
         if (index in this.actions && this.actions[index].onRelease) {
-            this.actions[index].onRelease()
+            this.actions[index].onRelease();
         }
     }
 }
@@ -80,9 +83,11 @@ class ActionHintsBar extends BottomBar {
         if (this.element) {
             this.element.innerHTML = '';
             for (let action of Object.values(actions)) {
-                let hint = this.createHint(action);
-                if (hint) {
-                    this.element.insertAdjacentHTML('beforeend', hint);
+                if (action.hideHint !== false) {
+                    let hint = this.createHint(action);
+                    if (hint) {
+                        this.element.insertAdjacentHTML('beforeend', hint);
+                    }
                 }
             }
         }

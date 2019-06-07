@@ -10,7 +10,10 @@ class NavigatablePage {
     async load() {
         await Promise.all([this.loadPseudoStyler(), this.waitUntilReady()])
         if (!this.unloaded) {
-            this.onLoad()
+            this.onLoad();
+            for (let action of this.getActions()) {
+                actionHandler.addAction(action);
+            }
         }
     }
 
@@ -44,6 +47,9 @@ class NavigatablePage {
     unload() {
         Object.keys(this.navigatables).forEach(key => this.navigatables[key].exit())
         this.unloaded = true
+        for (let action of this.getActions()) {
+            actionHandler.removeAction(action);
+        }
     }
 
     // to be overriden by subclasses
@@ -61,6 +67,10 @@ class NavigatablePage {
         return false
     }
 
+    getActions() {
+        return [];
+    }
+
     // static validatePath(path) must be implemented by subclasses
 
     isNavigatable(position) {
@@ -71,9 +81,9 @@ class NavigatablePage {
         if (!this.isNavigatable(position)) {
             throw new Error('no navigatable at position ' + position)
         }
-        let params = this.exit()
-        this.navigatables[position].enter(params)
+        let params = this.exit();
         this.position = position
+        this.enter(params);
     }
 
     addNavigatable(position, navigatable) {
@@ -86,7 +96,10 @@ class NavigatablePage {
     exit() {
         let params = {}
         if (this.navigatables[this.position]) {
-            let exitParams = this.navigatables[this.position].exit()
+            let exitParams = this.navigatables[this.position].exit();
+            for (let action of this.navigatables[this.position].getActions()) {
+                actionHandler.removeAction(action);
+            }
             if (exitParams) {
                 params = exitParams
             }
@@ -96,12 +109,11 @@ class NavigatablePage {
 
     enter(params) {
         if (this.navigatables[this.position]) {
-            this.navigatables[this.position].enter(params)
+            this.navigatables[this.position].enter(params);
+            for (let action of this.navigatables[this.position].getActions()) {
+                actionHandler.addAction(action);
+            }
         }
-    }
-
-    onAction(index) {
-        this.navigatables[this.position].doAction(index)
     }
 
     onDirectionAction(direction) {

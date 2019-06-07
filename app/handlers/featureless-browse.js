@@ -4,17 +4,9 @@ class FeaturelessBrowse extends SliderBrowse {
     }
 
     onLoad() {
-        super.onLoad()
-        let focus = () => {
-            this.addNavigatable(1, Slider.getSlider(0))
-            this.setNavigatable(1)
-        }
-        // TODO: rewrite content.js to avoid needed globals like keyboard
-        if (keyboard) {
-            keyboard.closeCallback = focus
-        } else {
-            focus()
-        }
+        super.onLoad();
+        this.addNavigatable(1, Slider.getSlider(0));
+        this.setNavigatable(1);
     }
 
     static validatePath(path) {

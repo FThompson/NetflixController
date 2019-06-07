@@ -34,10 +34,14 @@ class Billboard extends Navigatable {
         this.selected = null
     }
 
-    doAction(index) {
-        if (index === StandardMapping.Button.BUTTON_BOTTOM) {
-            this.selected.action.click()
-        }
+    getActions() {
+        return [
+            {
+                label: 'Select',
+                index: StandardMapping.Button.BUTTON_BOTTOM,
+                onPress: () => this.selected.action.click()
+            }
+        ];
     }
 
     unselect() {

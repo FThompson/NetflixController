@@ -74,17 +74,25 @@ class Slider extends Navigatable {
         return {position: position}
     }
 
-    doAction(index) {
-        if (index === StandardMapping.Button.BUTTON_BOTTOM) {
-            let hitzone = document.querySelector('.bob-play-hitzone')
-            if (hitzone) {
-                hitzone.click()
+    getActions() {
+        return [
+            {
+                label: 'Play',
+                index: StandardMapping.Button.BUTTON_BOTTOM,
+                onPress: () => this.clickHitzone('.bob-play-hitzone')
+            },
+            {
+                label: 'Expand',
+                index: StandardMapping.Button.BUTTON_LEFT,
+                onPress: () => this.clickHitzone('.bob-jaw-hitzone')
             }
-        } else if (index === StandardMapping.Button.BUTTON_LEFT) {
-            let hitzone = document.querySelector('.bob-jaw-hitzone')
-            if (hitzone) {
-                hitzone.click()
-            }
+        ];
+    }
+
+    clickHitzone(selector) {
+        let hitzone = document.querySelector(selector);
+        if (hitzone) {
+            hitzone.click();
         }
     }
 

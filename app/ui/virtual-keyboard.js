@@ -15,7 +15,6 @@ class VirtualKeyboard {
         this.keyboard = keyboard
         this.keys = keys
         this.closeCallback = closeCallback
-        this.closed = false
         this.toggleShift(true) // first letter upper case
         this.select('A')
     }
@@ -124,42 +123,73 @@ class VirtualKeyboard {
         if (this.closeCallback) {
             this.closeCallback()
         }
-        this.closed = true
     }
 
-    onAction(index) {
-        if (index === StandardMapping.Button.BUTTON_TOP) {
-            this.insertSpace()
-            this.pressKey('space')
-        } else if (index === StandardMapping.Button.BUTTON_BOTTOM) {
-            this.insert()
-            this.pressKey(this.selected)
-        } else if (index === StandardMapping.Button.BUTTON_RIGHT) {
-            this.backspace()
-            this.pressKey(BACKSPACE)
-        } else if (index === StandardMapping.Button.BUTTON_LEFT) {
-            this.toggleShift()
-            this.pressKey(SHIFT)
-        } else if (index === StandardMapping.Button.BUTTON_CONTROL_RIGHT) {
-            this.close()
-            this.pressKey('close')
-        } else if (index === StandardMapping.Button.BUTTON_CONTROL_LEFT) {
-            this.clear()
-        }
-    }
-
-    onButtonRelease(index) {
-        if (index === StandardMapping.Button.BUTTON_TOP) {
-            this.releaseKey('space')
-        } else if (index === StandardMapping.Button.BUTTON_BOTTOM) {
-            this.releaseKey(this.pressed)
-        } else if (index === StandardMapping.Button.BUTTON_RIGHT) {
-            this.releaseKey(BACKSPACE)
-        } else if (index === StandardMapping.Button.BUTTON_LEFT) {
-            this.releaseKey(SHIFT)
-        } else if (index === StandardMapping.Button.BUTTON_CONTROL_RIGHT) {
-            this.releaseKey('close')
-        }
+    getActions() {
+        return [
+            {
+                label: 'Space',
+                index: StandardMapping.Button.BUTTON_TOP,
+                onPress: () => {
+                    this.insertSpace();
+                    this.pressKey('space');
+                },
+                onRelease: () => {
+                    this.releaseKey('space');
+                }
+            },
+            {
+                label: 'Insert',
+                index: StandardMapping.Button.BUTTON_BOTTOM,
+                onPress: () => {
+                    this.insert();
+                    this.pressKey(this.selected);
+                },
+                onRelease: () => {
+                    this.releaseKey(this.pressed);
+                }
+            },
+            {
+                label: 'Backspace',
+                index: StandardMapping.Button.BUTTON_RIGHT,
+                onPress: () => {
+                    this.backspace();
+                    this.pressKey(BACKSPACE);
+                },
+                onRelease: () => {
+                    this.releaseKey(BACKSPACE);
+                }
+            },
+            {
+                label: 'Shift',
+                index: StandardMapping.Button.BUTTON_LEFT,
+                onPress: () => {
+                    this.toggleShift();
+                    this.pressKey(SHIFT);
+                },
+                onRelease: () => {
+                    this.releaseKey(SHIFT);
+                }
+            },
+            {
+                label: 'Close',
+                index: StandardMapping.Button.BUTTON_CONTROL_RIGHT,
+                onPress: () => {
+                    this.close();
+                    this.pressKey('close');
+                },
+                onRelease: () => {
+                    this.releaseKey('close');
+                }
+            },
+            {
+                label: 'Clear',
+                index: StandardMapping.Button.BUTTON_CONTROL_LEFT,
+                onPress: () => {
+                    this.clear();
+                }
+            }
+        ];
     }
 
     pressKey(key) {

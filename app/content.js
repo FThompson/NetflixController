@@ -11,6 +11,7 @@ gamepadMappings.buttonsPath = 'static/buttons';
 let numGamepads = 0;
 let hasConnectedGamepad = false;
 let keyboard = null;
+let handlerHistory = [];
 let currentHandler = null;
 let actionHandler = new ActionHandler();
 let connectionHintBar = new ConnectionHintBar();
@@ -22,6 +23,18 @@ const pageHandlers = [
     SearchBrowse,
     WatchVideo
 ];
+
+const searchAction = {
+    label: 'Search',
+    index: StandardMapping.Button.BUTTON_TOP,
+    onPress: openSearch
+};
+
+const backAction = {
+    label: 'Back',
+    index: StandardMapping.Button.BUTTON_RIGHT,
+    onPress: goBack
+};
 
 storage.addListener('showActionHints', showActionHints);
 storage.addListener('buttonImageMapping', () => actionHandler.updateHints());
@@ -55,11 +68,10 @@ async function runHandler(path) {
 }
 
 async function loadPage(handlerClass) {
-    currentHandler = new handlerClass()
-    if (!currentHandler.hasSearchBar()) {
-        keyboard = null // does not call keyboard close callbacks but that is okay
-    }
-    await currentHandler.load()
+    currentHandler = new handlerClass();
+    addHistory();
+    setPageActions();
+    await currentHandler.load();
 }
 
 function unload() {
@@ -73,6 +85,22 @@ function unload() {
 function refreshPageIfBad() {
     if (window.location.href.includes('so=su')) {
         window.location.assign(window.location.href.replace('so=su', ''))
+    }
+}
+
+function setPageActions() {
+    if (!keyboard) {
+        if (currentHandler.hasSearchBar()) {
+            actionHandler.addAction(searchAction);
+        } else {
+            actionHandler.removeAction(searchAction);
+        }
+        if (handlerHistory.length >= 2) {
+            actionHandler.addAction(backAction);
+        } else {
+            actionHandler.removeAction(backAction);
+        }
+        actionHandler.onDirection = currentHandler.onDirectionAction.bind(currentHandler);
     }
 }
 
@@ -118,26 +146,10 @@ gamepads.addEventListener('connect', e => {
     updateCompatibility();
     console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${e.gamepad.gamepad.id}`)
     e.gamepad.addEventListener('buttonpress', e => {
-        if (keyboard) {
-            sendButtonPress(e.index, keyboard)
-            if (keyboard.closed) {
-                keyboard = null
-            }
-        } else {
-            if (e.index === StandardMapping.Button.BUTTON_RIGHT) {
-                unload()
-                window.history.back()
-            } else if (e.index === StandardMapping.Button.BUTTON_TOP && currentHandler.hasSearchBar()) {
-                openSearch()
-            } else {
-                sendButtonPress(e.index, currentHandler)
-            }
-        }
+        actionHandler.onButtonPress(e.index);
     })
     e.gamepad.addEventListener('buttonrelease', e => {
-        if (keyboard) {
-            keyboard.onButtonRelease(e.index)
-        }
+        actionHandler.onButtonRelease(e.index);
     })
     e.gamepad.addEventListener('joystickmove', e => {
         checkJoystickDirection(e.gamepad, e.horizontalIndex, e.horizontalValue, DIRECTION.RIGHT, DIRECTION.LEFT)
@@ -154,19 +166,6 @@ gamepads.addEventListener('disconnect', e => {
     console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${e.gamepad.gamepad.id}`)
 })
 gamepads.start()
-
-function sendButtonPress(index, handler) {
-    let directionMap = {
-        12: DIRECTION.UP,
-        13: DIRECTION.DOWN,
-        14: DIRECTION.LEFT,
-        15: DIRECTION.RIGHT
-    }
-    if (index in directionMap) {
-        handler.onDirectionAction(directionMap[index])
-    }
-    handler.onAction(index)
-}
 
 // TODO: rethink this messy code; integrate rate limited polling into gamepads.js?
 let timeouts = {}
@@ -190,11 +189,7 @@ function checkJoystickDirection(gamepad, axis, value, pos, neg) {
 
 function rateLimitJoystickDirection(axis, rateMillis) {
     if (directions[axis] !== -1) {
-        if (keyboard) {
-            keyboard.onDirectionAction(directions[axis])
-        } else {
-            currentHandler.onDirectionAction(directions[axis])
-        }
+        actionHandler.onDirection(directions[axis]);
         timeouts[axis] = setTimeout(() => rateLimitJoystickDirection(axis, rateMillis), rateMillis)
     }
 }
@@ -209,8 +204,38 @@ function openSearch() {
     let startingLocation = window.location.href
     let handlerState = currentHandler.exit()
     keyboard = VirtualKeyboard.create(searchInput, searchParent, () => {
+        for (let action of keyboard.getActions()) {
+            actionHandler.removeAction(action);
+        }
         if (window.location.href === startingLocation) {
             currentHandler.enter(handlerState)
         }
-    })
+        keyboard = null;
+        setPageActions();
+    });
+    actionHandler.removeAction(searchAction);
+    for (let action of keyboard.getActions()) {
+        actionHandler.addAction(action);
+    }
+    actionHandler.onDirection = keyboard.onDirectionAction.bind(keyboard);
+}
+
+function goBack() {
+    if (handlerHistory.length > 0) {
+        handlerHistory.pop();
+        window.history.back();
+    }
+}
+
+// track history to ensure we don't go back to a non-Netflix page
+function addHistory() {
+    let location = new URL(window.location);
+    if (handlerHistory.length > 0) {
+        let last = handlerHistory[handlerHistory.length - 1];
+        if (last !== location.pathname) {
+            handlerHistory.push(location.pathname);
+        }
+    } else {
+        handlerHistory.push(location.pathname);
+    }
 }

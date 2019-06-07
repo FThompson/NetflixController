@@ -26,11 +26,17 @@ class Menu extends Navigatable {
         this.position = -1
     }
 
-    doAction(index) {
-        if (index === StandardMapping.Button.BUTTON_BOTTOM) {
-            this.options[this.position].click()
-            this.unselect()
-        }
+    getActions() {
+        return [
+            {
+                label: 'Select',
+                index: StandardMapping.Button.BUTTON_BOTTOM,
+                onPress: () => {
+                    this.options[this.position].click();
+                    this.unselect();
+                }
+            }
+        ];
     }
 
     unselect() {

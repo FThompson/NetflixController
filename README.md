@@ -8,7 +8,6 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Fix closing search without any search results
 * Continue mapping navigation controls to additional page elements
 * Detect account login page after idle period
-* Button action hints
 * Support interactive media (e.g. the new Black Mirror movie)
 * Support non-standard gamepad mappings / offer way to configure mappings
 * Configure right joystick to control a virtual mouse
@@ -16,6 +15,10 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Improve plugin design to be extendable for other websites
 * Come up with a better plugin name, maybe considering future extendability (Flixability, Joyflix, Netstix)
 * Replace pseudo:styler with calls to chrome.debugger to spawn trusted mouse events
+* Stop back button navigation if previous page is not Netflix
+* Dual action hints for action pairs like volume up/down
+* Fix bug where billboard sometimes grabs the current page instead of waiting for the new page's billboard to load in
+* Hide action hints on Watch module when idle
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.

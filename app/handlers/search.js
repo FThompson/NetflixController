@@ -15,7 +15,7 @@ class SearchBrowse extends FeaturelessBrowse {
     }
 
     isPageReady() {
-        return super.isPageReady() && this.loaded
+        return super.isPageReady() && this.loaded && keyboard === null;
     }
 
     // wait until search results are updated to load the page

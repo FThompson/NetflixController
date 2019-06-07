@@ -12,34 +12,54 @@ class WatchVideo extends NavigatablePage {
         return document.querySelector('.NFPlayer') !== null
     }
 
-    onAction(index) {
-        if (index === StandardMapping.Button.BUTTON_BOTTOM) {
-            // SPACE/ENTER = play/pause
-            this.dispatchKey(32)
-        } else if (index === StandardMapping.Button.BUTTON_LEFT) {
-            // M = toggle mute
-            this.dispatchKey(77)
-        } else if (index === StandardMapping.Button.BUTTON_TOP) {
-            // F(on)/ESC(off) = toggle fullscreen
-            // unable to set fullscreen via key due to non-trusted events; use chrome.debugger
-            chrome.runtime.sendMessage({ message: 'requestFullscreen' })
-        } else if (index === StandardMapping.Button.D_PAD_LEFT) {
-            // LEFT = rewind 10s
-            this.dispatchKey(37)
-        } else if (index === StandardMapping.Button.D_PAD_RIGHT) {
-            // RIGHT = fast forward 10s
-            this.dispatchKey(39)
-        } else if (index === StandardMapping.Button.D_PAD_UP) {
-            // UP = volume up
-            this.dispatchKey(38)
-        } else if (index === StandardMapping.Button.D_PAD_BOTTOM) {
-            // DOWN = volume down
-            this.dispatchKey(40)
-        } else if (index === StandardMapping.Button.BUMPER_RIGHT) {
-            this.openNextEpisode()
-        } else if (index === StandardMapping.Button.BUTTON_CONTROL_RIGHT) {
-            this.skipIntro()
-        }
+    getActions() {
+        return [
+            {
+                label: 'Play',
+                index: StandardMapping.Button.BUTTON_BOTTOM,
+                onPress: () => this.dispatchKey(32)
+            },
+            {
+                label: 'Mute',
+                index: StandardMapping.Button.BUTTON_LEFT,
+                onPress: () => this.dispatchKey(77)
+            },
+            {
+                label: 'Fullscreen',
+                index: StandardMapping.Button.BUTTON_TOP,
+                onPress: () => chrome.runtime.sendMessage({ message: 'requestFullscreen' })
+            },
+            {
+                label: 'Jump Back 10s',
+                index: StandardMapping.Button.D_PAD_LEFT,
+                onPress: () => this.dispatchKey(37)
+            },
+            {
+                label: 'Jump 10s',
+                index: StandardMapping.Button.D_PAD_RIGHT,
+                onPress: () => this.dispatchKey(39)
+            },
+            {
+                label: 'Volume Up',
+                index: StandardMapping.Button.D_PAD_UP,
+                onPress: () => this.dispatchKey(38)
+            },
+            {
+                label: 'Volume Down',
+                index: StandardMapping.Button.D_PAD_BOTTOM,
+                onPress: () => this.dispatchKey(40)
+            },
+            {
+                label: 'Next Episode',
+                index: StandardMapping.Button.BUMPER_RIGHT,
+                onPress: () => this.openNextEpisode()
+            },
+            {
+                label: 'Skip Intro',
+                index: StandardMapping.Button.BUTTON_CONTROL_RIGHT,
+                onPress: () => this.skipIntro()
+            }
+        ];
     }
 
     onDirectionAction(direction) {

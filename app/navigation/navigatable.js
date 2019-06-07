@@ -26,8 +26,8 @@ class Navigatable {
         throw new TypeError('must implement abstract Navigatable#exit')
     }
 
-    doAction(index) {
-        
+    getActions() {
+        return [];
     }
 
     static mouseOver(element) {
