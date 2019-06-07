@@ -203,6 +203,7 @@ function openSearch() {
     let searchParent = searchInput.parentElement.parentElement
     let startingLocation = window.location.href
     let handlerState = currentHandler.exit()
+
     keyboard = VirtualKeyboard.create(searchInput, searchParent, () => {
         for (let action of keyboard.getActions()) {
             actionHandler.removeAction(action);
@@ -213,6 +214,19 @@ function openSearch() {
         keyboard = null;
         setPageActions();
     });
+
+    let searchContainer = document.querySelector('.secondary-navigation');
+    let closeObserver = new MutationObserver((mutations) => {
+        for (let mutation of mutations) {
+            if (!mutation.target.classList.contains('search-focused')) {
+                // search bar is no longer focused
+                keyboard.close();
+                closeObserver.disconnect();
+            }
+        }
+    });
+    closeObserver.observe(searchContainer, { attributes: true, attributeFilter: [ 'class' ] });
+
     actionHandler.removeAction(searchAction);
     for (let action of keyboard.getActions()) {
         actionHandler.addAction(action);
