@@ -1,15 +1,55 @@
 class WatchVideo extends NavigatablePage {
+    constructor() {
+        super();
+        this.inactivityTimer = null;
+    }
+
     static validatePath(path) {
         return path.startsWith('/watch')
     }
 
     onLoad() {
-        super.onLoad()
-        this.player = document.querySelector('.NFPlayer')
+        super.onLoad();
+        this.player = document.querySelector('.NFPlayer');
+        this.hideControlsWhenInactive();
+    }
+
+    unload() {
+        this.controlObserver.disconnect();
+        if (this.inactivityTimer) {
+            clearTimeout(this.inactivityTimer);
+        }
+        super.unload();
     }
 
     isPageReady() {
         return document.querySelector('.NFPlayer') !== null
+    }
+
+    hideControlsWhenInactive() {
+        this.controlObserver = new MutationObserver((mutations) => {
+            for (let mutation of mutations) {
+                if (mutation.target.classList.contains('active')) {
+                    actionHandler.showHints();
+                } else if (mutation.target.classList.contains('inactive')) {
+                    actionHandler.hideHints();
+                } else {
+                    actionHandler.showHints();
+                }
+            }
+        });
+        this.controlObserver.observe(this.player, { attributes: true, attributeFilter: [ 'class' ]});
+    }
+
+    onInput() {
+        if (this.inactivityTimer) {
+            clearTimeout(this.inactivityTimer);
+        }
+        actionHandler.showHints();
+        this.inactivityTimer = setTimeout(() => {
+            actionHandler.hideHints();
+            this.inactivityTimer = null;
+        }, 4000);
     }
 
     getActions() {

@@ -14,6 +14,7 @@ class ActionHandler {
         this.hintsBar = new ActionHintsBar();
         this.actions = {};
         this.onDirection = null;
+        this.onInput = null;
     }
 
     addAction(action) {
@@ -56,6 +57,9 @@ class ActionHandler {
     }
 
     onButtonPress(index) {
+        if (this.onInput) {
+            this.onInput(); // non-specific activity callback
+        }
         if (index in DIRECTION_MAP && this.onDirection) {
             this.onDirection(DIRECTION_MAP[index]);
         }

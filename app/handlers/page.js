@@ -12,6 +12,7 @@ class NavigatablePage {
         if (!this.unloaded) {
             this.onLoad();
             actionHandler.addAll(this.getActions());
+            actionHandler.onInput = () => this.onInput();
         }
     }
 
@@ -46,6 +47,7 @@ class NavigatablePage {
         Object.keys(this.navigatables).forEach(key => this.navigatables[key].exit())
         this.unloaded = true
         actionHandler.removeAll(this.getActions());
+        actionHandler.onInput = null;
     }
 
     // to be overriden by subclasses
@@ -63,6 +65,12 @@ class NavigatablePage {
         return false
     }
 
+    // to be overriden by subclasses
+    onInput() {
+
+    }
+
+    // to be overriden by subclasses
     getActions() {
         return [];
     }
