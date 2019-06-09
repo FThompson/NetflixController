@@ -3,7 +3,7 @@ const manifest = chrome.runtime.getManifest();
 const NETFLIX_RED = 'rgba(229, 9, 20)';
 
 function getTransparentNetflixRed(opacity) {
-    return NETFLIX_RED.replace(')', ', ' + opacity + ')')
+    return NETFLIX_RED.replace(')', ', ' + opacity + ')');
 }
 
 gamepadMappings.buttonsPath = 'static/buttons';
@@ -56,13 +56,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
 });
 
 async function runHandler(path) {
-    unload()
-    refreshPageIfBad()
+    unload();
+    refreshPageIfBad();
     for (let i = 0, found = false; !found && i < pageHandlers.length; i++) {
         if (pageHandlers[i].validatePath(path)) {
-            console.log(`NETFLIX-CONTROLLER: Loading ${pageHandlers[i].name} module for ${path}`)
-            await loadPage(pageHandlers[i])
-            found = true
+            console.log(`NETFLIX-CONTROLLER: Loading ${pageHandlers[i].name} module for ${path}`);
+            await loadPage(pageHandlers[i]);
+            found = true;
         }
     }
 }
@@ -76,15 +76,15 @@ async function loadPage(handlerClass) {
 
 function unload() {
     if (currentHandler) {
-        currentHandler.unload()
-        currentHandler = null
+        currentHandler.unload();
+        currentHandler = null;
     }
 }
 
 // pages containing ?so=su seem to often not load; remove it and refresh
 function refreshPageIfBad() {
     if (window.location.href.includes('so=su')) {
-        window.location.assign(window.location.href.replace('so=su', ''))
+        window.location.assign(window.location.href.replace('so=su', ''));
     }
 }
 
@@ -133,7 +133,7 @@ function isStandardGamepadConnected() {
     return Object.values(gamepads.gamepads).some(g => g.gamepad.mapping === 'standard');
 }
 
-console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.')
+console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.');
 gamepads.addEventListener('connect', e => {
     if (!hasConnectedGamepad) {
         // first connection, run current page handler manually
@@ -144,7 +144,7 @@ gamepads.addEventListener('connect', e => {
     numGamepads++;
     showActionHints();
     updateCompatibility();
-    console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${e.gamepad.gamepad.id}`)
+    console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${e.gamepad.gamepad.id}`);
     e.gamepad.addEventListener('buttonpress', e => {
         actionHandler.onButtonPress(e.index);
     })
@@ -152,8 +152,8 @@ gamepads.addEventListener('connect', e => {
         actionHandler.onButtonRelease(e.index);
     })
     e.gamepad.addEventListener('joystickmove', e => {
-        checkJoystickDirection(e.gamepad, e.horizontalIndex, e.horizontalValue, DIRECTION.RIGHT, DIRECTION.LEFT)
-        checkJoystickDirection(e.gamepad, e.verticalIndex, e.verticalValue, DIRECTION.DOWN, DIRECTION.UP)
+        checkJoystickDirection(e.gamepad, e.horizontalIndex, e.horizontalValue, DIRECTION.RIGHT, DIRECTION.LEFT);
+        checkJoystickDirection(e.gamepad, e.verticalIndex, e.verticalValue, DIRECTION.DOWN, DIRECTION.UP);
     }, StandardMapping.Axis.JOYSTICK_LEFT)
 })
 gamepads.addEventListener('disconnect', e => {
@@ -163,26 +163,26 @@ gamepads.addEventListener('disconnect', e => {
     }
     showConnectionHint();
     updateCompatibility();
-    console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${e.gamepad.gamepad.id}`)
+    console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${e.gamepad.gamepad.id}`);
 })
-gamepads.start()
+gamepads.start();
 
 // TODO: rethink this messy code; integrate rate limited polling into gamepads.js?
-let timeouts = {}
-let directions = {}
+let timeouts = {};
+let directions = {};
 
 function checkJoystickDirection(gamepad, axis, value, pos, neg) {
     if (Math.abs(value) >= 1 - gamepad.joystickDeadzone) {
-        let direction = value > 0 ? pos : neg
+        let direction = value > 0 ? pos : neg;
         if (!(axis in directions) || directions[axis] !== direction) {
-            directions[axis] = direction
-            rateLimitJoystickDirection(axis, 500)
+            directions[axis] = direction;
+            rateLimitJoystickDirection(axis, 500);
         }
     } else {
-        directions[axis] = -1
+        directions[axis] = -1;
         if (axis in timeouts) {
-            clearTimeout(timeouts[axis])
-            delete timeouts[axis]
+            clearTimeout(timeouts[axis]);
+            delete timeouts[axis];
         }
     }
 }
@@ -190,24 +190,24 @@ function checkJoystickDirection(gamepad, axis, value, pos, neg) {
 function rateLimitJoystickDirection(axis, rateMillis) {
     if (directions[axis] !== -1) {
         actionHandler.onDirection(directions[axis]);
-        timeouts[axis] = setTimeout(() => rateLimitJoystickDirection(axis, rateMillis), rateMillis)
+        timeouts[axis] = setTimeout(() => rateLimitJoystickDirection(axis, rateMillis), rateMillis);
     }
 }
 
 function openSearch() {
-    let searchButton = document.querySelector('.searchTab')
+    let searchButton = document.querySelector('.searchTab');
     if (searchButton) {
-        searchButton.click()
+        searchButton.click();
     }
-    let searchInput = document.querySelector('.searchInput > input[type=text]')
-    let searchParent = searchInput.parentElement.parentElement
-    let startingLocation = window.location.href
-    let handlerState = currentHandler.exit()
+    let searchInput = document.querySelector('.searchInput > input[type=text]');
+    let searchParent = searchInput.parentElement.parentElement;
+    let startingLocation = window.location.href;
+    let handlerState = currentHandler.exit();
 
     keyboard = VirtualKeyboard.create(searchInput, searchParent, () => {
         actionHandler.removeAll(keyboard.getActions());
         if (window.location.href === startingLocation) {
-            currentHandler.enter(handlerState)
+            currentHandler.enter(handlerState);
         }
         keyboard = null;
         setPageActions();

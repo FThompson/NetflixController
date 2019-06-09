@@ -33,9 +33,9 @@ function setDeclarativeContent() {
 // inform the content script of any changes to the netflix's url path
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (tab.active && tab.status === 'complete' && changeInfo.status && changeInfo.status === 'complete') {
-        let url = new URL(tab.url)
+        let url = new URL(tab.url);
         if (url.hostname.endsWith('.netflix.com') && !url.hostname.startsWith('help.')) {
-            chrome.tabs.sendMessage(tabId, { message: 'locationChanged', path: url.pathname})
+            chrome.tabs.sendMessage(tabId, { message: 'locationChanged', path: url.pathname});
         }
     }
 })
@@ -45,14 +45,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         // possible alternate approach I discovered after writing the debugger approach:
         // chrome.windows.getCurrent(window => chrome.windows.update(window.id, {state: 'fullscreen'}))
         // the above seems to crash netflix upon trying to exit fullscreen mode
-        setFullScreen(sender.tab.id)
+        setFullScreen(sender.tab.id);
     }
 })
 
 // uses chrome.debugger to send trusted event, which is needed for setting fullscreen
 // via https://stackoverflow.com/a/53488689/1247781
 function setFullScreen(tabId) {
-    let debuggee = {tabId: tabId}
+    let debuggee = {tabId: tabId};
     chrome.debugger.attach(debuggee, '1.3', () => {
         chrome.debugger.sendCommand(debuggee, 'Input.dispatchKeyEvent', {
             type: 'rawKeyDown',
@@ -60,7 +60,7 @@ function setFullScreen(tabId) {
             windowsVirtualKeyCode: 70,
         }, () => {
             // detach immediately to avoid interrupting user experience with page-being-debugged popup
-            chrome.debugger.detach(debuggee)
-        })
+            chrome.debugger.detach(debuggee);
+        });
     })
 }

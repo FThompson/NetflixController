@@ -4,7 +4,6 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Loading WatchVideo module after going to next video
 * Dynamically determine whether a page has a billboard or not
 * Firefox/Edge support (convert manifests, fullscreen action)
-* Add semicolons throughout code (decided to start using them after main codebase built)
 * Continue mapping navigation controls to additional page elements
 * Detect account login page after idle period
 * Support interactive media (e.g. the new Black Mirror movie)
@@ -15,6 +14,7 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Come up with a better plugin name, maybe considering future extendability (Flixability, Joyflix, Netstix)
 * Dual action hints for action pairs like volume up/down
 * Fix bug where billboard sometimes grabs the current page instead of waiting for the new page's billboard to load in
+* CSS classes for content outlines
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.

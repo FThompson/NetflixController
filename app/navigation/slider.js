@@ -3,13 +3,13 @@ class Slider extends Navigatable {
      * Creates the Slider at the given row and selects the given position in it.
      */
     constructor(rowNode, position) {
-        super()
-        this.rowNode = rowNode
+        super();
+        this.rowNode = rowNode;
         if (position !== undefined) {
-            this.selectPosition(position)
+            this.selectPosition(position);
         }
-        this.canShiftLeft = false
-        this.locked = false
+        this.canShiftLeft = false;
+        this.locked = false;
     }
 
     /**
@@ -17,25 +17,25 @@ class Slider extends Navigatable {
      * Sets that slider to the given position or the right-most position if not possible.
      */
     static getSlider(row, position) {
-        let rowNode = document.querySelector(`#row-${row}`)
+        let rowNode = document.querySelector(`#row-${row}`);
         if (rowNode) {
-            return new Slider(rowNode, position)
+            return new Slider(rowNode, position);
         }
-        return null
+        return null;
     }
 
     /**
      * Selects the previous slider item.
      */
     left() {
-        this.select(false)
+        this.select(false);
     }
 
     /**
      * Selects the next slider item.
      */
     right() {
-        this.select(true)
+        this.select(true);
     }
 
     /**
@@ -43,35 +43,35 @@ class Slider extends Navigatable {
      */
     enter(params) {
         if ('position' in params) {
-            let position = params.position
+            let position = params.position;
             if (this.canShiftLeft) {
-                position++  // partially-visible left slider item takes up a position if present
+                position++;  // partially-visible left slider item takes up a position if present
             }
-            let found = false
+            let found = false;
             while (!found) {
                 if (this.hasPosition(position)) {
-                    found = true
+                    found = true;
                 } else {
-                    position--
+                    position--;
                 }
             }
-            this.selectPosition(position)
+            this.selectPosition(position);
         } else {
-            this.selectPosition(0)
+            this.selectPosition(0);
         }
-        this.scrollIntoView()
+        this.scrollIntoView();
     }
 
     /**
      * Unselects this slider and returns its position.
      */
     exit() {
-        this.unselect()
-        let position = this.position
+        this.unselect();
+        let position = this.position;
         if (this.canShiftLeft) {
-            position--  // partially-visible left slider item takes up a position if present
+            position--;  // partially-visible left slider item takes up a position if present
         }
-        return {position: position}
+        return {position: position};
     }
 
     getActions() {
@@ -97,23 +97,23 @@ class Slider extends Navigatable {
     }
 
     getBoxArtContainer() {
-        let boxarts = this.sliderItem.querySelectorAll('div.boxart-container')
+        let boxarts = this.sliderItem.querySelectorAll('div.boxart-container');
         // large title cards still have the small element; the last element is the larger one
-        return boxarts[boxarts.length - 1]
+        return boxarts[boxarts.length - 1];
     }
     
     /**
      * Scrolls the viewport to be centered vertically on this slider.
      */
     scrollIntoView() {
-        Navigatable.scrollIntoView(this.getBoxArtContainer())
+        Navigatable.scrollIntoView(this.getBoxArtContainer());
     }
 
     /**
      * Checks if this slider has the given position.
      */
     hasPosition(position) {
-        return this.rowNode.querySelector(`.slider-item-${position}`) !== null
+        return this.rowNode.querySelector(`.slider-item-${position}`) !== null;
     }
 
     /**
@@ -121,18 +121,18 @@ class Slider extends Navigatable {
      * These events initiate the selection animation from one slider item to the next.
      */
     selectPosition(position) {
-        this.locked = true
-        this.unselect()
-        let sliderItem = this.rowNode.querySelector(`.slider-item-${position}`)
+        this.locked = true;
+        this.unselect();
+        let sliderItem = this.rowNode.querySelector(`.slider-item-${position}`);
         // delay before sending mouseover necessary to avoid impacting animation
         setTimeout(() => {
-            Navigatable.mouseOver(this.getEventTarget(sliderItem))
-            this.locked = false
-        }, 100)
-        this.sliderItem = sliderItem
-        this.position = position
-        let boxart = this.getBoxArtContainer()
-        boxart.style.outline = '3px solid ' + getTransparentNetflixRed(0.7)
+            Navigatable.mouseOver(this.getEventTarget(sliderItem));
+            this.locked = false;
+        }, 100);
+        this.sliderItem = sliderItem;
+        this.position = position;
+        let boxart = this.getBoxArtContainer();
+        boxart.style.outline = '3px solid ' + getTransparentNetflixRed(0.7);
     }
 
     /**
@@ -140,8 +140,8 @@ class Slider extends Navigatable {
      */
     unselect() {
         if (this.sliderItem) {
-            Navigatable.mouseOut(this.getEventTarget(this.sliderItem))
-            this.getBoxArtContainer().style.outline = '0'
+            Navigatable.mouseOut(this.getEventTarget(this.sliderItem));
+            this.getBoxArtContainer().style.outline = '0';
         }
     }
 
@@ -149,7 +149,7 @@ class Slider extends Navigatable {
      * Gets the given slider item's mouse event target.
      */
     getEventTarget(sliderItem) {
-        return sliderItem.querySelector('img.boxart-image')
+        return sliderItem.querySelector('img.boxart-image');
     }
 
     /**
@@ -157,29 +157,29 @@ class Slider extends Navigatable {
      */
     select(next) {
         if (this.locked) {
-            return false // another interaction is in progress; do not initiate a new one
+            return false; // another interaction is in progress; do not initiate a new one
         }
-        let selected = false
-        let target = next ? this.sliderItem.nextElementSibling : this.sliderItem.previousElementSibling
+        let selected = false;
+        let target = next ? this.sliderItem.nextElementSibling : this.sliderItem.previousElementSibling;
         if (target) {
-            let targetSibling = next ? target.nextElementSibling : target.previousElementSibling
+            let targetSibling = next ? target.nextElementSibling : target.previousElementSibling;
             if (targetSibling) {
                 if (targetSibling.classList.contains('slider-item-')) { // reached end of visible items
-                    this.locked = true
-                    this.shiftSlider(next)
+                    this.locked = true;
+                    this.shiftSlider(next);
                     setTimeout(() => {
-                        this.selectPosition(this.getShiftedPosition(target))
-                        this.locked = false
-                    }, 800)
-                    selected = true
+                        this.selectPosition(this.getShiftedPosition(target));
+                        this.locked = false;
+                    }, 800);
+                    selected = true;
                 }
             }
             if (!selected) {
-                this.selectPosition(this.position + (next ? 1 : -1))
-                selected = true
+                this.selectPosition(this.position + (next ? 1 : -1));
+                selected = true;
             }
         }
-        return selected // if false, vibrate? cannot move slider
+        return selected; // if false, vibrate? cannot move slider
     }
 
     /**
@@ -189,27 +189,27 @@ class Slider extends Navigatable {
      */
     getShiftedPosition(target) {
         let newPosition;
-        let position = target.className[target.className.length - 1]
+        let position = target.className[target.className.length - 1];
         if (position === '0') {
-            let slider = this.rowNode.querySelector('.sliderContent')
+            let slider = this.rowNode.querySelector('.sliderContent');
             // count slider items ending in a number
             let visibleCount = Array.from(slider.childNodes).reduce((n, node) => {
-                let lastChar = node.className[node.className.length - 1]
-                return n + (lastChar >= '0' && lastChar <= '9')
-            }, 0)
-            newPosition = visibleCount - 2
+                let lastChar = node.className[node.className.length - 1];
+                return n + (lastChar >= '0' && lastChar <= '9');
+            }, 0);
+            newPosition = visibleCount - 2;
         } else {
-            newPosition = 1
+            newPosition = 1;
         }
-        return newPosition
+        return newPosition;
     }
 
     /**
      * Shifts the slider forwards or backwards by clicking the proper control.
      */
     shiftSlider(next) {
-        let handle = this.rowNode.querySelector('span.handle' + (next ? 'Next' : 'Prev'))
-        handle.click()
-        this.canShiftLeft = true
+        let handle = this.rowNode.querySelector('span.handle' + (next ? 'Next' : 'Prev'));
+        handle.click();
+        this.canShiftLeft = true;
     }
 }

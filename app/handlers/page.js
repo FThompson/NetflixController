@@ -1,14 +1,14 @@
 class NavigatablePage {
     constructor() {
         if (new.target === NavigatablePage) {
-            throw new TypeError('cannot instantiate abstract NavigatablePage')
+            throw new TypeError('cannot instantiate abstract NavigatablePage');
         }
-        this.navigatables = {}
-        this.unloaded = false
+        this.navigatables = {};
+        this.unloaded = false;
     }
 
     async load() {
-        await Promise.all([this.loadPseudoStyler(), this.waitUntilReady()])
+        await Promise.all([this.loadPseudoStyler(), this.waitUntilReady()]);
         if (!this.unloaded) {
             this.onLoad();
             actionHandler.addAll(this.getActions());
@@ -23,46 +23,46 @@ class NavigatablePage {
 
     async loadPseudoStyler() {
         if (this.needsPseudoStyler()) {
-            this.styler = new PseudoStyler()
-            return this.styler.loadDocumentStyles()
+            this.styler = new PseudoStyler();
+            return this.styler.loadDocumentStyles();
         }
-        return Promise.resolve()
+        return Promise.resolve();
     }
 
     // via https://stackoverflow.com/a/30506051/1247781
     waitUntilReady() {
-        let _this = this
+        let _this = this;
         return new Promise((resolve, reject) => {
             (function checkReadiness() {
                 if (_this.unloaded || _this.isPageReady()) {
-                    return resolve()
+                    return resolve();
                 }
-                setTimeout(checkReadiness, 50)
-            })()
-        })
+                setTimeout(checkReadiness, 50);
+            })();
+        });
     }
 
     // to be overriden by subclasses
     unload() {
-        Object.keys(this.navigatables).forEach(key => this.navigatables[key].exit())
-        this.unloaded = true
+        Object.keys(this.navigatables).forEach(key => this.navigatables[key].exit());
+        this.unloaded = true;
         actionHandler.removeAll(this.getActions());
         actionHandler.onInput = null;
     }
 
     // to be overriden by subclasses
     isPageReady() {
-        return true
+        return true;
     }
 
     // to be overriden by subclasses
     needsPseudoStyler() {
-        return false
+        return false;
     }
 
     // to be overriden by subclasses
     hasSearchBar() {
-        return false
+        return false;
     }
 
     // to be overriden by subclasses
@@ -78,7 +78,7 @@ class NavigatablePage {
     // static validatePath(path) must be implemented by subclasses
 
     isNavigatable(position) {
-        return position in this.navigatables
+        return position in this.navigatables;
     }
 
     setNavigatable(position) {
@@ -86,15 +86,15 @@ class NavigatablePage {
             throw new Error('no navigatable at position ' + position)
         }
         let params = this.exit();
-        this.position = position
+        this.position = position;
         this.enter(params);
     }
 
     addNavigatable(position, navigatable) {
         if (this.styler && navigatable !== null) {
-            navigatable.styler = this.styler
+            navigatable.styler = this.styler;
         }
-        this.navigatables[position] = navigatable
+        this.navigatables[position] = navigatable;
     }
 
     exit() {
@@ -118,14 +118,14 @@ class NavigatablePage {
     onDirectionAction(direction) {
         if (direction === DIRECTION.UP) {
             if (this.position > 0) {
-                this.setNavigatable(this.position - 1)
+                this.setNavigatable(this.position - 1);
             }
         } else if (direction === DIRECTION.DOWN) {
-            this.setNavigatable(this.position + 1)
+            this.setNavigatable(this.position + 1);
         } else if (direction === DIRECTION.LEFT) {
-            this.navigatables[this.position].left()
+            this.navigatables[this.position].left();
         } else if (direction === DIRECTION.RIGHT) {
-            this.navigatables[this.position].right()
+            this.navigatables[this.position].right();
         }
     }
 }

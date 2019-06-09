@@ -5,7 +5,7 @@ class WatchVideo extends NavigatablePage {
     }
 
     static validatePath(path) {
-        return path.startsWith('/watch')
+        return path.startsWith('/watch');
     }
 
     onLoad() {
@@ -23,15 +23,13 @@ class WatchVideo extends NavigatablePage {
     }
 
     isPageReady() {
-        return document.querySelector('.NFPlayer') !== null
+        return document.querySelector('.NFPlayer') !== null;
     }
 
     hideControlsWhenInactive() {
         this.controlObserver = new MutationObserver((mutations) => {
             for (let mutation of mutations) {
-                if (mutation.target.classList.contains('active')) {
-                    actionHandler.showHints();
-                } else if (mutation.target.classList.contains('inactive')) {
+                if (mutation.target.classList.contains('inactive')) {
                     actionHandler.hideHints();
                 } else {
                     actionHandler.showHints();
@@ -107,19 +105,19 @@ class WatchVideo extends NavigatablePage {
     }
 
     openNextEpisode() {
-        let button = this.player.querySelector('.button-nfplayerNextEpisode')
-        button.click()
+        let button = this.player.querySelector('.button-nfplayerNextEpisode');
+        button.click();
     }
 
     skipIntro() {
-        let button = this.player.querySelector('.skip-credits > a')
+        let button = this.player.querySelector('.skip-credits > a');
         if (button) {
-            button.click()
+            button.click();
         }
     }
 
     dispatchKey(keyCode) {
-        let event = new KeyboardEvent('keydown', {keyCode: keyCode, bubbles: true, cancelable: true, view: window})
-        this.player.dispatchEvent(event)
+        let event = new KeyboardEvent('keydown', {keyCode: keyCode, bubbles: true, cancelable: true, view: window});
+        this.player.dispatchEvent(event);
     }
 }

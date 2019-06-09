@@ -3,4 +3,4 @@ const DIRECTION = {
     'RIGHT': 1,
     'DOWN': 2,
     'LEFT': 3
-}
+};

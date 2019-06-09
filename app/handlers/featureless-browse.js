@@ -1,6 +1,6 @@
 class FeaturelessBrowse extends SliderBrowse {
     constructor() {
-        super(0)
+        super(0);
     }
 
     onLoad() {
@@ -10,6 +10,6 @@ class FeaturelessBrowse extends SliderBrowse {
     }
 
     static validatePath(path) {
-        return path === '/browse/new-release' || path === '/browse/my-list'
+        return path === '/browse/new-release' || path === '/browse/my-list';
     }
 }
