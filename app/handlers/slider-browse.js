@@ -37,12 +37,18 @@ class SliderBrowse extends NavigatablePage {
         return null;
     }
 
+    // .mainView has additional children while loading, so wait until it has only 1.
+    // additionally waits until the row content has loaded in by checking width.
     isPageReady() {
         if (keyboard) {
             return false;
         }
-        let row = document.querySelector(`#row-${this.loadingRow}`);
-        return row ? row.getBoundingClientRect().width > 0 : false;
+        let mainView = document.querySelector('.mainView');
+        if (mainView && mainView.childElementCount === 1) {
+            let row = document.querySelector(`#row-${this.loadingRow}`);
+            return row ? row.getBoundingClientRect().width > 0 : false;
+        }
+        return false;
     }
 
     needsPseudoStyler() {

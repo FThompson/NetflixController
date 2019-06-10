@@ -1,7 +1,6 @@
 Control Netflix in your browser with a gamepad or controller using this Chrome extension.
 
 ## TODO
-* Loading WatchVideo module after going to next video
 * Dynamically determine whether a page has a billboard or not
 * Firefox/Edge support (convert manifests, fullscreen action)
 * Continue mapping navigation controls to additional page elements
@@ -13,7 +12,6 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Improve plugin design to be extendable for other websites
 * Come up with a better plugin name, maybe considering future extendability (Flixability, Joyflix, Netstix)
 * Dual action hints for action pairs like volume up/down
-* Fix bug where billboard sometimes grabs the current page instead of waiting for the new page's billboard to load in
 * CSS classes for content outlines
 
 ## Libraries and Materials Used

@@ -47,7 +47,7 @@ class WatchVideo extends NavigatablePage {
         this.inactivityTimer = setTimeout(() => {
             actionHandler.hideHints();
             this.inactivityTimer = null;
-        }, 4000);
+        }, 5000);
     }
 
     getActions() {
