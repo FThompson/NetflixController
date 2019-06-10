@@ -252,14 +252,11 @@ function addHistory() {
 }
 
 function observeProfilePopup() {
-    console.log('observing profile popup');
     let root = document.getElementById('appMountPoint');
-    let observer = new MutationObserver((mutations, observer) => {
+    let observer = new MutationObserver((mutations) => {
         for (let mutation of mutations) {
-            console.log(mutation);
             for (let node of mutation.addedNodes) {
                 if (node.classList.contains('profiles-gate-container')) {
-                    console.log('OBSERVED PROFILE PAGE POPUP');
                     unload();
                     loadPage(ChooseProfile);
                 }
