@@ -42,6 +42,7 @@
     width: 100%;
     background-color: rgba(60, 60, 60, 0.9);
     z-index: 10000;
+    transition: opacity 0.5s ease-in-out;
 }
 
 #gamepad-interface-hints-bar {
@@ -98,6 +99,6 @@
     text-decoration: underline;
 }
 
-.gamepad-interface-hidden {
-    display: none;
+.gamepad-interface-hidden-faded {
+    opacity: 0;
 }

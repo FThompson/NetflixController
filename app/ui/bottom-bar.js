@@ -25,6 +25,14 @@ class BottomBarContainer {
         this.children = this.children.filter(e => e !== element);
         this.build();
     }
+
+    hide() {
+        this.container.classList.add('gamepad-interface-hidden-faded');
+    }
+
+    show() {
+        this.container.classList.remove('gamepad-interface-hidden-faded');
+    }
 }
 
 class BottomBar {

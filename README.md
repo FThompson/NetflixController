@@ -13,6 +13,7 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Come up with a better plugin name, maybe considering future extendability (Flixability, Joyflix, Netstix)
 * Dual action hints for action pairs like volume up/down
 * CSS classes for content outlines
+* Fix visual bug that occurs on some billboard MyList buttons
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.

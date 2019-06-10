@@ -12,6 +12,7 @@ class WatchVideo extends NavigatablePage {
         super.onLoad();
         this.player = document.querySelector('.NFPlayer');
         this.hideControlsWhenInactive();
+        this.setActivityTimer();
     }
 
     unload() {
@@ -19,6 +20,7 @@ class WatchVideo extends NavigatablePage {
         if (this.inactivityTimer) {
             clearTimeout(this.inactivityTimer);
         }
+        BottomBar.container.show();
         super.unload();
     }
 
@@ -30,24 +32,28 @@ class WatchVideo extends NavigatablePage {
         this.controlObserver = new MutationObserver((mutations) => {
             for (let mutation of mutations) {
                 if (mutation.target.classList.contains('inactive')) {
-                    actionHandler.hideHints();
+                    BottomBar.container.hide();
                 } else {
-                    actionHandler.showHints();
+                    BottomBar.container.show();
                 }
             }
         });
         this.controlObserver.observe(this.player, { attributes: true, attributeFilter: [ 'class' ]});
     }
 
-    onInput() {
+    setActivityTimer() {
         if (this.inactivityTimer) {
             clearTimeout(this.inactivityTimer);
         }
-        actionHandler.showHints();
+        BottomBar.container.show();
         this.inactivityTimer = setTimeout(() => {
-            actionHandler.hideHints();
+            BottomBar.container.hide();
             this.inactivityTimer = null;
         }, 5000);
+    }
+
+    onInput() {
+        this.setActivityTimer();
     }
 
     getActions() {
