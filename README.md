@@ -4,7 +4,6 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Dynamically determine whether a page has a billboard or not
 * Firefox/Edge support (convert manifests, fullscreen action)
 * Continue mapping navigation controls to additional page elements
-* Detect account login page after idle period
 * Support interactive media (e.g. the new Black Mirror movie)
 * Support non-standard gamepad mappings / offer way to configure mappings
 * Configure right joystick to control a virtual mouse
@@ -14,6 +13,7 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Dual action hints for action pairs like volume up/down
 * CSS classes for content outlines
 * Fix visual bug that occurs on some billboard MyList buttons
+* Increase size of virtual keyboard and scale inserted UI elements according to page size
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.

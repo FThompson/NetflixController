@@ -137,6 +137,7 @@ console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.');
 gamepads.addEventListener('connect', e => {
     if (!hasConnectedGamepad) {
         // first connection, run current page handler manually
+        observeProfilePopup();
         runHandler(window.location.pathname);
         hasConnectedGamepad = true;
     }
@@ -248,4 +249,22 @@ function addHistory() {
     } else {
         handlerHistory.push(location.pathname);
     }
+}
+
+function observeProfilePopup() {
+    console.log('observing profile popup');
+    let root = document.getElementById('appMountPoint');
+    let observer = new MutationObserver((mutations, observer) => {
+        for (let mutation of mutations) {
+            console.log(mutation);
+            for (let node of mutation.addedNodes) {
+                if (node.classList.contains('profiles-gate-container')) {
+                    console.log('OBSERVED PROFILE PAGE POPUP');
+                    unload();
+                    loadPage(ChooseProfile);
+                }
+            }
+        }
+    });
+    observer.observe(root, { subtree: true, childList: true });
 }
