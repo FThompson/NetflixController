@@ -47,6 +47,7 @@
 
 #gamepad-interface-hints-bar {
     height: 46px;
+    white-space: nowrap;
 }
 
 .gamepad-interface-hint {
