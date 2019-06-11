@@ -186,6 +186,11 @@ class WatchVideo extends NavigatablePage {
                 onPress: () => chrome.runtime.sendMessage({ message: 'requestFullscreen' })
             },
             {
+                label: 'Back',
+                index: StandardMapping.Button.BUTTON_RIGHT,
+                onPress: () => this.goBack()
+            },
+            {
                 label: 'Jump Back 10s',
                 index: StandardMapping.Button.D_PAD_LEFT,
                 onPress: () => this.dispatchKey(37)
@@ -222,21 +227,26 @@ class WatchVideo extends NavigatablePage {
     }
 
     openNextEpisode() {
-        let nextEpisode = null;
-        if (this.postplay) {
-            nextEpisode = document.querySelector('.WatchNext-still-container');
-        } else {
-            nextEpisode = this.player.querySelector('.button-nfplayerNextEpisode');
-        }
-        if (nextEpisode) {
-            nextEpisode.click();
-        }
+        this.clickControl('.button-nfplayerNextEpisode', '.WatchNext-still-container');
     }
 
     skipIntro() {
-        let button = this.player.querySelector('.skip-credits > a');
-        if (button) {
-            button.click();
+        this.clickControl('.skip-credits > a');
+    }
+
+    goBack() {
+        this.clickControl('.button-nfplayerBack', '.BackToBrowse');
+    }
+
+    clickControl(playerSelector, postplaySelector) {
+        let control = null;
+        if (this.postplay && postplaySelector) {
+            control = document.querySelector(postplaySelector);
+        } else {
+            control = this.player.querySelector(playerSelector);
+        }
+        if (control) {
+            control.click();
         }
     }
 
