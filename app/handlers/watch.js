@@ -3,6 +3,14 @@ class WatchVideo extends NavigatablePage {
         super();
         this.inactivityTimer = null;
         this.postplay = false;
+        this.hasInteractiveChoices = false;
+        this.hasNextEpisode = true;
+        this.hasSkipIntro = true;
+        this.skipIntroAction = {
+            label: 'Skip Intro',
+            index: StandardMapping.Button.BUTTON_CONTROL_RIGHT,
+            onPress: () => this.skipIntro()
+        };
         this.nextEpisodeAction = {
             label: 'Next Episode',
             index: StandardMapping.Button.BUMPER_RIGHT,
@@ -18,11 +26,14 @@ class WatchVideo extends NavigatablePage {
         super.onLoad();
         this.player = document.querySelector('.NFPlayer');
         this.observePlayerState();
+        this.observeInteractiveChoices();
         this.setActivityTimer();
+        this.checkPageForInteractiveControls();
     }
 
     unload() {
         this.controlObserver.disconnect();
+        this.interactiveObserver.disconnect();
         if (this.inactivityTimer) {
             clearTimeout(this.inactivityTimer);
         }
@@ -45,6 +56,45 @@ class WatchVideo extends NavigatablePage {
         this.controlObserver.observe(this.player, { attributes: true, attributeFilter: [ 'class' ]});
     }
 
+    observeInteractiveChoices() {
+        this.interactiveObserver = new MutationObserver((mutations) => {
+            for (let mutation of mutations) {
+                this.checkForInteractiveControls(mutation.addedNodes, true);
+                this.checkForInteractiveControls(mutation.removedNodes, false);
+            }
+        });
+        let controls = this.player.querySelector('.PlayerControlsNeo__all-controls');
+        this.interactiveObserver.observe(controls, { childList: true });
+    }
+
+    checkPageForInteractiveControls() {
+        let controls = this.player.querySelector('.PlayerControlsNeo__all-controls');
+        this.checkForInteractiveControls(controls.childNodes, true);
+    }
+
+    checkForInteractiveControls(nodeList, isAddedList) {
+        for (let node of nodeList) {
+            if (node.nodeType === 1 && node.classList.contains('main-hitzone-element-container')) {
+                this.setInteractiveMode(isAddedList);
+                return;
+            }
+        }
+    }
+
+    setInteractiveMode(interactive) {
+        if (interactive) {
+            actionHandler.removeAll(this.getActions());
+            this.addNavigatable(0, new InteractiveChoices(this.dispatchKey.bind(this)));
+            this.setNavigatable(0);
+            this.setActivityTimer();
+            this.hasInteractiveChoices = true;
+        } else {
+            this.hasInteractiveChoices = false;
+            actionHandler.addAll(this.getActions());
+            this.removeNavigatable(0);
+        }
+    }
+
     hideControls(inactive) {
         if (inactive) {
             BottomBar.container.hide();
@@ -54,6 +104,7 @@ class WatchVideo extends NavigatablePage {
     }
 
     showNextEpisode(visible) {
+        this.hasNextEpisode = visible;
         if (visible) {
             actionHandler.addAction(this.nextEpisodeAction);
         } else {
@@ -65,10 +116,15 @@ class WatchVideo extends NavigatablePage {
         if (this.inactivityTimer) {
             clearTimeout(this.inactivityTimer);
         }
-        BottomBar.container.show();
+        this.hideControls(false);
         this.inactivityTimer = setTimeout(() => {
-            BottomBar.container.hide();
-            this.inactivityTimer = null;
+            if (this.hasInteractiveChoices) {
+                // keep the controls visible while choices are present
+                this.setActivityTimer();
+            } else {
+                this.hideControls(true);
+                this.inactivityTimer = null;
+            }
         }, 5000);
     }
 
@@ -77,6 +133,20 @@ class WatchVideo extends NavigatablePage {
     }
 
     getActions() {
+        if (this.hasInteractiveChoices) {
+            return [];
+        }
+        let actions = this.getDefaultActions();
+        if (this.hasNextEpisode) {
+            actions.push(this.nextEpisodeAction);
+        }
+        if (this.hasSkipIntro) {
+            actions.push(this.skipIntroAction);
+        }
+        return actions;
+    }
+
+    getDefaultActions() {
         return [
             {
                 label: 'Play',
@@ -112,18 +182,21 @@ class WatchVideo extends NavigatablePage {
                 label: 'Volume Down',
                 index: StandardMapping.Button.D_PAD_BOTTOM,
                 onPress: () => this.dispatchKey(40)
-            },
-            this.nextEpisodeAction,
-            {
-                label: 'Skip Intro',
-                index: StandardMapping.Button.BUTTON_CONTROL_RIGHT,
-                onPress: () => this.skipIntro()
             }
         ];
     }
 
     onDirectionAction(direction) {
-        // override default direction navigation to do nothing
+        // override default direction navigation to do nothing unless interactive
+        if (this.hasInteractiveChoices) {
+            super.onDirectionAction(direction);
+        }
+    }
+
+    setNavigatable(position) {
+        if (position === 0) {
+            super.setNavigatable(position);
+        }
     }
 
     openNextEpisode() {
@@ -145,8 +218,11 @@ class WatchVideo extends NavigatablePage {
         }
     }
 
-    dispatchKey(keyCode) {
-        let event = new KeyboardEvent('keydown', {keyCode: keyCode, bubbles: true, cancelable: true, view: window});
+    dispatchKey(keyCode, isKeyDown=true) {
+        let event = new KeyboardEvent(isKeyDown ? 'keydown' : 'keyup', {
+            key: String.fromCharCode(keyCode),
+            keyCode: keyCode, bubbles: true, cancelable: true, view: window
+        });
         this.player.dispatchEvent(event);
     }
 }

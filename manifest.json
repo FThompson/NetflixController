@@ -34,6 +34,7 @@
                 "app/navigation/billboard.js",
                 "app/navigation/menu.js",
                 "app/navigation/profiles.js",
+                "app/navigation/choices.js",
                 "app/ui/virtual-keyboard.js",
                 "app/ui/bottom-bar.js",
                 "app/ui/notice-bar.js",

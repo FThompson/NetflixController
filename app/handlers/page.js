@@ -97,6 +97,10 @@ class NavigatablePage {
         this.navigatables[position] = navigatable;
     }
 
+    removeNavigatable(position) {
+        delete this.navigatables[position];
+    }
+
     exit() {
         if (this.navigatables[this.position]) {
             let exitParams = this.navigatables[this.position].exit();
