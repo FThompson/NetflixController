@@ -3,6 +3,11 @@ class WatchVideo extends NavigatablePage {
         super();
         this.inactivityTimer = null;
         this.postplay = false;
+        this.nextEpisodeAction = {
+            label: 'Next Episode',
+            index: StandardMapping.Button.BUMPER_RIGHT,
+            onPress: () => this.openNextEpisode()
+        };
     }
 
     static validatePath(path) {
@@ -12,7 +17,7 @@ class WatchVideo extends NavigatablePage {
     onLoad() {
         super.onLoad();
         this.player = document.querySelector('.NFPlayer');
-        this.hideControlsWhenInactive();
+        this.observePlayerState();
         this.setActivityTimer();
     }
 
@@ -29,18 +34,31 @@ class WatchVideo extends NavigatablePage {
         return document.querySelector('.NFPlayer') !== null;
     }
 
-    hideControlsWhenInactive() {
+    observePlayerState() {
         this.controlObserver = new MutationObserver((mutations) => {
             for (let mutation of mutations) {
                 this.postplay = mutation.target.classList.contains('postplay');
-                if (mutation.target.classList.contains('inactive')) {
-                    BottomBar.container.hide();
-                } else {
-                    BottomBar.container.show();
-                }
+                this.hideControls(mutation.target.classList.contains('inactive'));
+                this.showNextEpisode(mutation.target.classList.contains('nextEpisode'));
             }
         });
         this.controlObserver.observe(this.player, { attributes: true, attributeFilter: [ 'class' ]});
+    }
+
+    hideControls(inactive) {
+        if (inactive) {
+            BottomBar.container.hide();
+        } else {
+            BottomBar.container.show();
+        }
+    }
+
+    showNextEpisode(visible) {
+        if (visible) {
+            actionHandler.addAction(this.nextEpisodeAction);
+        } else {
+            actionHandler.removeAction(this.nextEpisodeAction);
+        }
     }
 
     setActivityTimer() {
@@ -95,11 +113,7 @@ class WatchVideo extends NavigatablePage {
                 index: StandardMapping.Button.D_PAD_BOTTOM,
                 onPress: () => this.dispatchKey(40)
             },
-            {
-                label: 'Next Episode',
-                index: StandardMapping.Button.BUMPER_RIGHT,
-                onPress: () => this.openNextEpisode()
-            },
+            this.nextEpisodeAction,
             {
                 label: 'Skip Intro',
                 index: StandardMapping.Button.BUTTON_CONTROL_RIGHT,
