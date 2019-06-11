@@ -2,6 +2,7 @@ class WatchVideo extends NavigatablePage {
     constructor() {
         super();
         this.inactivityTimer = null;
+        this.postplay = false;
     }
 
     static validatePath(path) {
@@ -31,6 +32,7 @@ class WatchVideo extends NavigatablePage {
     hideControlsWhenInactive() {
         this.controlObserver = new MutationObserver((mutations) => {
             for (let mutation of mutations) {
+                this.postplay = mutation.target.classList.contains('postplay');
                 if (mutation.target.classList.contains('inactive')) {
                     BottomBar.container.hide();
                 } else {
@@ -111,8 +113,15 @@ class WatchVideo extends NavigatablePage {
     }
 
     openNextEpisode() {
-        let button = this.player.querySelector('.button-nfplayerNextEpisode');
-        button.click();
+        let nextEpisode = null;
+        if (this.postplay) {
+            nextEpisode = document.querySelector('.WatchNext-still-container');
+        } else {
+            nextEpisode = this.player.querySelector('.button-nfplayerNextEpisode');
+        }
+        if (nextEpisode) {
+            nextEpisode.click();
+        }
     }
 
     skipIntro() {

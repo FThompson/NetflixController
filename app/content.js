@@ -256,7 +256,7 @@ function observeProfilePopup() {
     let observer = new MutationObserver((mutations) => {
         for (let mutation of mutations) {
             for (let node of mutation.addedNodes) {
-                if (nodeType === 1 && node.classList.contains('profiles-gate-container')) {
+                if (node.nodeType === 1 && node.classList.contains('profiles-gate-container')) {
                     unload();
                     loadPage(ChooseProfile);
                 }
