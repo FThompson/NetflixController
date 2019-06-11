@@ -5,7 +5,7 @@ class WatchVideo extends NavigatablePage {
         this.postplay = false;
         this.hasInteractiveChoices = false;
         this.hasNextEpisode = true;
-        this.hasSkipIntro = true;
+        this.hasSkipIntro = false;
         this.skipIntroAction = {
             label: 'Skip Intro',
             index: StandardMapping.Button.BUTTON_CONTROL_RIGHT,
@@ -25,14 +25,16 @@ class WatchVideo extends NavigatablePage {
     onLoad() {
         super.onLoad();
         this.player = document.querySelector('.NFPlayer');
+        this.showNextEpisode(this.player.classList.contains('nextEpisode'));
         this.observePlayerState();
+        this.observeSkipIntro();
         this.observeInteractiveChoices();
         this.setActivityTimer();
-        this.checkPageForInteractiveControls();
     }
 
     unload() {
         this.controlObserver.disconnect();
+        this.skipObserver.disconnect();
         this.interactiveObserver.disconnect();
         if (this.inactivityTimer) {
             clearTimeout(this.inactivityTimer);
@@ -56,28 +58,48 @@ class WatchVideo extends NavigatablePage {
         this.controlObserver.observe(this.player, { attributes: true, attributeFilter: [ 'class' ]});
     }
 
+    observeSkipIntro() {
+        let controls = this.player.querySelector('.PlayerControlsNeo__layout');
+        this.checkForElementWithClass(controls.childNodes, true, 'skip-credits',
+                () => this.showSkipIntro(true));
+        this.skipObserver = this.watchForElementsWithClass(controls,
+                'skip-credits', (found) => this.showSkipIntro(found));
+    }
+
     observeInteractiveChoices() {
-        this.interactiveObserver = new MutationObserver((mutations) => {
+        let controls = this.player.querySelector('.PlayerControlsNeo__all-controls');
+        this.checkForElementWithClass(controls.childNodes, true,
+                'main-hitzone-element-container', () => this.setInteractiveMode(true));
+        this.interactiveObserver = this.watchForElementsWithClass(controls,
+                'main-hitzone-element-container', (found) => this.setInteractiveMode(found));
+    }
+
+    watchForElementsWithClass(node, className, callback) {
+        let observer = new MutationObserver((mutations) => {
             for (let mutation of mutations) {
-                this.checkForInteractiveControls(mutation.addedNodes, true);
-                this.checkForInteractiveControls(mutation.removedNodes, false);
+                this.checkForElementWithClass(mutation.addedNodes, true, className, callback);
+                this.checkForElementWithClass(mutation.removedNodes, false, className, callback);
             }
         });
-        let controls = this.player.querySelector('.PlayerControlsNeo__all-controls');
-        this.interactiveObserver.observe(controls, { childList: true });
+        observer.observe(node, { childList: true });
+        return observer;
     }
 
-    checkPageForInteractiveControls() {
-        let controls = this.player.querySelector('.PlayerControlsNeo__all-controls');
-        this.checkForInteractiveControls(controls.childNodes, true);
-    }
-
-    checkForInteractiveControls(nodeList, isAddedList) {
+    checkForElementWithClass(nodeList, isAddedList, className, callback) {
         for (let node of nodeList) {
-            if (node.nodeType === 1 && node.classList.contains('main-hitzone-element-container')) {
-                this.setInteractiveMode(isAddedList);
+            if (node.nodeType === 1 && node.classList.contains(className)) {
+                callback(isAddedList);
                 return;
             }
+        }
+    }
+
+    showSkipIntro(canSkip) {
+        this.hasSkipIntro = canSkip;
+        if (canSkip) {
+            actionHandler.addAction(this.skipIntroAction);
+        } else {
+            actionHandler.removeAction(this.skipIntroAction);
         }
     }
 

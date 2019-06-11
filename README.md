@@ -13,8 +13,8 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * CSS classes for content outlines
 * Fix visual bug that occurs on some billboard MyList buttons
 * Increase size of virtual keyboard and scale inserted UI elements according to page size
-* Show skip intro action only when applicable
 * Hide jump 10s actions when unavaiable (player class 'preplay'?)
+* Identify interactive videos and only apply related settings if needed
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.
