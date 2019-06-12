@@ -5,33 +5,44 @@ class Billboard extends Navigatable {
         let linksDiv = billboardParent.querySelector('.billboard-links');
         let playLink = linksDiv.querySelector('a.playLink');
         let myList = linksDiv.querySelector('a.mylist-button');
-        this.buttons = {
-            play: {
+        let moreInfo = linksDiv.querySelector('a.nf-icon-button[href^="/title/"]');
+        console.log()
+        this.position = -1;
+        this.buttons = [
+            {
                 action: playLink,
                 style: playLink.firstElementChild
             },
-            myList: {
+            {
                 action: myList,
                 style: myList
+            },
+            {
+                action: moreInfo,
+                style: moreInfo
             }
-        };
+        ]
     }
     
     left() {
-        this.select(this.buttons.play);
+        if (this.position > 0) {
+            this.select(this.position - 1);
+        }
     }
 
     right() {
-        this.select(this.buttons.myList);
+        if (this.position < this.buttons.length - 1) {
+            this.select(this.position + 1);
+        }
     }
 
     enter(params) {
-        this.left();
+        this.select(0);
     }
 
     exit() {
         this.unselect();
-        this.selected = null;
+        this.position = -1;
     }
 
     getActions() {
@@ -39,23 +50,21 @@ class Billboard extends Navigatable {
             {
                 label: 'Select',
                 index: StandardMapping.Button.BUTTON_BOTTOM,
-                onPress: () => this.selected.action.click()
+                onPress: () => this.buttons[this.position].action.click()
             }
         ];
     }
 
     unselect() {
-        if (this.selected) {
-            this.styler.toggleStyle(this.selected.style, ':hover');
+        if (this.position >= 0) {
+            this.styler.toggleStyle(this.buttons[this.position].style, ':hover');
         }
     }
 
-    select(button) {
-        if (button !== this.selected) {
-            this.unselect();
-            this.styler.toggleStyle(button.style, ':hover');
-            this.selected = button;
-            Navigatable.scrollIntoView(this.selected.style);
-        }
+    select(position) {
+        this.unselect();
+        this.position = position;
+        this.styler.toggleStyle(this.buttons[this.position].style, ':hover');
+        Navigatable.scrollIntoView(this.buttons[this.position].style);
     }
 }

@@ -219,7 +219,9 @@ function openSearch() {
         for (let mutation of mutations) {
             if (!mutation.target.classList.contains('search-focused')) {
                 // search bar is no longer focused
-                keyboard.close();
+                if (keyboard) {
+                    keyboard.close();
+                }
                 closeObserver.disconnect();
             }
         }
