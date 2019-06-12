@@ -1,25 +1,21 @@
-class InteractiveChoices extends Navigatable {
+class InteractiveChoices extends StaticNavigatable {
     constructor(dispatchKeyFunction) {
         super();
-        this.choices = document.querySelectorAll('.BranchingInteractiveScene--choice-selection');
-        this.position = -1;
         this.ready = false;
         this.dispatchKey = dispatchKeyFunction;
     }
 
-    left() {
-        if (this.position > 0) {
-            this.select(this.position - 1);
-        }
+    getComponents() {
+        return document.querySelectorAll('.BranchingInteractiveScene--choice-selection');
     }
 
-    right() {
-        if (this.position < this.choices.length - 1) {
-            this.select(this.position + 1);
-        }
+    interact(component) {
+        let keycode = '0'.charCodeAt() + this.position + 1;
+        this.dispatchKey(keycode, false);
     }
 
-    // select if has delay and return true, otherwise return false
+    // select if component has delay and return true, otherwise return false.
+    // this delay is the time it takes for the component to load in visually.
     selectAfterDelay(target) {
         let delay = parseInt(target.style.transitionDelay);
         if (delay) {
@@ -34,7 +30,7 @@ class InteractiveChoices extends Navigatable {
     }
 
     enter(params) {
-        let loadTarget = this.choices[0].parentElement;
+        let loadTarget = this.components[0].parentElement;
         if (!this.selectAfterDelay(loadTarget)) {
             let observer = new MutationObserver((mutations, observer) => {
                 for (let mutation of mutations) {
@@ -48,36 +44,13 @@ class InteractiveChoices extends Navigatable {
         }
     }
 
-    exit() {
-        this.unselect();
-        this.position = -1;
-    }
-
-    getActions() {
-        return [
-            {
-                label: 'Select',
-                index: StandardMapping.Button.BUTTON_BOTTOM,
-                onPress: () => {
-                    // dispatch numeric key corresponding to choice number
-                    let keycode = '0'.charCodeAt() + this.position + 1;
-                    this.dispatchKey(keycode, false);
-                }
-            }
-        ];
-    }
-
-    unselect() {
-        if (this.position >= 0) {
-            this.choices[this.position].classList.remove('focus');
-        }
+    style(component, selected) {
+        component.classList.toggle('focus', selected);
     }
 
     select(position) {
         if (this.ready) {
-            this.unselect();
-            this.position = position;
-            this.choices[this.position].classList.add('focus');
+            super.select(position);
         }
     }
 }

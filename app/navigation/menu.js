@@ -1,56 +1,14 @@
-class Menu extends Navigatable {
-    constructor() {
-        super();
-        this.options = document.querySelectorAll('li.navigation-tab a');
-        this.position = -1;
+class Menu extends StaticNavigatable {
+    getComponents() {
+        return document.querySelectorAll('li.navigation-tab a');
     }
 
-    left() {
-        if (this.position > 0) {
-            this.select(this.position - 1);
+    style(component, selected) {
+        this.styler.toggleStyle(component, ':hover', selected);
+        if (selected) {
+            component.style.cssText = 'outline: 3px solid ' + getTransparentNetflixRed(0.7) + ' !important';
+        } else {
+            component.style.outline = '0';
         }
-    }
-
-    right() {
-        if (this.position < this.options.length - 1) {
-            this.select(this.position + 1);
-        }
-    }
-
-    enter(params) {
-        this.select(0);
-    }
-
-    exit() {
-        this.unselect();
-        this.position = -1;
-    }
-
-    getActions() {
-        return [
-            {
-                label: 'Select',
-                index: StandardMapping.Button.BUTTON_BOTTOM,
-                onPress: () => {
-                    this.options[this.position].click();
-                    this.unselect();
-                }
-            }
-        ];
-    }
-
-    unselect() {
-        if (this.position >= 0) {
-            this.styler.toggleStyle(this.options[this.position], ':hover');
-            this.options[this.position].style.outline = '0';
-        }
-    }
-
-    select(position) {
-        this.unselect();
-        this.position = position;
-        this.styler.toggleStyle(this.options[this.position], ':hover');
-        this.options[this.position].style.cssText = 'outline: 3px solid ' + getTransparentNetflixRed(0.7) + ' !important';
-        Navigatable.scrollIntoView(this.options[this.position]);
     }
 }
