@@ -240,6 +240,7 @@ function openSearch() {
 
 function goBack() {
     if (handlerHistory.length > 0) {
+        unload();
         handlerHistory.pop();
         window.history.back();
     }

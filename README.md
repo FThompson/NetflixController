@@ -16,6 +16,7 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Hide jump 10s actions when unavaiable (player class 'preplay'?)
 * Identify interactive videos and only apply related settings if needed
 * Support for /title pages and expanded video elements
+* Fix bug where search page handler does not finish loading until keyboard is closed when only one character has been entered into the search bar
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.
