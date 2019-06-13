@@ -3,7 +3,7 @@ class NavigatablePage {
         if (new.target === NavigatablePage) {
             throw new TypeError('cannot instantiate abstract NavigatablePage');
         }
-        this.navigatables = {};
+        this.navigatables = [];
         this.unloaded = false;
     }
 
@@ -44,7 +44,7 @@ class NavigatablePage {
 
     // to be overriden by subclasses
     unload() {
-        Object.keys(this.navigatables).forEach(key => this.navigatables[key].exit());
+        this.navigatables.forEach(navigatable => navigatable.exit());
         this.unloaded = true;
         actionHandler.removeAll(this.getActions());
         actionHandler.onInput = null;
@@ -78,7 +78,7 @@ class NavigatablePage {
     // static validatePath(path) must be implemented by subclasses
 
     isNavigatable(position) {
-        return position in this.navigatables;
+        return position < this.navigatables.length;
     }
 
     setNavigatable(position) {
@@ -94,11 +94,11 @@ class NavigatablePage {
         if (this.styler && navigatable !== null) {
             navigatable.styler = this.styler;
         }
-        this.navigatables[position] = navigatable;
+        this.navigatables.splice(position, 0, navigatable);
     }
 
     removeNavigatable(position) {
-        delete this.navigatables[position];
+        this.navigatables.splice(position, 1);
     }
 
     exit() {
