@@ -20,6 +20,7 @@ const pageHandlers = [
     ChooseProfile,
     FeaturedBrowse,
     FeaturelessBrowse,
+    TitleBrowse,
     SearchBrowse,
     WatchVideo
 ];

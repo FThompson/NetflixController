@@ -65,10 +65,7 @@ class StaticNavigatable extends Navigatable {
             {
                 label: 'Select',
                 index: StandardMapping.Button.BUTTON_BOTTOM,
-                onPress: () => {
-                    this.interact(this.getInteractionComponent());
-                    this.unselect();
-                }
+                onPress: () => this.interact(this.getInteractionComponent())
             }
         ];
     }
