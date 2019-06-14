@@ -18,8 +18,4 @@ class TitleBrowse extends SliderBrowse {
     isPageReady() {
         return super.isPageReady() && document.querySelector('.jawbone-actions');
     }
-
-    // getNextNavigatable(position) {
-    //     return super.getNextNavigatable(position - 1);
-    // }
 }
