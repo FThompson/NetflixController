@@ -5,6 +5,7 @@ class SliderBrowse extends NavigatablePage {
         }
         super();
         this.loadingRow = loadingRow;
+        this.currentRow = 0;
     }
 
     onLoad() {
@@ -13,25 +14,46 @@ class SliderBrowse extends NavigatablePage {
     }
 
     setNavigatable(position) {
+        if (position === this.position + 1) {
+            // look for a jawbone if moving to the next navigatable below the current one
+            // if a jawbone exists above the current nav, it will already exist in nav list
+            let currentNav = this.navigatables[this.position];
+            if (currentNav && currentNav.constructor.name === 'Slider') {
+                if (!currentNav.jawboneOpen) {
+                    // inline jawbone does not have its own row so we must check for it
+                    let jawbone = Jawbone.getJawbone(currentNav.row, currentNav);
+                    if (jawbone) {
+                        if (jawbone.replacedEarlierJawbone) {
+                            position--;
+                        }
+                        this.addNavigatable(position, jawbone);
+                    }
+                }
+            }
+        }
         if (!this.isNavigatable(position)) {
-            let nextRow = this.getNextNavigatable(position);
-            if (nextRow) {
-                this.addNavigatable(position, nextRow);
+            // no jawbone found, check for other navigatables like slider/billboard
+            let nextNav = this.getNextNavigatable();
+            if (nextNav) {
+                this.addNavigatable(position, nextNav);
             }
         }
         super.setNavigatable(position);
     }
 
-    getNextNavigatable(position) {
-        let nextPosition = position - 1;
-        let rowNode = document.querySelector(`#row-${nextPosition}`);
-        if (rowNode) {
-            if (rowNode.querySelector('.slider')) {
-                return new Slider(rowNode);
-            } else if (rowNode.querySelector('.billboard-title')) {
-                return new Billboard(nextPosition);
-            } else {
-                console.log('unknown contents in row ' + nextPosition);
+    getNextNavigatable() {
+        let currentNav = this.navigatables[this.position];
+        if ('row' in currentNav) {
+            let nextRow = currentNav.row + 1;
+            let rowNode = document.getElementById(`row-${nextRow}`);
+            if (rowNode) {
+                if (rowNode.querySelector('.slider')) {
+                    return new Slider(nextRow, rowNode);
+                } else if (rowNode.querySelector('.billboard-title')) {
+                    return new Billboard(nextRow);
+                } else {
+                    console.log('unknown contents in row ' + nextRow);
+                }
             }
         }
         return null;

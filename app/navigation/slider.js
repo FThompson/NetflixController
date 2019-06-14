@@ -2,14 +2,21 @@ class Slider extends Navigatable {
     /**
      * Creates the Slider at the given row and selects the given position in it.
      */
-    constructor(rowNode, position) {
+    constructor(row, rowNode, position) {
         super();
+        this.row = row;
         this.rowNode = rowNode;
         if (position !== undefined) {
             this.selectPosition(position);
         }
         this.canShiftLeft = false;
         this.locked = false;
+        this.jawboneOpen = false;
+        this.jawboneAction = {
+            label: 'Expand',
+            index: StandardMapping.Button.BUTTON_LEFT,
+            onPress: () => this.openJawbone()
+        };
     }
 
     /**
@@ -19,7 +26,7 @@ class Slider extends Navigatable {
     static getSlider(row, position) {
         let rowNode = document.querySelector(`#row-${row}`);
         if (rowNode) {
-            return new Slider(rowNode, position);
+            return new Slider(row, rowNode, position);
         }
         return null;
     }
@@ -42,7 +49,11 @@ class Slider extends Navigatable {
      * Selects either this slider's first item or the item in the given position.
      */
     enter(params) {
-        if ('position' in params) {
+        if (params.jawboneClosed) {
+            this.jawboneOpen = false;
+        }
+        let jawboneRow = 'jawboneRow' in params ? params.jawboneRow : -1;
+        if ('position' in params && (jawboneRow === -1 || jawboneRow === this.row)) {
             let position = params.position;
             if (this.canShiftLeft) {
                 position++;  // partially-visible left slider item takes up a position if present
@@ -75,25 +86,39 @@ class Slider extends Navigatable {
     }
 
     getActions() {
-        return [
-            {
-                label: 'Play',
-                index: StandardMapping.Button.BUTTON_BOTTOM,
-                onPress: () => this.clickHitzone('.bob-play-hitzone')
-            },
-            {
-                label: 'Expand',
-                index: StandardMapping.Button.BUTTON_LEFT,
-                onPress: () => this.clickHitzone('.bob-jaw-hitzone')
+        let actions = [{
+            label: 'Play',
+            index: StandardMapping.Button.BUTTON_BOTTOM,
+            onPress: () => this.clickHitzone('.bob-play-hitzone')
+        }];
+        if (!this.jawboneOpen) {
+            actions.push(this.jawboneAction);
+        }
+        return actions;
+    }
+
+    openJawbone() {
+        if (!this.locked) {
+            if (this.clickHitzone('.bob-jaw-hitzone')) {
+                this.locked = true;
+                actionHandler.removeAction(this.jawboneAction);
+                // TODO add mutationobserver instead of timeout
+                setTimeout(() => {
+                    currentHandler.setNavigatable(currentHandler.position + 1);
+                    this.jawboneOpen = true;
+                    this.locked = false;
+                }, 1000);
             }
-        ];
+        }
     }
 
     clickHitzone(selector) {
         let hitzone = document.querySelector(selector);
         if (hitzone) {
             hitzone.click();
+            return true;
         }
+        return false;
     }
 
     getBoxArtContainer() {
@@ -178,6 +203,12 @@ class Slider extends Navigatable {
                 this.selectPosition(this.position + (next ? 1 : -1));
                 selected = true;
             }
+        }
+        if (selected && this.jawboneOpen) {
+            // new jawbone is created in DOM so clear any existing one from navigation
+            this.jawboneOpen = false; // still visible but needs to be reopened
+            currentHandler.inlineJawbone = null;
+            currentHandler.removeNavigatable(currentHandler.position + 1);
         }
         return selected; // if false, vibrate? cannot move slider
     }

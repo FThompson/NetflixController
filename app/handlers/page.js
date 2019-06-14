@@ -97,8 +97,22 @@ class NavigatablePage {
         this.navigatables.splice(position, 0, navigatable);
     }
 
-    removeNavigatable(position) {
-        this.navigatables.splice(position, 1);
+    removeNavigatable(arg) {
+        let position = arg;
+        if (typeof arg === 'object') {
+            // find and remove object argument
+            position = this.navigatables.indexOf(arg);
+        }
+        if (position >= 0) {
+            this.navigatables.splice(position, 1);
+        }
+    }
+
+    removeCurrentNavigatable() {
+        let params = this.exit();
+        this.removeNavigatable(this.position);
+        this.position--;
+        this.enter(params);
     }
 
     exit() {

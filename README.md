@@ -17,6 +17,8 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Identify interactive videos and only apply related settings if needed
 * Support for /title pages and expanded video elements
 * Fix bug where search page handler does not finish loading until keyboard is closed when only one character has been entered into the search bar
+* Scroll up to search box when keyboard is opened while viewing a lower portion of the page
+* Organize page handler logic such that navigatables have clean access to the enclosing page handler
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.
