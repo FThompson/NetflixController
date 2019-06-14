@@ -209,6 +209,7 @@ function openSearch() {
     let searchParent = searchInput.parentElement.parentElement;
     let startingLocation = window.location.href;
     let handlerState = currentHandler.exit();
+    Navigatable.scrollIntoView(searchInput);
 
     keyboard = VirtualKeyboard.create(searchInput, searchParent, () => {
         actionHandler.removeAll(keyboard.getActions());

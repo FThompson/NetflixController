@@ -7,8 +7,6 @@ class Billboard extends StaticNavigatable {
     getComponents() {
         let selector = this.row !== undefined ? `#row-${this.row}` : '.billboard-row';
         let billboardParent = document.querySelector(selector);
-        console.log(selector);
-        console.log(billboardParent);
         let linksDiv = billboardParent.querySelector('.billboard-links');
         let playLink = linksDiv.querySelector('a.playLink');
         let myList = linksDiv.querySelector('a.mylist-button');

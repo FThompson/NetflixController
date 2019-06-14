@@ -19,6 +19,8 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Fix bug where search page handler does not finish loading until keyboard is closed when only one character has been entered into the search bar
 * Scroll up to search box when keyboard is opened while viewing a lower portion of the page
 * Organize page handler logic such that navigatables have clean access to the enclosing page handler
+* Use mutation observer instead of static delay to determine when jawbone is ready for focus
+* Rewrite Billboard query logic using similar logic as in Jawbone and maybe create a superclass
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.
