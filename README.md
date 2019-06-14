@@ -14,13 +14,12 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Fix visual bug that occurs on some billboard MyList buttons
 * Increase size of virtual keyboard and scale inserted UI elements according to page size
 * Hide jump 10s actions when unavaiable (player class 'preplay'?)
-* Identify interactive videos and only apply related settings if needed
-* Support for /title pages and expanded video elements
+* Identify interactive videos and only apply related settings/observers if needed
 * Fix bug where search page handler does not finish loading until keyboard is closed when only one character has been entered into the search bar
-* Scroll up to search box when keyboard is opened while viewing a lower portion of the page
 * Organize page handler logic such that navigatables have clean access to the enclosing page handler
 * Use mutation observer instead of static delay to determine when jawbone is ready for focus
 * Rewrite Billboard query logic using similar logic as in Jawbone and maybe create a superclass
+* Add additional styling to jawbone buttons to better indicate the selected option
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.
