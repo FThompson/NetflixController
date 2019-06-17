@@ -1,7 +1,6 @@
-class Jawbone extends StaticNavigatable {
+class Jawbone extends TitlePanel {
     constructor(row, jawbone, slider) {
-        super();
-        this.row = row;
+        super(row);
         this.jawbone = jawbone;
         this.inline = jawbone !== undefined;
         this.slider = slider;
@@ -76,24 +75,16 @@ class Jawbone extends StaticNavigatable {
         }
     }
 
-    getComponents() {
+    getPanelComponent() {
         if (!this.jawbone) {
             // the title jawbone should be the first and only jawbone in the page
             this.jawbone = document.querySelector('.jawBoneContainer');
         }
-        return this.jawbone.querySelectorAll('.jawbone-actions .nf-icon-button');
+        return this.jawbone;
     }
 
-    getInteractionComponent() {
-        let component = this.getSelectedComponent();
-        if (component.tagName === 'SPAN') {
-            return component.parentElement;
-        }
-        return component;
-    }
-
-    style(component, selected) {
-        this.styler.toggleStyle(component, ':hover', selected);
+    getButtonSelector() {
+        return '.jawbone-actions';
     }
 
     shouldScrollIntoView() {

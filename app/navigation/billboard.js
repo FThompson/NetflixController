@@ -1,41 +1,15 @@
-class Billboard extends StaticNavigatable {
+class Billboard extends TitlePanel {
     constructor(row) {
-        super();
-        this.row = row;
+        super(row);
     }
 
-    getComponents() {
+    getPanelComponent() {
         let selector = this.row !== undefined ? `#row-${this.row}` : '.billboard-row';
-        let billboardParent = document.querySelector(selector);
-        let linksDiv = billboardParent.querySelector('.billboard-links');
-        let playLink = linksDiv.querySelector('a.playLink');
-        let myList = linksDiv.querySelector('a.mylist-button');
-        let moreInfo = linksDiv.querySelector('a.nf-icon-button[href^="/title/"]');
-        return [
-            {
-                action: playLink,
-                style: playLink.firstElementChild
-            },
-            {
-                action: myList,
-                style: myList
-            },
-            {
-                action: moreInfo,
-                style: moreInfo
-            }
-        ];
+        let billboard = document.querySelector(selector);
+        return billboard;
     }
 
-    getInteractionComponent() {
-        return this.getSelectedComponent().action;
-    }
-
-    getStyleComponent() {
-        return this.getSelectedComponent().style;
-    }
-
-    style(component, selected) {
-        this.styler.toggleStyle(component, ':hover', selected);
+    getButtonSelector() {
+        return '.billboard-links';
     }
 }
