@@ -32,7 +32,7 @@ class WatchVideo extends NavigatablePage {
         this.setActivityTimer();
     }
 
-    unload() {
+    onUnload() {
         this.controlObserver.disconnect();
         this.skipObserver.disconnect();
         this.interactiveObserver.disconnect();
@@ -40,7 +40,7 @@ class WatchVideo extends NavigatablePage {
             clearTimeout(this.inactivityTimer);
         }
         BottomBar.container.show();
-        super.unload();
+        super.onUnload();
     }
 
     isPageReady() {

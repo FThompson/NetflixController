@@ -4,6 +4,7 @@ class NavigatablePage {
             throw new TypeError('cannot instantiate abstract NavigatablePage');
         }
         this.navigatables = [];
+        this.loaded = false;
         this.unloaded = false;
     }
 
@@ -13,6 +14,7 @@ class NavigatablePage {
             this.onLoad();
             actionHandler.addAll(this.getActions());
             actionHandler.onInput = () => this.onInput();
+            this.loaded = true;
         }
     }
 
@@ -44,8 +46,15 @@ class NavigatablePage {
 
     // to be overriden by subclasses
     unload() {
-        this.navigatables.forEach(navigatable => navigatable.exit());
         this.unloaded = true;
+        if (this.loaded) {
+            this.onUnload();
+        }
+    }
+
+    // to be overriden by subclasses
+    onUnload() {
+        this.navigatables.forEach(navigatable => navigatable.exit());
         actionHandler.removeAll(this.getActions());
         actionHandler.onInput = null;
     }
