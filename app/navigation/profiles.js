@@ -6,4 +6,9 @@ class Profiles extends StaticNavigatable {
     style(component, selected) {
         this.styler.toggleStyle(component, ':hover', selected);
     }
+
+    interact(component) {
+        super.interact(component);
+        runHandler(window.location.pathname, true);
+    }
 }
