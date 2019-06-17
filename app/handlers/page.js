@@ -65,6 +65,10 @@ class NavigatablePage {
         return false;
     }
 
+    hasPath() {
+        return true;
+    }
+
     // to be overriden by subclasses
     onInput() {
 

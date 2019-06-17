@@ -10,10 +10,12 @@ class Jawbone extends StaticNavigatable {
         }
         this.closed = false;
         if (this.inline) {
+            // there can only be one inline jawbone at a time, so track it at handler level
             if (currentHandler.inlineJawbone) {
                 currentHandler.removeNavigatable(currentHandler.inlineJawbone);
                 if (this.row !== currentHandler.inlineJawbone.row) {
                     currentHandler.inlineJawbone.slider.jawboneOpen = false;
+                    // used to update position properly when setting position in SliderBrowse
                     this.replacedEarlierJawbone = this.row > currentHandler.inlineJawbone.row;
                 }
             }

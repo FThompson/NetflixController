@@ -8,7 +8,6 @@ function getTransparentNetflixRed(opacity) {
 
 gamepadMappings.buttonsPath = 'static/buttons';
 
-let currentPath = null;
 let numGamepads = 0;
 let hasConnectedGamepad = false;
 let keyboard = null;
@@ -58,23 +57,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendMessage) => {
 });
 
 async function runHandler(path) {
-    if (path !== currentPath) {
-        unload();
-        refreshPageIfBad();
-        for (let i = 0, found = false; !found && i < pageHandlers.length; i++) {
-            if (pageHandlers[i].validatePath(path)) {
-                console.log(`NETFLIX-CONTROLLER: Loading ${pageHandlers[i].name} module for ${path}`);
-                await loadPage(pageHandlers[i]);
-                found = true;
-            }
+    unload();
+    refreshPageIfBad();
+    let found = false;
+    for (let i = 0; !found && i < pageHandlers.length; i++) {
+        if (pageHandlers[i].validatePath(path)) {
+            console.log(`NETFLIX-CONTROLLER: Loading ${pageHandlers[i].name} module for ${path}`);
+            await loadPage(pageHandlers[i]);
+            found = true;
         }
-        currentPath = path;
+    }
+    if (!found) {
+        console.warn(`NETFLIX-CONTROLLER: No module found for ${path}`);
     }
 }
 
 async function loadPage(handlerClass) {
     currentHandler = new handlerClass();
-    addHistory();
+    if (currentHandler.hasPath()) {
+        addHistory();
+    }
     setPageActions();
     await currentHandler.load();
 }

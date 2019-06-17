@@ -102,7 +102,6 @@ class Slider extends Navigatable {
             if (this.clickHitzone('.bob-jaw-hitzone')) {
                 this.locked = true;
                 actionHandler.removeAction(this.jawboneAction);
-                // TODO add mutationobserver instead of timeout
                 setTimeout(() => {
                     currentHandler.setNavigatable(currentHandler.position + 1);
                     this.jawboneOpen = true;

@@ -4,6 +4,10 @@ class ChooseProfile extends NavigatablePage {
         return document.querySelector('.list-profiles') !== null;
     }
 
+    hasPath() {
+        return false;
+    }
+
     onLoad() {
         this.addNavigatable(0, new Profiles());
         this.setNavigatable(0);
