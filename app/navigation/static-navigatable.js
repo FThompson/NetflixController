@@ -39,6 +39,11 @@ class StaticNavigatable extends Navigatable {
 
     }
 
+    // can be overriden to disable scrolling into view when selected
+    shouldScrollIntoView() {
+        return true;
+    }
+
     left() {
         if (this.position > 0) {
             this.select(this.position - 1);
@@ -80,6 +85,8 @@ class StaticNavigatable extends Navigatable {
         this.unselect();
         this.position = position;
         this.style(this.getStyleComponent(), true);
-        Navigatable.scrollIntoView(this.getStyleComponent());
+        if (this.shouldScrollIntoView()) {
+            Navigatable.scrollIntoView(this.getStyleComponent());
+        }
     }
 }

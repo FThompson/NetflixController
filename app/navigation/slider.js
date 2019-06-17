@@ -102,11 +102,17 @@ class Slider extends Navigatable {
             if (this.clickHitzone('.bob-jaw-hitzone')) {
                 this.locked = true;
                 actionHandler.removeAction(this.jawboneAction);
+                let jawboneContainer = this.rowNode.querySelector('.jawBoneContainer');
+                // wait for jawbone open transition to finish before giving jawbone focus
+                let transition = window.getComputedStyle(jawboneContainer).transition;
+                let pattern = new RegExp(/height (\d+(\.\d+)?)s/g);
+                let matches = pattern.exec(transition);
+                let heightDuration = matches.length > 0 ? Number(matches[1]) * 1000 : 1000;
                 setTimeout(() => {
                     currentHandler.setNavigatable(currentHandler.position + 1);
                     this.jawboneOpen = true;
                     this.locked = false;
-                }, 1000);
+                }, heightDuration);
             }
         }
     }

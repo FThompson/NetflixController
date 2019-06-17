@@ -95,4 +95,8 @@ class Jawbone extends StaticNavigatable {
     style(component, selected) {
         this.styler.toggleStyle(component, ':hover', selected);
     }
+
+    shouldScrollIntoView() {
+        return false;
+    }
 }
