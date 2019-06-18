@@ -44,7 +44,6 @@ class NavigatablePage {
         });
     }
 
-    // to be overriden by subclasses
     unload() {
         this.unloaded = true;
         if (this.loaded) {

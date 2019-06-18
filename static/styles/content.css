@@ -86,16 +86,16 @@
     cursor: pointer;
 }
 
-#gamepad-interface-connection-bar {
+.gamepad-interface-connection-bar {
     color: white;
 }
 
-#gamepad-interface-compatibility-bar > span {
+.gamepad-interface-warning-bar > span {
     color: var(--netflix-red);
     font-weight: 600;
 }
 
-#gamepad-interface-compatibility-bar > span > a {
+.gamepad-interface-warning-bar > span > a {
     color: inherit;
     text-decoration: underline;
 }

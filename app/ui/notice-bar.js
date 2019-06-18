@@ -1,34 +1,52 @@
 class NoticeBar extends BottomBar {
-    constructor(notice, barId, settingName) {
+    constructor(notice, barClass, settingName) {
         super();
         this.notice = notice;
-        this.barId = barId;
+        this.barClass = barClass;
         this.settingName = settingName;
+        this.noticeElement = null;
+    }
+
+    // can be overriden by subclass to add additional right-justified links.
+    // return an array of elements created through document.createElement
+    getLinks() {
+        return [];
     }
 
     createBar() {
         let bar = document.createElement('div');
-        bar.id = this.barId;
+        bar.classList.add(this.barClass);
         bar.classList.add('gamepad-interface-notice-bar');
-        bar.insertAdjacentHTML('afterbegin', this.notice);
-        let dismissLinks = document.createElement('div');
-        dismissLinks.classList.add('gamepad-interface-notice-bar-links');
-        bar.append(dismissLinks);
-        let dismissLink = document.createElement('a');
-        dismissLink.classList.add('gamepad-interface-notice-bar-link');
-        dismissLink.textContent = 'Dismiss';
-        dismissLink.addEventListener('click', () => this.remove());
-        dismissLinks.append(dismissLink);
-        let dismissForeverLink = document.createElement('a');
-        dismissForeverLink.classList.add('gamepad-interface-notice-bar-link');
-        dismissForeverLink.textContent = 'Never show again';
-        dismissForeverLink.addEventListener('click', () => this.removeForever());
-        dismissLinks.append(dismissForeverLink);
+        this.noticeElement = document.createElement('span');
+        this.noticeElement.innerHTML = this.notice;
+        bar.append(this.noticeElement);
+        let links = document.createElement('div');
+        links.classList.add('gamepad-interface-notice-bar-links');
+        bar.append(links);
+        for (let link of this.getLinks()) {
+            links.append(link);
+        }
+        links.append(this.createLink('Dismiss', () => this.remove()));
+        if (this.settingName) {
+            // add remove forever option if linked to a configuration setting
+            links.append(this.createLink('Never show again', () => this.removeForever()));
+        }
         return bar;
+    }
+
+    createLink(text, onClickHandler) {
+        let link = document.createElement('a');
+        link.classList.add('gamepad-interface-notice-bar-link');
+        link.textContent = text;
+        link.alt = text;
+        if (onClickHandler) {
+            link.addEventListener('click', onClickHandler);
+        }
+        return link;
     }
 
     removeForever() {
         this.remove();
-        chrome.storage.local.set({ [this.settingName]: false });
+        storage.local[this.settingName] = false;
     }
 }

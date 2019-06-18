@@ -8,18 +8,18 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Configure right joystick to control a virtual mouse
 * Timeout page readiness checks (useful in case of no internet connection)
 * Improve plugin design to be extendable for other websites
-* Come up with a better plugin name, maybe considering future extendability (Flixability, Joyflix, Netstix)
 * Dual action hints for action pairs like volume up/down
 * CSS classes for content outlines
 * Fix visual bug that occurs on some billboard MyList buttons
 * Increase size of virtual keyboard and scale inserted UI elements according to page size
-* Hide jump 10s actions when unavaiable (player class 'preplay'?)
+* Hide jump 10s actions when unavaiable (player class `preplay`?)
 * Identify interactive videos and only apply related settings/observers if needed
 * Fix bug where search page handler does not finish loading until keyboard is closed when only one character has been entered into the search bar
 * Organize page handler logic such that navigatables have clean access to the enclosing page handler
-* Rewrite Billboard query logic using similar logic as in Jawbone and maybe create a superclass
 * Add additional styling to jawbone buttons to better indicate the selected option
-* Use mutation observers instead of static timing in slider timeouts
+* Use mutation observers or parse CSS transitions instead of using static timing in slider timeouts
+* Fix bug where jawbone changes due to removing from my list the title with an open jawbone
+* Show video controls when in fullscreen mode
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - Allows for forcing an element to be styled with a pseudo-class.

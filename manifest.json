@@ -44,6 +44,7 @@
                 "app/ui/actions.js",
                 "app/ui/connection-hint.js",
                 "app/ui/compatibility-warning.js",
+                "app/ui/error-bar.js",
                 "app/handlers/page.js",
                 "app/handlers/choose-profile.js",
                 "app/handlers/slider-browse.js",

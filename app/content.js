@@ -1,5 +1,6 @@
 const storage = LiveStorage;
 const manifest = chrome.runtime.getManifest();
+const ERROR_ALERT_DURATION = 10000;
 const NETFLIX_RED = 'rgba(229, 9, 20)';
 
 function getTransparentNetflixRed(opacity) {
@@ -17,6 +18,7 @@ let currentHandler = null;
 let actionHandler = new ActionHandler();
 let connectionHintBar = new ConnectionHintBar();
 let compatibilityWarning = new CompatibilityWarningBar();
+let errorBar = new ErrorBar();
 const pageHandlers = [
     ChooseProfile,
     FeaturedBrowse,
@@ -64,13 +66,13 @@ async function runHandler(path, forceLoad=false) {
         let found = false;
         for (let i = 0; !found && i < pageHandlers.length; i++) {
             if (pageHandlers[i].validatePath(path)) {
-                console.log(`NETFLIX-CONTROLLER: Loading ${pageHandlers[i].name} module for ${path}`);
+                log(`Loading ${pageHandlers[i].name} module for ${path}`);
                 await loadPage(pageHandlers[i]);
                 found = true;
             }
         }
         if (!found) {
-            console.warn(`NETFLIX-CONTROLLER: No module found for ${path}`);
+            warn(`No module found for ${path}`);
         }
         currentPath = path;
     }
@@ -82,7 +84,11 @@ async function loadPage(handlerClass) {
         addHistory();
     }
     setPageActions();
-    await currentHandler.load();
+    try {
+        await currentHandler.load();
+    } catch (error) {
+        showError(error);
+    }
 }
 
 function unload() {
@@ -140,11 +146,29 @@ function updateCompatibility() {
     }
 }
 
+function showError(error, timeout=-1) {
+    console.error(error);
+    errorBar.setError(error.message, timeout);
+    errorBar.add();
+}
+
+function showTempError(error) {
+    showError(error, ERROR_ALERT_DURATION);
+}
+
+function log(message) {
+    console.log(`NETFLIX-CONTROLLER: ${message}`);
+}
+
+function warn(message) {
+    console.warn(`NETFLIX-CONTROLLER: ${message}`);
+}
+
 function isStandardGamepadConnected() {
     return Object.values(gamepads.gamepads).some(g => g.gamepad.mapping === 'standard');
 }
 
-console.log('NETFLIX-CONTROLLER: Listening for gamepad connections.');
+log('Listening for gamepad connections.');
 gamepads.addEventListener('connect', e => {
     if (!hasConnectedGamepad) {
         // first connection, run current page handler manually
@@ -156,17 +180,29 @@ gamepads.addEventListener('connect', e => {
     numGamepads++;
     showActionHints();
     updateCompatibility();
-    console.log(`NETFLIX-CONTROLLER: Gamepad connected: ${e.gamepad.gamepad.id}`);
+    log(`Gamepad connected: ${e.gamepad.gamepad.id}`);
     e.gamepad.addEventListener('buttonpress', e => {
-        actionHandler.onButtonPress(e.index);
+        try {
+            actionHandler.onButtonPress(e.index);
+        } catch (error) {
+            showTempError(error);
+        }
     })
     e.gamepad.addEventListener('buttonrelease', e => {
-        actionHandler.onButtonRelease(e.index);
+        try {
+            actionHandler.onButtonRelease(e.index);
+        } catch (error) {
+            showTempError(error);
+        }
     })
     e.gamepad.addEventListener('joystickmove', e => {
-        checkJoystickDirection(e.gamepad, e.horizontalIndex, e.horizontalValue, DIRECTION.RIGHT, DIRECTION.LEFT);
-        checkJoystickDirection(e.gamepad, e.verticalIndex, e.verticalValue, DIRECTION.DOWN, DIRECTION.UP);
-    }, StandardMapping.Axis.JOYSTICK_LEFT)
+        try {
+            checkJoystickDirection(e.gamepad, e.horizontalIndex, e.horizontalValue, DIRECTION.RIGHT, DIRECTION.LEFT);
+            checkJoystickDirection(e.gamepad, e.verticalIndex, e.verticalValue, DIRECTION.DOWN, DIRECTION.UP);
+        } catch (error) {
+            showTempError(error);
+        }
+    }, StandardMapping.Axis.JOYSTICK_LEFT);
 })
 gamepads.addEventListener('disconnect', e => {
     numGamepads--;
@@ -175,7 +211,7 @@ gamepads.addEventListener('disconnect', e => {
     }
     showConnectionHint();
     updateCompatibility();
-    console.log(`NETFLIX-CONTROLLER: Gamepad disconnected: ${e.gamepad.gamepad.id}`);
+    log(`Gamepad disconnected: ${e.gamepad.gamepad.id}`);
 })
 gamepads.start();
 
