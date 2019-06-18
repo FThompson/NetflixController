@@ -38,7 +38,9 @@ class SliderBrowse extends NavigatablePage {
                 this.addNavigatable(position, nextNav);
             }
         }
-        super.setNavigatable(position);
+        if (this.isNavigatable(position)) {
+            super.setNavigatable(position);
+        }
     }
 
     getNextNavigatable() {
@@ -52,7 +54,7 @@ class SliderBrowse extends NavigatablePage {
                 } else if (rowNode.querySelector('.billboard-title')) {
                     return new Billboard(nextRow);
                 } else {
-                    console.log('unknown contents in row ' + nextRow);
+                    warn('unknown contents in row ' + nextRow);
                 }
             }
         }
