@@ -17,6 +17,9 @@ class VirtualKeyboard {
         this.closeCallback = closeCallback;
         this.toggleShift(true); // first letter upper case
         this.select('A');
+        this.alignWithParent();
+        this.resizeCallback = () => this.alignWithParent();
+        window.addEventListener('resize', this.resizeCallback);
     }
 
     static create(input, parent, closeCallback) {
@@ -43,13 +46,24 @@ class VirtualKeyboard {
             appendKey(label, LAYOUT_BOTTOM[label] * 10);
         }
 
-        let targetBounds = parent.getBoundingClientRect();
-        keyboard.style.top = (targetBounds.top + targetBounds.height) + 'px';
-        keyboard.style.width = (targetBounds.width - 2) + 'px';
-        keyboard.style.height = (targetBounds.height * 4) + 'px';
         parent.append(keyboard);
 
         return new VirtualKeyboard(input, parent, keyboard, keys, closeCallback);
+    }
+
+    alignWithParent() {
+        // attach keyboard to bottom of search bar
+        let targetBounds = this.parent.getBoundingClientRect();
+        this.keyboard.style.top = (targetBounds.top + targetBounds.height) + 'px';
+
+        // set keyboard minimum size to that of the search bar's width
+        let searchWidth = targetBounds.width - 2;
+        this.keyboard.style.minWidth = searchWidth + 'px';
+        this.keyboard.style.minHeight = (searchWidth * 0.6) + 'px';
+
+        // right-justify the keyboard's attachment to the search bar
+        let keyboardWidth = parseFloat(window.getComputedStyle(this.keyboard).width);
+        this.keyboard.style.left = (searchWidth - keyboardWidth) + 'px';
     }
 
     select(key) {
@@ -120,6 +134,7 @@ class VirtualKeyboard {
     close() {
         this.input.blur();
         this.parent.removeChild(this.keyboard);
+        window.removeEventListener('resize', this.resizeCallback);
         if (this.closeCallback) {
             this.closeCallback();
         }

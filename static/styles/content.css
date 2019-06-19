@@ -4,6 +4,10 @@
 
 #gamepad-interface-keyboard {
     position: absolute;
+    width: 40vw;
+    height: 22vw;
+    font-size: calc(10px + 0.5vw);
+    margin-top: -1px;
     z-index: 10000;
     display: flex;
     flex-flow: row wrap;
@@ -11,9 +15,8 @@
     text-align: center;
     padding-top: 4px;
     padding-bottom: 4px;
-    background-color: rgba(30, 30, 30, 0.8);
+    background-color: rgba(30, 30, 30, 0.9);
     border: 1px solid white;
-    border-top: none;
 }
 
 .gamepad-interface-keyboard-key {
