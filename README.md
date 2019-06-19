@@ -11,7 +11,7 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Dual action hints for action pairs like volume up/down
 * CSS classes for content outlines
 * Fix visual bug that occurs on some billboard MyList buttons
-* Increase size of virtual keyboard and scale inserted UI elements according to page size
+* Scale bottom bar elements according to page size
 * Hide jump 10s actions when unavaiable (player class `preplay`?)
 * Identify interactive videos and only apply related settings/observers if needed
 * Fix bug where search page handler does not finish loading until keyboard is closed when only one character has been entered into the search bar
@@ -20,6 +20,7 @@ Control Netflix in your browser with a gamepad or controller using this Chrome e
 * Use mutation observers or parse CSS transitions instead of using static timing in slider timeouts
 * Fix bug where jawbone changes due to removing from my list the title with an open jawbone
 * Show video controls when in fullscreen mode
+* Add remaining jawbone pane types
 
 ## Libraries and Materials Used
 * [pseudo:styler](https://github.com/TSedlar/pseudo-styler) - A module that allows for forcing an element to be styled with a pseudo-class.

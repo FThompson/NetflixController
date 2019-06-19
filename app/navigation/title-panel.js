@@ -14,7 +14,10 @@ class TitlePanel extends StaticNavigatable {
 
     getComponents() {
         let panel = this.getPanelComponent();
-        return panel.querySelectorAll(`${this.getButtonSelector()} .nf-icon-button`);
+        let linkSelector = this.getButtonSelector();
+        let iconSelector = linkSelector + ' .nf-icon-button';
+        let flatSelector = linkSelector + ' .nf-flat-button';
+        return panel.querySelectorAll(`${iconSelector}, ${flatSelector}`);
     }
 
     getInteractionComponent() {
