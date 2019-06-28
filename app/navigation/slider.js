@@ -112,7 +112,7 @@ class Slider extends Navigatable {
                     currentHandler.setNavigatable(currentHandler.position + 1);
                     this.jawboneOpen = true;
                     this.locked = false;
-                }, heightDuration);
+                }, heightDuration + 300); // extra 300ms for smoothness
             }
         }
     }
