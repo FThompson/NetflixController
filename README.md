@@ -15,6 +15,7 @@ Add Netflix Controller to your browser [here](https://chrome.google.com/webstore
 * Navigate Netflix using a controller
 * Control the video player
 * Search for media using virtual keyboard
+* See current actions in the hints bar at the bottom of the viewport
 * Choose options when watching interactive media like Black Mirror Bandersnatch
 * Choose your button icons (Xbox 360 / Xbox One / PS3 / PS4)
 * Test your gamepad mapping in the browser icon popup
@@ -24,16 +25,16 @@ Add Netflix Controller to your browser [here](https://chrome.google.com/webstore
 
 | Action | Xbox | Playstation |
 |--------|------|-------------|
-| Play / Pause  | ![A](/static/buttons/Xbox%20One/XboxOne_A.png) | ![Cross](/static/buttons/PS4/PS4_Cross.png) |
-| Mute          | ![X](/static/buttons/Xbox%20One/XboxOne_X.png) | ![Square](/static/buttons/PS4/PS4_Square.png) |
-| Fullscreen    | ![Y](/static/buttons/Xbox%20One/XboxOne_Y.png) | ![Triangle](/static/buttons/PS4/PS4_Triangle.png) |
-| Go Back       | ![B](/static/buttons/Xbox%20One/XboxOne_B.png) | ![Circle](/static/buttons/PS4/PS4_Circle.png) |
-| Volume Up     | ![Dpad Up](/static/buttons/Xbox%20One/XboxOne_Dpad_Up.png) | ![Dpad Up](/static/buttons/PS4/PS4_Dpad_Up.png) |
-| Volume Down   | ![Dpad Down](/static/buttons/Xbox%20One/XboxOne_Dpad_Down.png) | ![Dpad Down](/static/buttons/PS4/PS4_Dpad_Down.png) |
-| Jump 10s      | ![Dpad Right](/static/buttons/Xbox%20One/XboxOne_Dpad_Right.png) | ![Dpad Right](/static/buttons/PS4/PS4_Dpad_Right.png) |
-| Jump Back 10s | ![Dpad Left](/static/buttons/Xbox%20One/XboxOne_Dpad_Left.png) | ![Dpad Left](/static/buttons/PS4/PS4_Dpad_Left.png) |
-| Skip Intro    | ![Start](/static/buttons/Xbox%20One/XboxOne_Menu.png) | ![Start](/static/buttons/PS4/PS4_Options.png) |
-| Next Episode  | ![RB](/static/buttons/Xbox%20One/XboxOne_RB.png) | ![R1](/static/buttons/PS4/PS4_R1.png) |
+| Play / Pause  | <img alt='A' src='static/buttons/Xbox%20One/XboxOne_A.png' width='40'> | <img alt='Cross' src='static/buttons/PS4/PS4_Cross.png' width='40'> |
+| Mute          | <img alt='X' src='static/buttons/Xbox%20One/XboxOne_X.png' width='40'> | <img alt='Square' src='static/buttons/PS4/PS4_Square.png' width='40'> |
+| Fullscreen    | <img alt='Y' src='static/buttons/Xbox%20One/XboxOne_Y.png' width='40'> | <img alt='Triangle' src='static/buttons/PS4/PS4_Triangle.png' width='40'> |
+| Go Back       | <img alt='B' src='static/buttons/Xbox%20One/XboxOne_B.png' width='40'> | <img alt='Square' src='static/buttons/PS4/PS4_Square.png' width='40'> |
+| Volume Up     | <img alt='Dpad Up' src='static/buttons/Xbox%20One/XboxOne_Dpad_Up.png' width='40'> | <img alt='Dpad Up' src='static/buttons/PS4/PS4_Dpad_Up.png' width='40'> |
+| Volume Down   | <img alt='Dpad Down' src='static/buttons/Xbox%20One/XboxOne_Dpad_Down.png' width='40'> | <img alt='Dpad Down' src='static/buttons/PS4/PS4_Dpad_Down.png' width='40'> |
+| Jump 10s      | <img alt='Dpad Right' src='static/buttons/Xbox%20One/XboxOne_Dpad_Right.png' width='40'> | <img alt='Dpad Right' src='static/buttons/PS4/PS4_Dpad_Right.png' width='40'> |
+| Jump Back 10s | <img alt='Dpad Left' src='static/buttons/Xbox%20One/XboxOne_Dpad_Left.png' width='40'> | <img alt='Dpad Left' src='static/buttons/PS4/PS4_Dpad_Left.png' width='40'> |
+| Skip Intro    | <img alt='Start' src='static/buttons/Xbox%20One/XboxOne_Menu.png' width='40'> | <img alt='Start' src='static/buttons/PS4/PS4_Options.png' width='40'> |
+| Next Episode  | <img alt='RB' src='static/buttons/Xbox%20One/XboxOne_RB.png' width='40'> | <img alt='R1' src='static/buttons/PS4/PS4_R1.png' width='40'> |
 
 ## Screenshots
 
