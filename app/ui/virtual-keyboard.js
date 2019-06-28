@@ -54,7 +54,6 @@ class VirtualKeyboard {
     alignWithParent() {
         // attach keyboard to bottom of search bar
         let targetBounds = this.parent.getBoundingClientRect();
-        console.log(targetBounds);
         this.keyboard.style.top = (targetBounds.top + targetBounds.height) + 'px';
 
         // set keyboard minimum size to that of the search bar's width
