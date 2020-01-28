@@ -1,6 +1,6 @@
 {
     "name": "Netflix Controller",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Control Netflix in your browser with a gamepad or controller.",
     "manifest_version": 2,
     "permissions": [
@@ -25,8 +25,8 @@
             "exclude_matches": ["*://help.netflix.com/*"],
             "js": [
                 "static/js/live-storage@1.0.2.js",
-                "static/js/gamepads@1.1.2.js",
-                "static/js/gamepad-mappings@1.1.2.js",
+                "static/js/gamepads@1.2.2.js",
+                "static/js/gamepad-icons@1.2.2.js",
                 "static/js/pseudostyler@1.0.8.js",
                 "app/navigation/direction.js",
                 "app/navigation/navigatable.js",
