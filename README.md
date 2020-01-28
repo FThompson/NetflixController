@@ -72,3 +72,9 @@ Add Netflix Controller to your browser [here](https://chrome.google.com/webstore
 * Xbox controller image courtesy of http://gamepadviewer.com/
 * Project icons courtesy of https://material.io/icons/ and https://iconfu.com.
 * Many thanks to [Tyler Sedlar](https://github.com/TSedlar) for creating pseudo:styler and for letting me bounce ideas off of him throughout development of this project.
+
+## Changelog
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.1 | January 27, 2020 | Updated gamepads.js to fix Chrome support. |
+| 1.0.0 | June 28, 2019 | Initial release.
