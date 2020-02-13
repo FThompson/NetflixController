@@ -6,6 +6,11 @@ class WatchVideo extends NavigatablePage {
         this.hasInteractiveChoices = false;
         this.hasNextEpisode = true;
         this.hasSkipIntro = false;
+        this.backAction = {
+            label: 'Back',
+            index: StandardMapping.Button.BUTTON_RIGHT,
+            onPress: () => this.goBack()
+        };
         this.skipIntroAction = {
             label: 'Skip Intro',
             index: StandardMapping.Button.BUTTON_CONTROL_RIGHT,
@@ -25,7 +30,7 @@ class WatchVideo extends NavigatablePage {
     onLoad() {
         super.onLoad();
         this.player = document.querySelector('.NFPlayer');
-        this.showNextEpisode(this.player.classList.contains('nextEpisode'));
+        this.showNextEpisode(this.player.classList.contains('nextEpisodeSeamless'));
         this.observePlayerState();
         this.observeSkipIntro();
         this.observeInteractiveChoices();
@@ -50,9 +55,8 @@ class WatchVideo extends NavigatablePage {
     observePlayerState() {
         this.controlObserver = new MutationObserver((mutations) => {
             for (let mutation of mutations) {
-                this.postplay = mutation.target.classList.contains('postplay');
                 this.hideControls(mutation.target.classList.contains('inactive'));
-                this.showNextEpisode(mutation.target.classList.contains('nextEpisode'));
+                this.showNextEpisode(mutation.target.classList.contains('nextEpisodeSeamless'));
             }
         });
         this.controlObserver.observe(this.player, { attributes: true, attributeFilter: [ 'class' ]});
@@ -62,26 +66,31 @@ class WatchVideo extends NavigatablePage {
         let controls = this.player.querySelector('.PlayerControlsNeo__layout');
         this.checkForElementWithClass(controls.childNodes, true, 'skip-credits',
                 () => this.showSkipIntro(true));
-        this.skipObserver = this.watchForElementsWithClass(controls,
+        this.skipObserver = this.watchForElementsWithClass(controls, false,
                 'skip-credits', (found) => this.showSkipIntro(found));
     }
 
     observeInteractiveChoices() {
         let controls = this.player.querySelector('.PlayerControlsNeo__all-controls');
-        this.checkForElementWithClass(controls.childNodes, true,
-                'main-hitzone-element-container', () => this.setInteractiveMode(true));
-        this.interactiveObserver = this.watchForElementsWithClass(controls,
-                'main-hitzone-element-container', (found) => this.setInteractiveMode(found));
+        this.interactiveObserver = new MutationObserver((mutations) => {
+            for (let mutation of mutations) {
+                this.checkForElementMatchingSelector(mutation.addedNodes, true, '.BranchingInteractiveScene--wrapper', () => this.setInteractiveMode(true));
+                this.checkForElementMatchingSelector(mutation.removedNodes, false, '.BranchingInteractiveScene--wrapper', () => this.setInteractiveMode(false));
+                this.checkForElementMatchingSelector(mutation.addedNodes, true, '.SeamlessControls--container', () => this.setPostPlay(true));
+                this.checkForElementMatchingSelector(mutation.removedNodes, false, '.SeamlessControls--container', () => this.setPostPlay(false));
+            }
+        });
+        this.interactiveObserver.observe(controls, { childList: true });
     }
 
-    watchForElementsWithClass(node, className, callback) {
+    watchForElementsWithClass(node, subtree, className, callback) {
         let observer = new MutationObserver((mutations) => {
             for (let mutation of mutations) {
                 this.checkForElementWithClass(mutation.addedNodes, true, className, callback);
                 this.checkForElementWithClass(mutation.removedNodes, false, className, callback);
             }
         });
-        observer.observe(node, { childList: true });
+        observer.observe(node, { childList: true, subtree: subtree });
         return observer;
     }
 
@@ -94,12 +103,36 @@ class WatchVideo extends NavigatablePage {
         }
     }
 
+    checkForElementMatchingSelector(nodeList, isAddedList, selector, callback) {
+        for (let node of nodeList) {
+            if (node.nodeType == 1 && node.querySelector(selector)) {
+                callback(isAddedList);
+                return;
+            }
+        }
+    }
+
     showSkipIntro(canSkip) {
         this.hasSkipIntro = canSkip;
         if (canSkip) {
             actionHandler.addAction(this.skipIntroAction);
         } else {
             actionHandler.removeAction(this.skipIntroAction);
+        }
+    }
+
+    setPostPlay(postplay) {
+        if (postplay) {
+            actionHandler.removeAll(this.getActions());
+            actionHandler.addAction(this.nextEpisodeAction);
+            actionHandler.addAction(this.backAction);
+            this.setActivityTimer();
+            this.postplay = true;
+        } else {
+            this.postplay = false;
+            actionHandler.removeAction(this.nextEpisodeAction);
+            actionHandler.removeAction(this.backAction);
+            actionHandler.addAll(this.getActions());
         }
     }
 
@@ -185,11 +218,7 @@ class WatchVideo extends NavigatablePage {
                 index: StandardMapping.Button.BUTTON_TOP,
                 onPress: () => chrome.runtime.sendMessage({ message: 'requestFullscreen' })
             },
-            {
-                label: 'Back',
-                index: StandardMapping.Button.BUTTON_RIGHT,
-                onPress: () => this.goBack()
-            },
+            this.backAction,
             {
                 label: 'Jump Back 10s',
                 index: StandardMapping.Button.D_PAD_LEFT,
@@ -227,7 +256,9 @@ class WatchVideo extends NavigatablePage {
     }
 
     openNextEpisode() {
-        this.clickControl('.button-nfplayerNextEpisode', '.WatchNext-still-container');
+        this.clickControl('.button-nfplayerNextEpisode', 'button[data-uia="next-episode-seamless-button"]');
+        //below only works once player is "ended" class
+        //control.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
     }
 
     skipIntro() {
