@@ -126,8 +126,8 @@ class Slider extends Navigatable {
         return false;
     }
 
-    getBoxArtContainer() {
-        let boxarts = this.sliderItem.querySelectorAll('div.boxart-container');
+    getBoxArtContainer(sliderItem) {
+        let boxarts = sliderItem.querySelectorAll('div.boxart-container');
         // large title cards still have the small element; the last element is the larger one
         return boxarts[boxarts.length - 1];
     }
@@ -136,7 +136,7 @@ class Slider extends Navigatable {
      * Scrolls the viewport to be centered vertically on this slider.
      */
     scrollIntoView() {
-        Navigatable.scrollIntoView(this.getBoxArtContainer());
+        Navigatable.scrollIntoView(this.getBoxArtContainer(this.sliderItem));
     }
 
     /**
@@ -161,7 +161,7 @@ class Slider extends Navigatable {
         }, 100);
         this.sliderItem = sliderItem;
         this.position = position;
-        let boxart = this.getBoxArtContainer();
+        let boxart = this.getBoxArtContainer(this.sliderItem);
         boxart.style.outline = '3px solid ' + getTransparentNetflixRed(0.7);
     }
 
@@ -171,7 +171,7 @@ class Slider extends Navigatable {
     unselect() {
         if (this.sliderItem) {
             Navigatable.mouseOut(this.getEventTarget(this.sliderItem));
-            this.getBoxArtContainer().style.outline = '0';
+            this.getBoxArtContainer(this.sliderItem).style.outline = '0';
         }
     }
 
@@ -179,7 +179,7 @@ class Slider extends Navigatable {
      * Gets the given slider item's mouse event target.
      */
     getEventTarget(sliderItem) {
-        return sliderItem.querySelector('img.boxart-image');
+        return this.getBoxArtContainer(sliderItem).childNodes[0];
     }
 
     /**
