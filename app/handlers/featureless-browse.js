@@ -1,12 +1,6 @@
-class FeaturelessBrowse extends SliderBrowse {
+class FeaturelessBrowse extends PureSliderBrowse {
     constructor() {
         super(0);
-    }
-
-    onLoad() {
-        super.onLoad();
-        this.addNavigatable(1, Slider.getSlider(0));
-        this.setNavigatable(1);
     }
 
     static validatePath(path) {

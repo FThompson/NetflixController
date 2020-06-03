@@ -23,6 +23,7 @@ const pageHandlers = [
     ChooseProfile,
     FeaturedBrowse,
     FeaturelessBrowse,
+    LatestBrowse,
     TitleBrowse,
     SearchBrowse,
     WatchVideo
