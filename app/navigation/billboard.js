@@ -12,4 +12,12 @@ class Billboard extends TitlePanel {
     getButtonSelector() {
         return '.billboard-links';
     }
+
+    interact(component) {
+        if (component.tagName === 'BUTTON') {
+            component.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+        } else {
+            super.interact(component);
+        }
+    }
 }

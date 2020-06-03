@@ -77,14 +77,18 @@ class StaticNavigatable extends Navigatable {
 
     unselect() {
         if (this.position >= 0) {
-            this.style(this.getStyleComponent(), false);
+            let component = this.getStyleComponent();
+            this.style(component, false);
+            component.style.outline = '0';
         }
     }
 
     select(position) {
         this.unselect();
         this.position = position;
-        this.style(this.getStyleComponent(), true);
+        let component = this.getStyleComponent();
+        this.style(component, true);
+        component.style.outline = '3px solid ' + getTransparentNetflixRed(0.7);
         if (this.shouldScrollIntoView()) {
             Navigatable.scrollIntoView(this.getStyleComponent());
         }
