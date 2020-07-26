@@ -76,6 +76,7 @@ Add Netflix Controller to your browser [here](https://chrome.google.com/webstore
 ## Changelog
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.0.4 | July 25, 2020 | Fixed the title panel handler. |
 | 1.0.3 | June 3, 2020 | Fixed the billboard handler and added support for the latest page. |
 | 1.0.2 | March 21, 2020 | Fixed crashing at the end of episodes in a playlist and added support for the top 10 slider. |
 | 1.0.1 | January 27, 2020 | Updated gamepads.js to fix Chrome support. |
