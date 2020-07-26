@@ -2,6 +2,10 @@ class TitlePanel extends StaticNavigatable {
     constructor(row) {
         super();
         this.row = row;
+        let panel = this.getPanelComponent();
+        let baseSelector = this.getButtonSelector();
+        this.primaryButton = panel.querySelector(baseSelector + ' button.color-primary');
+        this.secondaryButton = panel.querySelector(baseSelector + ' button.color-secondary');
     }
 
     getPanelComponent() {
@@ -13,19 +17,15 @@ class TitlePanel extends StaticNavigatable {
     }
 
     getComponents() {
-        let panel = this.getPanelComponent();
-        let linkSelector = this.getButtonSelector();
-        let iconSelector = linkSelector + ' .button-primary';
-        let flatSelector = linkSelector + ' .button-secondary';
-        return panel.querySelectorAll(`${iconSelector}, ${flatSelector}`);
+        return [this.primaryButton, this.secondaryButton];
     }
 
-    getInteractionComponent() {
-        let component = this.getSelectedComponent();
-        if (component.tagName === 'SPAN') {
-            return component.parentElement;
+    interact(component) {
+        if (component === this.secondaryButton) {
+            component.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+        } else {
+            super.interact(component);
         }
-        return component;
     }
 
     style(component, selected) {
