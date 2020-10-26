@@ -1,6 +1,8 @@
 class WatchVideo extends NavigatablePage {
     constructor() {
         super();
+        this.player = null;
+        this.sizingWrapper = null;
         this.inactivityTimer = null;
         this.postplay = false;
         this.hasInteractiveChoices = false;
@@ -29,7 +31,10 @@ class WatchVideo extends NavigatablePage {
 
     onLoad() {
         super.onLoad();
-        this.player = document.querySelector('.NFPlayer');
+        // The sizing wrapper is the fullscreen element if set via the player.
+        // We identify the sizing wrapper here to set the video to full screen.
+        this.sizingWrapper = document.querySelector('.sizing-wrapper')
+        this.player = this.sizingWrapper.querySelector('.NFPlayer');
         this.showNextEpisode(this.player.classList.contains('nextEpisodeSeamless'));
         this.observePlayerState();
         this.observeSkipIntro();
@@ -216,7 +221,7 @@ class WatchVideo extends NavigatablePage {
             {
                 label: 'Fullscreen',
                 index: StandardMapping.Button.BUTTON_TOP,
-                onPress: () => chrome.runtime.sendMessage({ message: 'requestFullscreen' })
+                onPress: () => this.toggleFullscreen()
             },
             this.backAction,
             {
@@ -287,5 +292,19 @@ class WatchVideo extends NavigatablePage {
             keyCode: keyCode, bubbles: true, cancelable: true, view: window
         });
         this.player.dispatchEvent(event);
+    }
+
+    toggleFullscreen() {
+        // For now, ignore the errors thrown by these functions.
+        // We likely want a warning-type temporary error bar eventually.
+        if (!document.fullscreenElement) {
+            this.sizingWrapper.requestFullscreen().catch(err => {
+                console.warn(`Unable to switch to fullscreen mode: ${err}`)
+            });
+        } else {
+            document.exitFullscreen().catch(err => {
+                console.warn(`Unable to exit fullscreen mode: ${err}`)
+            });
+        }
     }
 }

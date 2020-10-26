@@ -38,29 +38,4 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             chrome.tabs.sendMessage(tabId, { message: 'locationChanged', path: url.pathname});
         }
     }
-})
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.message === 'requestFullscreen') {
-        // possible alternate approach I discovered after writing the debugger approach:
-        // chrome.windows.getCurrent(window => chrome.windows.update(window.id, {state: 'fullscreen'}))
-        // the above seems to crash netflix upon trying to exit fullscreen mode
-        setFullScreen(sender.tab.id);
-    }
-})
-
-// uses chrome.debugger to send trusted event, which is needed for setting fullscreen
-// via https://stackoverflow.com/a/53488689/1247781
-function setFullScreen(tabId) {
-    let debuggee = {tabId: tabId};
-    chrome.debugger.attach(debuggee, '1.3', () => {
-        chrome.debugger.sendCommand(debuggee, 'Input.dispatchKeyEvent', {
-            type: 'rawKeyDown',
-            nativeVirtualKeyCode: 70,
-            windowsVirtualKeyCode: 70,
-        }, () => {
-            // detach immediately to avoid interrupting user experience with page-being-debugged popup
-            chrome.debugger.detach(debuggee);
-        });
-    })
-}
+});
